@@ -1,0 +1,25 @@
+﻿/*
+ * このファイルはバージョンアップの時に上書きされるので
+ * カスタマイズしたい場合はhta-custom.cssと言う名前のファイルを作りそちらを編集する。
+ */
+
+
+body {
+	font-family: "UD Digi Kyokasho NK-R", "Meiryo UI", "Yu Gothic UI", sans-serif;
+	line-height: 112.5%;
+	white-space: nowrap;
+}
+#warning {
+	color: red;
+}
+#info {
+	font-family: "UD Digi Kyokasho N-R", "Lucida Console", monospace;
+}
+h2 {
+	font-size: 100%;
+	font-weight: normal;
+}
+dd {
+	font-family: "UD Digi Kyokasho N-R", "Meiryo", "Yu Gothic Medium", monospace;
+	margin-left: 0;
+}

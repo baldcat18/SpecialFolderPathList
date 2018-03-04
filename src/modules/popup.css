@@ -1,0 +1,28 @@
+﻿/*
+ * このファイルはバージョンアップの時に上書きされるので
+ * カスタマイズしたい場合はpopup-custom.cssと言う名前のファイルを作りそちらを編集する。
+ */
+
+
+menu {
+	margin: 0;
+	padding: 2px;
+	border: black solid 1px;
+	background-color: white;
+	position: absolute;
+	white-space: nowrap;
+	list-style: none;
+	font-family: "UD Digi Kyokasho NK-R", "Meiryo UI", "Yu Gothic UI", sans-serif;
+	font-size: 87.5%;
+	line-height: 87.5%;
+	cursor: default;
+}
+li {
+	margin: 0;
+	padding: 4px;
+	border: white solid 1px;
+}
+li:hover {
+	border-color: blue;
+	background-color: lightcyan;
+}

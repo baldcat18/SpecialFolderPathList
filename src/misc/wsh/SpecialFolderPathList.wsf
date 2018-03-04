@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<package>
+<job>
+<runtime>
+<description>
+WSH による SpecialFolderPathList の実装です。
+特殊フォルダーのパス情報を標準出力に出力します。
+</description>
+<named name="c" helpstring="フォルダーをカテゴリごとに分けて出力します。"/>
+<named name="d" helpstring="エクスプローラーのタイトル バーやアドレス バーに表示される名前も出力します。"/>
+<named name="t" helpstring="フォルダーの種類も出力します。"/>
+<named name="f" helpstring="スクリプトを実行した環境ではサポートされないフォルダーの名前も出力します。"/>
+<named name="o" helpstring="ファイル フォルダー(ディレクトリ)の情報のみ出力します。仮想フォルダーの情報は出力しません。"/>
+</runtime>
+<script language="JavaScript" src="../../modules/common.js"></script>
+<script language="JavaScript" src="../../modules/settings.js"></script>
+<!-- <script language="JavaScript" src="../../modules/settings-custom.js"></script> -->
+<script language="JavaScript" src="../../modules/data.js"></script>
+<script language="JavaScript" src="../../modules/wshmain.js"></script>
+</job>
+</package>

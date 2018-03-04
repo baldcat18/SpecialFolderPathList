@@ -1,0 +1,5 @@
+*.txt
+!README.txt
+*-custom.*
+shortcuts/
+tools/New-KnownFolder.ps1
