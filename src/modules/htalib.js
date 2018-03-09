@@ -3,6 +3,7 @@
 "use strict";
 
 const isExplorerRunasLaunchingUser = !getRegValue("HKCR\\AppID\\{CDCBCFCA-3CDC-436f-A4E2-0E02075250C2}\\RunAs");
+const isWslEnabled = fso.FileExists(getSystemPath() + "\\wsl.exe");
 
 const command = {
 	/** @param {HTMLAnchorElement} target */
@@ -22,6 +23,14 @@ const command = {
 	execPowershell: function(target) { target.xFolder.execPowershell(); },
 	/** @param {HTMLAnchorElement} target */
 	execPowershellElevated: function(target) { target.xFolder.execPowershell("runas"); },
+	execWsl: isWslEnabled ?
+		/** @param {HTMLAnchorElement} target */
+		function(target) { target.xFolder.execWsl(); } :
+		function() { writeError("WSL がサポートしていないか有効化されていません。"); },
+	execWslElevated: isWslEnabled ?
+		/** @param {HTMLAnchorElement} target */
+		function(target) { target.xFolder.execWsl("runas"); } :
+		function() { writeError("WSL がサポートしていないか有効化されていません。"); },
 	/** @param {HTMLAnchorElement} target */
 	showProperty: function(target) { target.xFolder.showProperties(); },
 };
@@ -34,8 +43,8 @@ const popup = (function() {
 	/** @type {DialogArgument} */
 	const dlgargs = {
 		isDirectory: false,
-		enablePowerhell: false,
-		enableProperties: false,
+		isWslEnabled: isWslEnabled,
+		isPropertiesEnabled: false,
 		extended: false,
 		explorerRunasLaunchingUser: isExplorerRunasLaunchingUser,
 		/** @param {string} item */
@@ -74,7 +83,7 @@ const popup = (function() {
 			}
 			
 			dlgargs.isDirectory = folder.isDirectory;
-			dlgargs.enableProperties = folder.hasProperties();
+			dlgargs.isPropertiesEnabled = folder.hasProperties();
 			dlgargs.extended = evt.shiftKey;
 			
 			const dlgopts = "dialogWidth: 0px; dialogHeight: 0px; unadorned: 1; " +

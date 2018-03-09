@@ -201,6 +201,7 @@ interface SpecialFolder {
 	execCmd(verb?: string): void;
 	execExplorer(verb?: string): void;
 	execPowershell(verb?: string): void;
+	execWsl(verb?: string): void;
 	getType(): string;
 	hasProperties(): boolean;
 	open(): void;
@@ -236,8 +237,8 @@ interface SpecialFolderOption {
 
 interface DialogArgument {
 	isDirectory: boolean;
-	enablePowerhell: boolean;
-	enableProperties: boolean;
+	isWslEnabled: boolean;
+	isPropertiesEnabled: boolean;
 	extended: boolean;
 	explorerRunasLaunchingUser: boolean;
 	sendItem(item: string): void;
