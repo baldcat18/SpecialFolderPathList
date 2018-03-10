@@ -127,6 +127,13 @@
 		}
 		else writeError("ディレクトリではないので PowerShell を実行できません。");
 	};
+	/** @param {string} [verb] */
+	SpecialFolderConstructor.prototype.execWsl = function(verb) {
+		if (this.isDirectory) {
+			shell.ShellExecute("cmd.exe", "/c pushd \"{0}\" & wsl.exe".xFormat(this.path), null, verb);
+		}
+		else writeError("ディレクトリではないので WSL を実行できません。");
+	};
 	/** @return {boolean} */
 	SpecialFolderConstructor.prototype.hasProperties = function() {
 		if (this._propertyTypes == ptShellExecute) return true;

@@ -9,6 +9,8 @@ var Key = {
 	a: 65,
 	e: 69,
 	h: 72,
+	i: 73,
+	l: 76,
 	o: 79,
 	p: 80,
 	r: 82,
@@ -38,6 +40,8 @@ items[Key.p] = "execCmd";
 items[Key.w] = "execCmdElevated";
 items[Key.s] = "execPowershell";
 items[Key.h] = "execPowershellElevated";
+items[Key.l] = "execWsl";
+items[Key.i] = "execWslElevated";
 items[Key.r] = "showProperty";
 document.onkeyup = function() {
 	var evt = /** @type {KeyboardEvent} */ (event);
@@ -51,7 +55,8 @@ document.onkeyup = function() {
 
 window.onload = function() {
 	if (!dlgargs.explorerRunasLaunchingUser) document.getElementById("execExplorerElevated").remove();
-	if (!dlgargs.enableProperties) document.getElementById("showProperty").remove();
+	if (!dlgargs.isWslEnabled) removeElements(".wsl");
+	if (!dlgargs.isPropertiesEnabled) document.getElementById("showProperty").remove();
 	if (!dlgargs.isDirectory) removeElements(".console");
 	if (!dlgargs.extended) removeElements(".extended");
 	
