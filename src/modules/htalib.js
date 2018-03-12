@@ -23,17 +23,17 @@ const command = {
 	execPowershell: function(target) { target.xFolder.execPowershell(); },
 	/** @param {HTMLAnchorElement} target */
 	execPowershellElevated: function(target) { target.xFolder.execPowershell("runas"); },
-	execWsl: isWslEnabled ?
-		/** @param {HTMLAnchorElement} target */
-		function(target) { target.xFolder.execWsl(); } :
-		function() { writeError("WSL がサポートしていないか有効化されていません。"); },
-	execWslElevated: isWslEnabled ?
-		/** @param {HTMLAnchorElement} target */
-		function(target) { target.xFolder.execWsl("runas"); } :
-		function() { writeError("WSL がサポートしていないか有効化されていません。"); },
+	/** @param {HTMLAnchorElement} target */
+	execWsl: function(target) { target.xFolder.execWsl(); },
+	/** @param {HTMLAnchorElement} target */
+	execWslElevated: function(target) { target.xFolder.execWsl("runas"); },
 	/** @param {HTMLAnchorElement} target */
 	showProperty: function(target) { target.xFolder.showProperties(); },
 };
+if (!isWslEnabled) {
+	command.execWsl = command.execWslElevated =
+		function() { writeError("WSL がサポートされていないか有効化されていません。"); };
+}
 
 const popup = (function() {
 	/** @type {HTMLAnchorElement} */
