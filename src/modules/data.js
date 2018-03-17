@@ -17,6 +17,8 @@
 	var WIN10_1703 = OS.version.isGreaterThan(new Version(10, 0, 15063));
 	/** Win10 1709以降 */
 	var WIN10_1709 = OS.version.isGreaterThan(new Version(10, 0, 16299));
+	/** Win10 1803以降 */
+	var WIN10_1803 = OS.version.isGreaterThan(new Version(10, 0, 16300));
 	
 	var WIN10_1507_to_1511 = WIN10 && !WIN10_1607;
 	
@@ -643,7 +645,7 @@
 			// shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\10
 			return new SpecialFolder("システムとセキュリティ", "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\5");
 		case 144:
-			return new SpecialFolder("時計、言語、および地域", "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\6");
+			return new SpecialFolder(WIN10_1803 ? "時計と地域" : "時計、言語、および地域", "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\6");
 		case 145:
 			return new SpecialFolder("コンピューターの簡単操作", "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\7");
 		case 146:
