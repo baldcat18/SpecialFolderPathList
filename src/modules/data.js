@@ -98,12 +98,12 @@
 		this.path = option.path || (this.folderItem ? this.folderItem.Path : "");
 		if (this.path && this.path.charAt(0) == ":") this.path = "shell:" + this.path;
 		
-		this.isDirectory = fso.FolderExists(this.path);
+		this.isFileFolder = fso.FolderExists(this.path);
 		
 		if (State.Host.type == "mshta") {
 			this._folderItemForProperties = (option || defaultOption).folderItemForProperties;
 			this._propertyTypes = option.propertyType ||
-				(this.isDirectory && this._folderItemForProperties === undefined ? ptShellExecute : ptVerb);
+				(this.isFileFolder && this._folderItemForProperties === undefined ? ptShellExecute : ptVerb);
 			
 			/** @type {FolderItemVerb} */
 			this._properties = undefined;
@@ -113,8 +113,8 @@
 	SpecialFolderConstructor.prototype.open = function() { this.folderItem.InvokeVerb(); };
 	/** @param {string} [verb] */
 	SpecialFolderConstructor.prototype.execCmd = function(verb) {
-		if (this.isDirectory) shell.ShellExecute("cmd.exe", "/k pushd \"{0}\"".xFormat(this.path), null, verb);
-		else writeError("ディレクトリではないのでコマンドプロンプトを実行できません。");
+		if (this.isFileFolder) shell.ShellExecute("cmd.exe", "/k pushd \"{0}\"".xFormat(this.path), null, verb);
+		else writeError("ファイル フォルダーではないのでコマンドプロンプトを実行できません。");
 	};
 	/** @param {string} [verb] */
 	SpecialFolderConstructor.prototype.execExplorer = function(verb) {
@@ -123,18 +123,18 @@
 	};
 	/** @param {string} [verb] */
 	SpecialFolderConstructor.prototype.execPowershell = function(verb) {
-		if (this.isDirectory) {
+		if (this.isFileFolder) {
 			var arg = "-NoExit -Command \"Push-Location -LiteralPath '{0}'\"".xFormat(this.path);
 			shell.ShellExecute("powershell.exe", arg, null, verb);
 		}
-		else writeError("ディレクトリではないので PowerShell を実行できません。");
+		else writeError("ファイル フォルダーではないので PowerShell を実行できません。");
 	};
 	/** @param {string} [verb] */
 	SpecialFolderConstructor.prototype.execWsl = function(verb) {
-		if (this.isDirectory) {
+		if (this.isFileFolder) {
 			shell.ShellExecute("cmd.exe", "/c pushd \"{0}\" & wsl.exe".xFormat(this.path), null, verb);
 		}
-		else writeError("ディレクトリではないので WSL を実行できません。");
+		else writeError("ファイル フォルダーではないので WSL を実行できません。");
 	};
 	/** @return {boolean} */
 	SpecialFolderConstructor.prototype.hasProperties = function() {
