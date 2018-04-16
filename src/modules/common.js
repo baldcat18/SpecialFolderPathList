@@ -170,10 +170,12 @@ var State = (function() {
 		var arm = 5;
 		// var ia64 = 6;
 		var amd64 = 9;
+		var arm64 = 12;
 		var unknown = 0xFFFF;
 		
 		switch (shell.GetSystemInformation("ProcessorArchitecture")) {
 			case amd64:
+			case arm64:
 			// case ia64:
 				return 64;
 			case x86:
