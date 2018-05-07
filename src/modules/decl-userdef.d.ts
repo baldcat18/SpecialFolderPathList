@@ -196,7 +196,7 @@ interface SpecialFolder {
 	readonly dir: string | number;
 	readonly folderItem: FolderItem;
 	readonly path: string;
-	readonly isDirectory: boolean;
+	readonly isFileFolder: boolean;
 	
 	execCmd(verb?: string): void;
 	execExplorer(verb?: string): void;
@@ -236,7 +236,7 @@ interface SpecialFolderOption {
 }
 
 interface DialogArgument {
-	isDirectory: boolean;
+	isFileFolder: boolean;
 	isWslEnabled: boolean;
 	isPropertiesEnabled: boolean;
 	extended: boolean;

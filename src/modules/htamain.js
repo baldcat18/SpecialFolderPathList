@@ -28,7 +28,7 @@ var htaDebug = (function() {
 		var type = typeof value;
 		if (type != "object") return type;
 		/** @type {string} */
-		var name = Object.prototype.toString.call(value).replace(/^\[object (\w+)\]$/,"$1");
+		var name = Object.prototype.toString.call(value).replace(/^\[object (.+)\]$/,"$1");
 		return (name != "Object" || value.construcor == Object) ? name : type;
 	}
 	

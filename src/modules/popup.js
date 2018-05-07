@@ -57,7 +57,7 @@ window.onload = function() {
 	if (!dlgargs.explorerRunasLaunchingUser) document.getElementById("execExplorerElevated").remove();
 	if (!dlgargs.isWslEnabled) removeElements(".wsl");
 	if (!dlgargs.isPropertiesEnabled) document.getElementById("showProperty").remove();
-	if (!dlgargs.isDirectory) removeElements(".console");
+	if (!dlgargs.isFileFolder) removeElements(".console");
 	if (!dlgargs.extended) removeElements(".extended");
 	
 	var menu = document.querySelector("menu");

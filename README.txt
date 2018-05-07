@@ -16,14 +16,14 @@ Windows で使われている特殊フォルダーのフルパスを表示しま
 ・動作環境
 Windows 7 SP1 (IE11 必須)
 Windows 8.1 Update
-Windows 10 Anniversary Update   (バージョン 1607 ビルド 14393)
-           Creators Update      (バージョン 1703 ビルド 15063)
+Windows 10 Creators Update      (バージョン 1703 ビルド 15063)
            Fall Creators Update (バージョン 1709 ビルド 16299)
+           April 2018 Update    (バージョン 1803 ビルド 17134)
 
 32 ビット版・64 ビット版の両方で動作します。
 
-Windows 10 初期バージョン (ビルド 10240) でも動作すると思いますが、
-動作確認していません。
+Windows 10 Anniversary Update (バージョン 1607 ビルド 14393) でも
+動作すると思いますが、動作確認していません。
 
 Windows 7 で実行するには Internet Explorer 11 が必要です。
 

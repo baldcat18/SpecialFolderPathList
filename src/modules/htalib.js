@@ -42,7 +42,7 @@ const popup = (function() {
 	let dialog = null;
 	/** @type {DialogArgument} */
 	const dlgargs = {
-		isDirectory: false,
+		isFileFolder: false,
 		isWslEnabled: isWslEnabled,
 		isPropertiesEnabled: false,
 		extended: false,
@@ -82,7 +82,7 @@ const popup = (function() {
 				top = rect.top + window.screenTop + 8;
 			}
 			
-			dlgargs.isDirectory = folder.isDirectory;
+			dlgargs.isFileFolder = folder.isFileFolder;
 			dlgargs.isPropertiesEnabled = folder.hasProperties();
 			dlgargs.extended = evt.shiftKey;
 			

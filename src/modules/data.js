@@ -18,7 +18,7 @@
 	/** Win10 1709以降 */
 	var WIN10_1709 = OS.version.isGreaterThan(new Version(10, 0, 16299));
 	/** Win10 1803以降 */
-	var WIN10_1803 = OS.version.isGreaterThan(new Version(10, 0, 16300));
+	var WIN10_1803 = OS.version.isGreaterThan(new Version(10, 0, 17134));
 	
 	var WIN10_1507_to_1511 = WIN10 && !WIN10_1607;
 	
@@ -98,12 +98,12 @@
 		this.path = option.path || (this.folderItem ? this.folderItem.Path : "");
 		if (this.path && this.path.charAt(0) == ":") this.path = "shell:" + this.path;
 		
-		this.isDirectory = fso.FolderExists(this.path);
+		this.isFileFolder = fso.FolderExists(this.path);
 		
 		if (State.Host.type == "mshta") {
 			this._folderItemForProperties = (option || defaultOption).folderItemForProperties;
 			this._propertyTypes = option.propertyType ||
-				(this.isDirectory && this._folderItemForProperties === undefined ? ptShellExecute : ptVerb);
+				(this.isFileFolder && this._folderItemForProperties === undefined ? ptShellExecute : ptVerb);
 			
 			/** @type {FolderItemVerb} */
 			this._properties = undefined;
@@ -113,8 +113,8 @@
 	SpecialFolderConstructor.prototype.open = function() { this.folderItem.InvokeVerb(); };
 	/** @param {string} [verb] */
 	SpecialFolderConstructor.prototype.execCmd = function(verb) {
-		if (this.isDirectory) shell.ShellExecute("cmd.exe", "/k pushd \"{0}\"".xFormat(this.path), null, verb);
-		else writeError("ディレクトリではないのでコマンドプロンプトを実行できません。");
+		if (this.isFileFolder) shell.ShellExecute("cmd.exe", "/k pushd \"{0}\"".xFormat(this.path), null, verb);
+		else writeError("ファイル フォルダーではないのでコマンドプロンプトを実行できません。");
 	};
 	/** @param {string} [verb] */
 	SpecialFolderConstructor.prototype.execExplorer = function(verb) {
@@ -123,18 +123,18 @@
 	};
 	/** @param {string} [verb] */
 	SpecialFolderConstructor.prototype.execPowershell = function(verb) {
-		if (this.isDirectory) {
+		if (this.isFileFolder) {
 			var arg = "-NoExit -Command \"Push-Location -LiteralPath '{0}'\"".xFormat(this.path);
 			shell.ShellExecute("powershell.exe", arg, null, verb);
 		}
-		else writeError("ディレクトリではないので PowerShell を実行できません。");
+		else writeError("ファイル フォルダーではないので PowerShell を実行できません。");
 	};
 	/** @param {string} [verb] */
 	SpecialFolderConstructor.prototype.execWsl = function(verb) {
-		if (this.isDirectory) {
+		if (this.isFileFolder) {
 			shell.ShellExecute("cmd.exe", "/c pushd \"{0}\" & wsl.exe".xFormat(this.path), null, verb);
 		}
-		else writeError("ディレクトリではないので WSL を実行できません。");
+		else writeError("ファイル フォルダーではないので WSL を実行できません。");
 	};
 	/** @return {boolean} */
 	SpecialFolderConstructor.prototype.hasProperties = function() {
@@ -689,7 +689,7 @@
 		case 159:
 			return new SpecialFolder("ユーザー アカウント", "shell:ControlPanelFolder\\::{60632754-c523-4b62-b45c-4172da012619}");
 		case 160:
-			// Win10 1709までサポート (?)
+			// Win10 1709までサポート
 			return new SpecialFolder("ホームグループ", "shell:ControlPanelFolder\\::{67CA7650-96E6-4FDD-BB43-A8E774F73A57}");
 		case 161:
 			// Win8までサポート
@@ -774,7 +774,7 @@
 		case 191:
 			return new SpecialFolder("通知領域アイコン", "shell:" + (WIN10 ? "::{21EC2020-3AEA-1069-A2DD-08002B30309D}" : "ControlPanelFolder") + "\\::{05d7b0f4-2121-4eff-bf6b-ed3f69b894d9}");
 		case 192:
-			// Win8.1以降ではフォルダーを開けないので非表示に
+			// Win8.1 Update以降ではフォルダーを開けないので非表示に
 			return new SpecialFolder("ワイヤレス ネットワークの管理", WIN81 ? null : "shell:::{21EC2020-3AEA-1069-A2DD-08002B30309D}\\::{1FA9085F-25A2-489B-85D4-86326EEDCD87}");
 		case 193:
 			// shell:::{21EC2020-3AEA-1069-A2DD-08002B30309D}\::{863AA9FD-42DF-457B-8E4D-0DE1B8015C60}
@@ -812,17 +812,17 @@
 		case 206:
 			return new SpecialFolder("ホームグループ", "shell:::{6785BFAC-9D2D-4be5-B7E2-59937E8FB80A}");
 		case 207:
-			// Win8.1以降ではフォルダーを開けないので非表示に
+			// Win8.1 Update以降ではフォルダーを開けないので非表示に
 			return new SpecialFolder("Programs Folder (すべてのプログラム)", WIN81 ? null : "shell:::{7be9d83c-a729-4d97-b5a7-1b7313c39e0a}");
 		case 208:
-			// Win8.1以降ではフォルダーを開けないので非表示に
+			// Win8.1 Update以降ではフォルダーを開けないので非表示に
 			return new SpecialFolder("Programs Folder and Fast Items (すべてのプログラム (ファイルを先に表示))", WIN81 ? null : "shell:::{865e5e76-ad83-4dca-a109-50dc2113ce9a}");
 		case 209:
 			// search:
 			// search-ms:
 			return new SpecialFolder("検索結果", "shell:SearchHomeFolder");
 		case 210:
-			// Win8.1からWin10 1511までサポート
+			// Win8.1 UpdateからWin10 1511までサポート
 			return new SpecialFolder("StartMenuAllPrograms", "shell:StartMenuAllPrograms");
 		case 211:
 			// 企業向けエディションで使用可
@@ -832,7 +832,7 @@
 		case 213:
 			return new SpecialFolder("AppSuggestedLocations", "shell:::{c57a6066-66a3-4d91-9eb9-41532179f0a5}");
 		case 214:
-			// Win10 1709までサポート (?)
+			// Win10 1709までサポート
 			return new SpecialFolder("ゲーム", "shell:Games");
 		case 215:
 			if (!Setting.debug) index = doneIteration;
@@ -869,7 +869,7 @@
 			// 検索
 			return new SpecialFolder("検索", "shell:::{04731B67-D933-450a-90E6-4ACD2E9408FE}", { category: "CantOpen" });
 		case 225:
-			// Win8.1でこのカテゴリに移動
+			// Win8.1 Updateでこのカテゴリに移動
 			return new SpecialFolder("ワイヤレス ネットワークの管理", WIN81 ? "shell:::{1FA9085F-25A2-489B-85D4-86326EEDCD87}" : null);
 		case 226:
 			return new SpecialFolder("Sync Center Conflict Folder", "shell:::{289978AC-A101-4341-A817-21EBA7FD046D}");
@@ -888,11 +888,11 @@
 		case 232:
 			return new SpecialFolder("Sync Results Folder", "shell:::{71D99464-3B6B-475C-B241-E15883207529}");
 		case 233:
-			// Win8.1でこのカテゴリに移動
+			// Win8.1 Updateでこのカテゴリに移動
 			// Win10 1511まで
 			return new SpecialFolder("Programs Folder", WIN81 ? "shell:::{7be9d83c-a729-4d97-b5a7-1b7313c39e0a}" : null);
 		case 234:
-			// Win8.1でこのカテゴリに移動
+			// Win8.1 Updateでこのカテゴリに移動
 			// Win10 1511まで
 			return new SpecialFolder("Programs Folder and Fast Items", WIN81 ? "shell:::{865e5e76-ad83-4dca-a109-50dc2113ce9a}" : null);
 		case 235:
@@ -1219,7 +1219,7 @@
 			// Win8.1から
 			return new SpecialFolder("Personal", "shell:::{A8CDFF1C-4878-43be-B5FD-F8091C1C60D0}");
 		case 362:
-			// Win8.1からWin10 1511まで
+			// Win8.1 UpdateからWin10 1511まで
 			return new SpecialFolder("StartMenuAllPrograms", "shell:::{adfa80e7-9769-4ad9-992c-55dc57e1008c}");
 		case 363:
 			// Win8.1から
@@ -1243,7 +1243,7 @@
 			return new SpecialFolder("Default Programs command object for Start menu", "shell:::{E44E5D18-0652-4508-A4E2-8A090067BCB0}");
 		case 370:
 			// ゲーム
-			// Win10 1709までサポート (?)
+			// Win10 1709までサポート
 			return new SpecialFolder("Games Explorer", "shell:::{ED228FDF-9EA8-4870-83b1-96b02CFE0D52}");
 		case 371:
 			// ネットワーク
