@@ -151,8 +151,8 @@ var State = (function() {
 		caption: "{0}{1} ({2})\n    {3}".xFormat(
 			getWinNTCurrentVersionValue("ProductName"), releaseId ? " " + releaseId : "", osVersion, buildLab),
 		isSuppoertedVersion:
-			osVersion.isGreaterThan(new Version(10, 0, 14393)) || // Win10 1607以降
-			osVersionString == "10.0.10586" || // Win10 1511 Enterprise
+			osVersion.isGreaterThan(new Version(10, 0, 15063)) || // Win10 1703以降
+			osVersionString == "10.0.14393" || // Win10 1607 LTSB | Enterprise
 			osVersionString == "10.0.10240" || // Win10 1507 LTSB
 			osVersionString == "6.3.9600" &&  osVersion.revision >= 17031 || // Win8.1 Update
 			osVersion.toString(2) == "6.1" && osVersion.build >= 7601 // Win7 SP1
