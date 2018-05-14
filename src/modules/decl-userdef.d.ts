@@ -149,8 +149,8 @@ declare var Setting: {
 	
 	/** サポートされない古いOS上で実行した時に強制終了させる */
 	abortIfOldOS: boolean;
-	/** ディレクトリ(ファイル フォルダー)の情報だけを返す */
-	directoryOnly: boolean;
+	/** ファイル フォルダー(ディレクトリ)の情報だけを返す */
+	fileFolderOnly: boolean;
 	/** フォルダーのカテゴリの名前を表示する */
 	viewCategory: boolean;
 	
@@ -175,6 +175,9 @@ declare var Setting: {
 	wshWriteDisplayName?: boolean;
 	/** WSH版でフォルダーの種類も出力する */
 	wshWriteType?: boolean;
+	
+	/** @deprecated 移行先はfileFolderOnly */
+	directoryOnly?: boolean;
 };
 declare var Version: VersionConstructor;
 declare var SpecialFolder: SpecialFolderConstructor;

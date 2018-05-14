@@ -53,6 +53,10 @@
 	var index = -1;
 	var doneIteration = Infinity;
 	
+	if (Setting.directoryOnly !== undefined && Setting.fileFolderOnly === undefined) {
+		Setting.fileFolderOnly = Setting.directoryOnly;
+	}
+	
 	/**
 	 * @param {string} path
 	 * @returns {FolderItem}
@@ -326,7 +330,7 @@
 			return new SpecialFolder("テンプレート", "shell:Templates");
 		
 		case 41:
-			if (Setting.directoryOnly) index += 6;
+			if (Setting.fileFolderOnly) index += 6;
 			
 			// shell:UsersLibrariesFolder
 			// shell:::{031E4825-7B94-4dc3-B131-E946B44C8DD5}
@@ -595,7 +599,7 @@
 		case 125:
 			return new SpecialFolder("既定のガジェット", WIN8 ? "shell:ProgramFiles\\Windows Sidebar\\Gadgets" : "shell:Default Gadgets");
 		case 126:
-			if (Setting.directoryOnly) index = doneIteration;
+			if (Setting.fileFolderOnly) index = doneIteration;
 			
 			return new SpecialFolder("ガジェット (All Users)", "shell:ProgramFiles\\Windows Sidebar\\Shared Gadgets");
 		
