@@ -181,10 +181,13 @@ function addEventHandler() {
 		evt.preventDefault();
 		
 		const target = evt.target;
-		if (!(target instanceof HTMLAnchorElement)) return;
+		if (target instanceof HTMLAnchorElement) {
+			if (evt.altKey) command.copyAsPath(target);
+			else popup.show(evt);
+		} else if (Setting.debug && evt.altKey) {
+			htaDebug.breakpoint();
+		}
 		
-		if (evt.altKey) command.copyAsPath(target);
-		else popup.show(evt);
 	};
 	/** @param {KeyboardEvent} evt */
 	document.onkeyup =  function(evt) {
