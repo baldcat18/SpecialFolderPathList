@@ -55,7 +55,7 @@
 	
 	/**
 	 * @param {string} path
-	 * @return {FolderItem}
+	 * @returns {FolderItem}
 	 */
 	function getDirectoryFolderItem(path) {
 		var items = shell.NameSpace(fso.GetParentFolderName(path)).Items();
@@ -136,7 +136,7 @@
 		}
 		else writeError("ファイル フォルダーではないので WSL を実行できません。");
 	};
-	/** @return {boolean} */
+	/** @returns {boolean} */
 	SpecialFolderConstructor.prototype.hasProperties = function() {
 		if (this._propertyTypes == ptShellExecute) return true;
 		if (this._folderItemForProperties === null) return false;

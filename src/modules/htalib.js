@@ -204,7 +204,7 @@ function addEventHandler() {
 
 /**
  * @param {MouseEvent} evt
- * @return {string}
+ * @returns {string}
  */
 function getVerb(evt) {
 	return evt.altKey ? "showProperty" :
