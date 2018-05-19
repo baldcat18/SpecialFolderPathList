@@ -14,7 +14,7 @@ function updateSetting() {
 		c: "viewCategory",
 		d: "wshWriteDisplayName",
 		f: "wshForceWriteAllData",
-		o: "directoryOnly",
+		o: "fileFolderOnly",
 		t: "wshWriteType"
 	};
 	
