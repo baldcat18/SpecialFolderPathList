@@ -137,7 +137,7 @@ interface HTMLAnchorElement {
 
 declare var global: {
 	Setting: object;
-	SpecialFolder: Function;
+	SpecialFolder: object;
 	Version: Function;
 	window?: Window;
 	WScript?: object;

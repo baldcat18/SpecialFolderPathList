@@ -2,6 +2,14 @@
 
 if (!this.global || global != this.global) this.global = this;
 
+if (!Object.create) {
+	Object.create = function(o) {
+		var _ = function() {};
+		_.prototype = o;
+		return new _();
+	};
+}
+
 var wShell = new ActiveXObject("WScript.Shell");
 var shell = new ActiveXObject("Shell.Application");
 var fso = new ActiveXObject("Scripting.FileSystemObject");
