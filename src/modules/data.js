@@ -84,21 +84,17 @@
 	/**
 	 * @class
 	 * @abstract
-	 * @param {string} title
-	 * @param {string | number} dir
-	 * @param {FolderItem} folderItem
-	 * @param {string} path
-	 * @param {SpecialFolderOption} [option]
+	 * @param {SpecialFolderArgument} arg
 	 */
-	function SpecialFolder_(title, dir, folderItem, path, option) {
-		this.title = title;
-		this.dir = dir;
-		this.folderItem = folderItem;
-		this.path = path;
-		this.category = option.category || "";
+	function SpecialFolder_(arg) {
+		this.title = arg.title;
+		this.dir = arg.dir;
+		this.folderItem = arg.folderItem;
+		this.path = arg.path;
+		this.category = arg.option.category || "";
 		/** @type {PropertyTypes} */
 		this._propertyTypes = null;
-		this._folderItemForProperties = option.folderItemForProperties;
+		this._folderItemForProperties = arg.option.folderItemForProperties;
 		/** @type {FolderItemVerb} */
 		this._properties = undefined;
 	}
@@ -142,15 +138,11 @@
 	
 	/**
 	 * @class
-	 * @param {string} title
-	 * @param {string | number} dir
-	 * @param {FolderItem} folderItem
-	 * @param {string} path
-	 * @param {SpecialFolderOption} [option]
+	 * @param {SpecialFolderArgument} arg
 	 */
-	function FileFolder(title, dir, folderItem, path, option) {
-		SpecialFolder_.apply(this, arguments);
-		this._propertyTypes = option.propertyType ||
+	function FileFolder(arg) {
+		SpecialFolder_.call(this, arg);
+		this._propertyTypes = arg.option.propertyType ||
 			(this._folderItemForProperties === undefined ? ptShellExecute : ptVerb);
 	}
 	FileFolder.prototype = Object.create(SpecialFolder_.prototype);
@@ -174,15 +166,11 @@
 	
 	/**
 	 * @class
-	 * @param {string} title
-	 * @param {string | number} dir
-	 * @param {FolderItem} folderItem
-	 * @param {string} path
-	 * @param {SpecialFolderOption} [option]
+	 * @param {SpecialFolderArgument} arg
 	 */
-	function VirtualFolder(title, dir, folderItem, path, option) {
-		SpecialFolder_.apply(this, arguments);
-		this._propertyTypes = option.propertyType || ptVerb;
+	function VirtualFolder(arg) {
+		SpecialFolder_.call(this, arg);
+		this._propertyTypes = arg.option.propertyType || ptVerb;
 	}
 	VirtualFolder.prototype = Object.create(SpecialFolder_.prototype);
 	VirtualFolder.prototype.constructor = VirtualFolder;
@@ -199,19 +187,24 @@
 	
 	/**
 	 * @class
-	 * @param {string} title
-	 * @param {string | number} dir
-	 * @param {FolderItem} folderItem
-	 * @param {string} path
-	 * @param {SpecialFolderOption} [option]
+	 * @param {SpecialFolderArgument} arg
 	 */
-	function InvalidFolder(title, dir, folderItem, path, option) {
-		SpecialFolder_.call(this, title, dir, null, "", option);
+	function InvalidFolder(arg) {
+		SpecialFolder_.call(this, arg);
 	}
 	InvalidFolder.prototype = Object.create(SpecialFolder_.prototype);
 	InvalidFolder.prototype.constructor = InvalidFolder;
 	InvalidFolder.prototype.isFileFolder = false;
 	InvalidFolder.prototype.getType = function() { return "使用不可"; };
+	
+	/** @type {SpecialFolderArgument} */
+	var sfArg = {
+		title: "",
+		dir: "",
+		folderItem: null,
+		path: "",
+		option: null
+	};
 	
 	/**
 	 * @param {string} title
@@ -220,25 +213,23 @@
 	 * @returns {SpecialFolder}
 	 */
 	function createSpecialFolder(title, dir, option) {
-		/** @type {FolderItem} */
-		var folderItem;
-		try { folderItem = shell.NameSpace(dir).Self }
-		catch (err) { folderItem = null; }
+		sfArg.title = title;
+		sfArg.dir = dir;
 		
-		if (!option) option = defaultOption;
+		try { sfArg.folderItem = shell.NameSpace(dir).Self }
+		catch (err) { sfArg.folderItem = null; }
 		
-		var category = option.category || "";
+		sfArg.option = option || defaultOption;
 		
-		var path = "";
-		if (folderItem) {
-			path = option.path || folderItem.Path;
-			if (path.charAt(0) == ":") path = "shell:" + path;
+		if (sfArg.folderItem) {
+			sfArg.path = sfArg.option.path || sfArg.folderItem.Path;
+			if (sfArg.path.charAt(0) == ":") sfArg.path = "shell:" + sfArg.path;
 		}
 		
-		var SpecialFolderConstructor = fso.FolderExists(path) ? FileFolder :
-			folderItem ? VirtualFolder : InvalidFolder;
+		var SpecialFolderConstructor = fso.FolderExists(sfArg.path) ? FileFolder :
+			sfArg.folderItem ? VirtualFolder : InvalidFolder;
 		// @ts-ignore: FileFolder、VirtualFolder、InvalidFolder は SpecialFolder_ のサブクラス
-		return new SpecialFolderConstructor(title, dir, folderItem, path, option);
+		return new SpecialFolderConstructor(sfArg);
 	}
 	
 	global.SpecialFolder = {};

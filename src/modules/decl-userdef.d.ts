@@ -247,6 +247,14 @@ interface SpecialFolderOption {
 	folderItemForProperties?: FolderItem;
 }
 
+interface SpecialFolderArgument {
+	title: string;
+	dir: string | number;
+	folderItem: FolderItem;
+	path: string;
+	option: SpecialFolderOption;
+}
+
 interface DialogArgument {
 	isFileFolder: boolean;
 	isWslEnabled: boolean;
