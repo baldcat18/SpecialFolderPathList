@@ -198,6 +198,22 @@
 	};
 	
 	/**
+	 * @class
+	 * @param {string} title
+	 * @param {string | number} dir
+	 * @param {FolderItem} folderItem
+	 * @param {string} path
+	 * @param {SpecialFolderOption} [option]
+	 */
+	function InvalidFolder(title, dir, folderItem, path, option) {
+		SpecialFolder_.call(this, title, dir, null, "", option);
+	}
+	InvalidFolder.prototype = Object.create(SpecialFolder_.prototype);
+	InvalidFolder.prototype.constructor = InvalidFolder;
+	InvalidFolder.prototype.isFileFolder = false;
+	InvalidFolder.prototype.getType = function() { return "使用不可"; };
+	
+	/**
 	 * @param {string} title
 	 * @param {string | number} dir
 	 * @param {SpecialFolderOption} [option]
@@ -213,11 +229,16 @@
 		
 		var category = option.category || "";
 		
-		var path = option.path || (folderItem ? folderItem.Path : "");
-		if (path && path.charAt(0) == ":") path = "shell:" + path;
+		var path = "";
+		if (folderItem) {
+			path = option.path || folderItem.Path;
+			if (path.charAt(0) == ":") path = "shell:" + path;
+		}
 		
-		// @ts-ignore: FileFolder と VirtualFolder は SpecialFolder_ のサブクラス
-		return new (fso.FolderExists(path) ? FileFolder : VirtualFolder)(title, dir, folderItem, path, option);
+		var SpecialFolderConstructor = fso.FolderExists(path) ? FileFolder :
+			folderItem ? VirtualFolder : InvalidFolder;
+		// @ts-ignore: FileFolder、VirtualFolder、InvalidFolder は SpecialFolder_ のサブクラス
+		return new SpecialFolderConstructor(title, dir, folderItem, path, option);
 	}
 	
 	global.SpecialFolder = {};
