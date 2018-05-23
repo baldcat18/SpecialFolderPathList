@@ -215,21 +215,25 @@
 	function createSpecialFolder(title, dir, option) {
 		sfArg.title = title;
 		sfArg.dir = dir;
+		sfArg.option = option || defaultOption;
 		
 		try { sfArg.folderItem = shell.NameSpace(dir).Self }
 		catch (err) { sfArg.folderItem = null; }
 		
-		sfArg.option = option || defaultOption;
-		
+		sfArg.path = "";
 		if (sfArg.folderItem) {
 			sfArg.path = sfArg.option.path || sfArg.folderItem.Path;
 			if (sfArg.path.charAt(0) == ":") sfArg.path = "shell:" + sfArg.path;
 		}
 		
-		var SpecialFolderConstructor = fso.FolderExists(sfArg.path) ? FileFolder :
-			sfArg.folderItem ? VirtualFolder : InvalidFolder;
 		// @ts-ignore: FileFolder、VirtualFolder、InvalidFolder は SpecialFolder_ のサブクラス
-		return new SpecialFolderConstructor(sfArg);
+		if (fso.FolderExists(sfArg.path)) return new FileFolder(sfArg);
+		if (Setting.fileFolderOnly) {
+			sfArg.folderItem = null;
+			sfArg.path = "";
+		}
+		// @ts-ignore
+		return new (sfArg.folderItem ? VirtualFolder : InvalidFolder)(sfArg);
 	}
 	
 	global.SpecialFolder = {};
@@ -388,8 +392,6 @@
 			return createSpecialFolder("テンプレート", "shell:Templates");
 		
 		case 41:
-			if (Setting.fileFolderOnly) index += 6;
-			
 			// shell:UsersLibrariesFolder
 			// shell:::{031E4825-7B94-4dc3-B131-E946B44C8DD5}
 			return createSpecialFolder("ライブラリ", "shell:Libraries", { category: "Libraries", path: LIBRARIES_PATH, folderItemForProperties: getDirectoryFolderItem(LIBRARIES_PATH) });
@@ -657,8 +659,6 @@
 		case 125:
 			return createSpecialFolder("既定のガジェット", WIN8 ? "shell:ProgramFiles\\Windows Sidebar\\Gadgets" : "shell:Default Gadgets");
 		case 126:
-			if (Setting.fileFolderOnly) index = doneIteration;
-			
 			return createSpecialFolder("ガジェット (All Users)", "shell:ProgramFiles\\Windows Sidebar\\Shared Gadgets");
 		
 		case 127:
