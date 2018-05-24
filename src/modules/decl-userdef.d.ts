@@ -1,12 +1,12 @@
 ﻿/// <reference path="decl-lib.d.ts" />
 
 declare enum ProcessorArchitecture {
-	Intel = 0,
-	Arm = 5,
-	Ia64 = 6,
-	Amd64 = 9,
-	Arm64 = 12,
-	Unknown = 0xFFFF,
+	intel = 0,
+	arm = 5,
+	ia64 = 6,
+	amd64 = 9,
+	arm64 = 12,
+	unknown = 0xFFFF,
 }
 
 declare enum Key {

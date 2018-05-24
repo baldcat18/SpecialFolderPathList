@@ -175,15 +175,15 @@ var State = (function() {
 	
 	function getPlatform() {
 		switch (shell.GetSystemInformation("ProcessorArchitecture")) {
-			case /** @type ProcessorArchitecture.Amd64 */ (9):
-			case /** @type ProcessorArchitecture.Arm64 */ (12):
-			// case /** @type ProcessorArchitecture.Ia64 */ (6):
-				return 64;
-			case /** @type ProcessorArchitecture.Intel */ (0):
-			case /** @type ProcessorArchitecture.Arm */ (5):
-				return 32;
-			default:
-				throw new Error("対応していないプラットフォームです。");
+		case /** @type ProcessorArchitecture.amd64 */ (9):
+		case /** @type ProcessorArchitecture.arm64 */ (12):
+		// case /** @type ProcessorArchitecture.ia64 */ (6):
+			return 64;
+		case /** @type ProcessorArchitecture.intel */ (0):
+		case /** @type ProcessorArchitecture.arm */ (5):
+			return 32;
+		default:
+			throw new Error("対応していないプラットフォームです。");
 		}
 	}
 	
