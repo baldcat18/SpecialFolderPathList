@@ -118,9 +118,11 @@ function newListHtml() {
 	
 	let dl = document.createElement("dl");
 	
+	const it = SpecialFolders.iterator();
 	for (;;) {
-		const folder = SpecialFolder.getObject();
-		if (!folder) break;
+		const result = it.next();
+		if (result.done) break;
+		const folder = result.value;
 		
 		if (folder.category) {
 			fragment.appendChild(dl);

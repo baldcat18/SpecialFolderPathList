@@ -137,7 +137,7 @@ interface HTMLAnchorElement {
 
 declare var global: {
 	Setting: object;
-	SpecialFolder: object;
+	SpecialFolders: object;
 	Version: Function;
 	window?: Window;
 	WScript?: object;
@@ -180,7 +180,6 @@ declare var Setting: {
 	directoryOnly?: boolean;
 };
 declare var Version: VersionConstructor;
-declare var SpecialFolder: SpecialFolderConstructor;
 
 declare function getRegValue(name: string, defaultValue:string, expand: true): string;
 
@@ -220,18 +219,6 @@ interface SpecialFolder {
 	showProperties(): void;
 }
 
-interface SpecialFolderConstructor {
-	/**
-	 * @param title ツール上に表示するフォルダーの名前
-	 * @param dir FolderItemオブジェクトを取得する時に使うフォルダーのパスまたはShellSpecialFolderConstants。パスのハードコードはなるべく避ける。shellスキームを使ったり、環境変数やレジストリから取得する
-	 * @param [option] オプション設定
-	*/
-	new (title: string, dir: (string | number), option?: SpecialFolderOption): SpecialFolder;
-	getObject(): SpecialFolder;
-	
-	prototype: SpecialFolder;
-}
-
 interface SpecialFolderOption {
 	/** フォルダーのカテゴリ名 */
 	category?: string;
@@ -262,4 +249,9 @@ interface DialogArgument {
 	extended: boolean;
 	explorerRunasLaunchingUser: boolean;
 	sendItem(item: string): void;
+}
+
+declare var SpecialFolders: {
+	item(itemIndex: number): SpecialFolder;
+	iterator(): { next: () => IteratorResult<SpecialFolder>; }
 }

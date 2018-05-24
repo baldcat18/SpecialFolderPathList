@@ -41,9 +41,6 @@
 	/** @type {PropertyTypes.ptVerb} */
 	var ptVerb = 2;
 	
-	var index = -1;
-	var doneIteration = Infinity;
-	
 	if (Setting.directoryOnly !== undefined && Setting.fileFolderOnly === undefined) {
 		Setting.fileFolderOnly = Setting.directoryOnly;
 	}
@@ -77,7 +74,7 @@
 	 * @abstract
 	 * @param {SpecialFolderArgument} arg
 	 */
-	function SpecialFolder_(arg) {
+	function SpecialFolder(arg) {
 		this.title = arg.title;
 		this.dir = arg.dir;
 		this.folderItem = arg.folderItem;
@@ -89,13 +86,13 @@
 		/** @type {FolderItemVerb} */
 		this._properties = undefined;
 	}
-	SpecialFolder_.prototype.open = function() { this.folderItem.InvokeVerb(); };
+	SpecialFolder.prototype.open = function() { this.folderItem.InvokeVerb(); };
 	/** @param {string} [verb] */
-	SpecialFolder_.prototype.execExplorer = function(verb) {
+	SpecialFolder.prototype.execExplorer = function(verb) {
 		var path = typeof this.dir == "number" ? this.path : this.dir;
 		shell.ShellExecute("explorer.exe", "\"{0}\"".xFormat(path), null, verb);
 	};
-	SpecialFolder_.prototype.hasProperties = function() {
+	SpecialFolder.prototype.hasProperties = function() {
 		if (this._propertyTypes == ptShellExecute) return true;
 		if (this._folderItemForProperties === null) return false;
 		
@@ -114,7 +111,7 @@
 		}
 		return !!this._properties;
 	};
-	SpecialFolder_.prototype.showProperties = function() {
+	SpecialFolder.prototype.showProperties = function() {
 		if (this._propertyTypes == ptShellExecute) {
 			var dir = /** @type {string} */ (this.dir);
 			var path = dir.slice(0, 6) == "shell:" ? dir : "file:" + dir;
@@ -123,7 +120,7 @@
 		else if (this.hasProperties()) this._properties.DoIt();
 		else writeError("プロパティを表示できません。");
 	};
-	SpecialFolder_.prototype.getType = function() {
+	SpecialFolder.prototype.getType = function() {
 		return this.folderItem ? this.folderItem.Type : "使用不可";
 	};
 	
@@ -132,11 +129,11 @@
 	 * @param {SpecialFolderArgument} arg
 	 */
 	function FileFolder(arg) {
-		SpecialFolder_.call(this, arg);
+		SpecialFolder.call(this, arg);
 		this._propertyTypes = arg.option.propertyType ||
 			(this._folderItemForProperties === undefined ? ptShellExecute : ptVerb);
 	}
-	FileFolder.prototype = Object.create(SpecialFolder_.prototype);
+	FileFolder.prototype = Object.create(SpecialFolder.prototype);
 	FileFolder.prototype.constructor = FileFolder;
 	FileFolder.prototype.isFileFolder = true;
 	// メソッドでthis.pathが未定義だといわれないようにするためのもの
@@ -160,10 +157,10 @@
 	 * @param {SpecialFolderArgument} arg
 	 */
 	function VirtualFolder(arg) {
-		SpecialFolder_.call(this, arg);
+		SpecialFolder.call(this, arg);
 		this._propertyTypes = arg.option.propertyType || ptVerb;
 	}
-	VirtualFolder.prototype = Object.create(SpecialFolder_.prototype);
+	VirtualFolder.prototype = Object.create(SpecialFolder.prototype);
 	VirtualFolder.prototype.constructor = VirtualFolder;
 	VirtualFolder.prototype.isFileFolder = false;
 	VirtualFolder.prototype.execCmd = function(verb) {
@@ -181,9 +178,9 @@
 	 * @param {SpecialFolderArgument} arg
 	 */
 	function InvalidFolder(arg) {
-		SpecialFolder_.call(this, arg);
+		SpecialFolder.call(this, arg);
 	}
-	InvalidFolder.prototype = Object.create(SpecialFolder_.prototype);
+	InvalidFolder.prototype = Object.create(SpecialFolder.prototype);
 	InvalidFolder.prototype.constructor = InvalidFolder;
 	InvalidFolder.prototype.isFileFolder = false;
 	InvalidFolder.prototype.getType = function() { return "使用不可"; };
@@ -217,7 +214,7 @@
 			if (sfArg.path.charAt(0) == ":") sfArg.path = "shell:" + sfArg.path;
 		}
 		
-		// @ts-ignore: FileFolder、VirtualFolder、InvalidFolder は SpecialFolder_ のサブクラス
+		// @ts-ignore: FileFolder、VirtualFolder、InvalidFolder は SpecialFolder のサブクラス
 		if (fso.FolderExists(sfArg.path)) return new FileFolder(sfArg);
 		if (Setting.fileFolderOnly) {
 			sfArg.folderItem = null;
@@ -227,9 +224,41 @@
 		return new (sfArg.folderItem ? VirtualFolder : InvalidFolder)(sfArg);
 	}
 	
-	global.SpecialFolder = {};
-	SpecialFolder.getObject = function() {
-		switch (++index) {
+	global.SpecialFolders = {
+		item: (function() {
+			/** @type {{ current: number; }} */
+			var index = null;
+			return item;
+			
+			/**
+			 * @param {number} itemIndex
+			 * @returns {SpecialFolder}
+			 */
+			function item(itemIndex) {
+				if (!index) index = { current: 0 };
+				
+				index.current = itemIndex;
+				return getSpecialFolder(index);
+			};
+		})(),
+		iterator: function() {
+			return {
+				next: function() {
+					return this._index.current == doneIteration ?
+						{ done: true } : { done: false, value: getSpecialFolder(this._index) };
+				},
+				_index: { current: 0 }
+			}
+		}
+	};
+	
+	var doneIteration = Infinity;
+	
+	/**
+	 * @param {{ current: number; }} index
+	 */
+	function getSpecialFolder(index) {
+		switch (index.current++) {
 		case 0:
 			// shell:Profile
 			// shell:::{59031a47-3f72-44a7-89c5-5595fe6b30ee}
@@ -888,7 +917,7 @@
 			// Win10 1709までサポート
 			return createSpecialFolder("ゲーム", "shell:Games");
 		case 215:
-			if (!Setting.debug) index = doneIteration;
+			if (!Setting.debug) index.current = doneIteration;
 			
 			return createSpecialFolder("Previous Versions Results Folder", "shell:::{f8c2ab3b-17bc-41da-9758-339d7dbf2d88}");
 		
@@ -998,7 +1027,7 @@
 			return createSpecialFolder("オフライン ファイル", "shell:CSCFolder");
 		
 		case 256:
-			if (true) ++index;
+			if (true) ++index.current;
 			else {
 				// Win8からサポート
 				// ファイル履歴を有効にすると利用可
@@ -1425,7 +1454,7 @@
 		case 426:
 			return createSpecialFolder("History", "shell:::{FF393560-C2A7-11CF-BFF4-444553540000}");
 		case 427:
-			index = doneIteration;
+			index.current = doneIteration;
 			
 			return createSpecialFolder("Windows Photo Viewer Image Verbs", "shell:::{FFE2A43C-56B9-4bf5-9A79-CC6D4285608A}");
 		
