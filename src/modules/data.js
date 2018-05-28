@@ -80,12 +80,12 @@
 		this.folderItem = arg.folderItem;
 		this.path = arg.path;
 		this.category = arg.option.category || "";
-		/** @type {PropertyTypes} */
-		this._propertyTypes = null;
 		this._folderItemForProperties = arg.option.folderItemForProperties;
-		/** @type {FolderItemVerb} */
-		this._properties = undefined;
 	}
+	/** @type {PropertyTypes} */
+	SpecialFolder.prototype._propertyTypes = null;
+	/** @type {FolderItemVerb} */
+	SpecialFolder.prototype._properties = undefined;
 	SpecialFolder.prototype.open = function() { this.folderItem.InvokeVerb(); };
 	/** @param {string} [verb] */
 	SpecialFolder.prototype.execExplorer = function(verb) {
