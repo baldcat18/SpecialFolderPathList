@@ -244,10 +244,10 @@
 		iterator: function() {
 			return {
 				next: function() {
-					return this._index.current == doneIteration ?
+					return ++this._index.current == doneIteration ?
 						{ done: true } : { done: false, value: getSpecialFolder(this._index) };
 				},
-				_index: { current: 0 }
+				_index: { current: -1 }
 			}
 		}
 	};
@@ -258,7 +258,7 @@
 	 * @param {{ current: number; }} index
 	 */
 	function getSpecialFolder(index) {
-		switch (index.current++) {
+		switch (index.current) {
 		case 0:
 			// shell:Profile
 			// shell:::{59031a47-3f72-44a7-89c5-5595fe6b30ee}
