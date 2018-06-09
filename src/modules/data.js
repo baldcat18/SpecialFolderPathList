@@ -120,9 +120,7 @@
 		else if (this.hasProperties()) this._properties.DoIt();
 		else writeError("プロパティを表示できません。");
 	};
-	SpecialFolder.prototype.getType = function() {
-		return this.folderItem ? this.folderItem.Type : "使用不可";
-	};
+	SpecialFolder.prototype.getType = function() { return this.folderItem.Type; };
 	
 	/**
 	 * @class
