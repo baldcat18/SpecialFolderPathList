@@ -186,9 +186,9 @@ Add-Type -TypeDefinition $source -ErrorAction Stop
 		}
 		
 		# [pscustomobject]@{}が使えるのはPowerShell3.0から
-		New-Object psobject | Select-Object @(
-			@{ Name = "Name"; Expression = { $name } }
-			@{ Name = "Result"; Expression = { $result } }
-			@{ Name = "Path"; Expression = { $folder.Path } }
-		)
+		New-Object psobject -Property @{
+			"Name" = $name
+			"Result" = $result
+			"Path" = $folder.Path
+		} | Select-Object Name, Result, Path
 	}

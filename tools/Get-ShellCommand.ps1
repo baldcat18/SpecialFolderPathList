@@ -22,13 +22,13 @@ Get-ChildItem "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDe
 	ForEach-Object {
 		$key = $_
 		
-		New-Object psobject | Select-Object @(
-			@{ Name = "Guid"; Expression = { $key.PSChildName } }
-			@{ Name = "Name"; Expression = { "shell:$($key.GetValue('Name'))" } }
-			@{ Name = "Category"; Expression = { $categories[$key.GetValue("Category")] } }
-			@{ Name = "PreCreate"; Expression = { $key.GetValue("PreCreate") } }
-			@{ Name = "ParsingName"; Expression = { $key.GetValue("ParsingName") } }
-			@{ Name = "ParentFolder"; Expression = { $key.GetValue("ParentFolder") } }
-			@{ Name = "RelativePath"; Expression = { $key.GetValue("RelativePath") } }
-		)
+		New-Object psobject -Property @{
+			"Guid" = $key.PSChildName
+			"Name" = "shell:$($key.GetValue('Name'))"
+			"Category" = $categories[$key.GetValue("Category")]
+			"PreCreate" = $key.GetValue("PreCreate")
+			"ParsingName" = $key.GetValue("ParsingName")
+			"ParentFolder" = $key.GetValue("ParentFolder")
+			"RelativePath" = $key.GetValue("RelativePath")
+		} | Select-Object Guid, Name, Category, PreCreate, ParsingName, ParentFolder, RelativePath
 	}
