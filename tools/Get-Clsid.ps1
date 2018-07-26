@@ -27,10 +27,12 @@ Get-Content -LiteralPath $regFile |
 			$clsid = $_
 			$subKey = $clsidKey.OpenSubKey($clsid)
 			
-			New-Object psobject -Property @{
-				"Key" = "shell:::$clsid"
-				"Name" = $subKey.GetValue("")
-			} | Select-Object Key, Name
+			Write-Output (
+				New-Object psobject -Property @{
+					"Key" = "shell:::$clsid"
+					"Name" = $subKey.GetValue("")
+				} | Select-Object Key, Name
+			)
 		} finally {
 			$subKey.Close()
 		}

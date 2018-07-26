@@ -16,9 +16,11 @@ $unusableText = ($dataText -csplit 'category: "Unusable"', 2, "SimpleMatch")[1]
 		$path = "Microsoft.PowerShell.Core\Registry::HKEY_CLASSES_ROOT\CLSID\$clsid"
 		$exists = Test-path $path
 		
-		New-Object psobject -Property @{
-			"Clsid" = $clsid
-			"Exists" = $exists
-			"Name" = if ($exists) { (Get-Item $path).GetValue("") }
-		} | Select-Object Clsid, Exists, Name
+		Write-Output (
+			New-Object psobject -Property @{
+				"Clsid" = $clsid
+				"Exists" = $exists
+				"Name" = if ($exists) { (Get-Item $path).GetValue("") }
+			} | Select-Object Clsid, Exists, Name
+		)
 	}
