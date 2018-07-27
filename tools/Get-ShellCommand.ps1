@@ -4,7 +4,7 @@ data.jsに載っていないshellコマンドの情報を返す
 #>
 
 [CmdletBinding()]
-param([switch]$All, [switch]$Detail)
+param([switch]$All)
 
 function const ([string]$name, $value) {
     New-Variable -Name $name -Value $value -Option Constant -Scope 1
