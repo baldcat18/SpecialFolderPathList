@@ -222,6 +222,8 @@
 		return new (sfArg.folderItem ? VirtualFolder : InvalidFolder)(sfArg);
 	}
 	
+	var doneIteration = Infinity;
+	
 	global.SpecialFolders = {
 		item: (function() {
 			/** @type {{ current: number; }} */
@@ -249,8 +251,6 @@
 			}
 		}
 	};
-	
-	var doneIteration = Infinity;
 	
 	/**
 	 * @param {{ current: number; }} index
