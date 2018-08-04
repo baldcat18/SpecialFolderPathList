@@ -7,8 +7,8 @@
  */
 
 
-// ディレクトリ(ファイル フォルダー)の情報だけを返してほしい時は値をtrueにする
-Setting.directoryOnly = false;
+// ファイル フォルダー(ディレクトリ)の情報だけを返してほしい時は値をtrueにする
+Setting.fileFolderOnly = false;
 
 // フォルダーのカテゴリの名前を表示する場合はtrueにする
 Setting.viewCategory = false;

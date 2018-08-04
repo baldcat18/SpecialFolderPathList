@@ -2,6 +2,14 @@
 
 if (!this.global || global != this.global) this.global = this;
 
+if (!Object.create) {
+	Object.create = function(o) {
+		var _ = function() {};
+		_.prototype = o;
+		return new _();
+	};
+}
+
 var wShell = new ActiveXObject("WScript.Shell");
 var shell = new ActiveXObject("Shell.Application");
 var fso = new ActiveXObject("Scripting.FileSystemObject");
@@ -20,7 +28,7 @@ String.prototype.xFormat = function() {
 	 * @param {string} matched
 	 * @param {string} index
 	 * @param {string} fmt
-	 * @return {string}
+	 * @returns {string}
 	 */
 	function replacer(matched, index, fmt) {
 		if (matched == "{{") return "{";
@@ -68,7 +76,7 @@ global.Version = (function() {
 	
 	/**
 	 * @param {Version} value
-	 * @return {number}
+	 * @returns {number}
 	 */
 	Version.prototype.compareTo = function(value) {
 		if (!value) return 1;
@@ -82,21 +90,21 @@ global.Version = (function() {
 	};
 	/**
 	 * @param {Version} obj
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	Version.prototype.equals = function(obj) {
 		return this.compareTo(obj) == 0;
 	};
 	/**
 	 * @param {Version} obj
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	Version.prototype.isGreaterThan = function(obj) {
 		return !!obj && this.compareTo(obj) > 0;
 	}
 	/**
 	 * @param {number} [fieldCount]
-	 * @return {string}
+	 * @returns {string}
 	 */
 	Version.prototype.toString = function(fieldCount) {
 		if (fieldCount == undefined) {
@@ -116,13 +124,13 @@ global.Version = (function() {
 })();
 
 var State = (function() {
-	var appVersion = "1.3.1.0";
+	var appVersion = "1.3.2.0 alpha";
 	
 	/**
 	 * @template T
 	 * @param {string} name
 	 * @param {T} [defaultValue]
-	 * @return {T}
+	 * @returns {T}
 	 */
 	function getWinNTCurrentVersionValue(name, defaultValue) {
 		return getRegValue("HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\" + name, defaultValue);
@@ -158,7 +166,7 @@ var State = (function() {
 			osVersion.toString(2) == "6.1" && osVersion.build >= 7601 // Win7 SP1
 	};
 	
-	/** @return {string} */
+	/** @returns {string} */
 	function getHostType() {
 		if (global.window && /\.hta$/.test(location.href)) return "mshta";
 		if (global.WScript) return fso.GetBaseName(WScript.FullName).toLowerCase();
@@ -166,23 +174,16 @@ var State = (function() {
 	}
 	
 	function getPlatform() {
-		var x86 = 0;
-		var arm = 5;
-		// var ia64 = 6;
-		var amd64 = 9;
-		var arm64 = 12;
-		var unknown = 0xFFFF;
-		
 		switch (shell.GetSystemInformation("ProcessorArchitecture")) {
-			case amd64:
-			case arm64:
-			// case ia64:
-				return 64;
-			case x86:
-			case arm:
-				return 32;
-			default:
-				throw new Error("対応していないプラットフォームです。");
+		case /** @type ProcessorArchitecture.amd64 */ (9):
+		case /** @type ProcessorArchitecture.arm64 */ (12):
+		// case /** @type ProcessorArchitecture.ia64 */ (6):
+			return 64;
+		case /** @type ProcessorArchitecture.intel */ (0):
+		case /** @type ProcessorArchitecture.arm */ (5):
+			return 32;
+		default:
+			throw new Error("対応していないプラットフォームです。");
 		}
 	}
 	
@@ -206,7 +207,7 @@ var unsupportMessage = (function() {
 
 /**
  * @param {any} value 
- * @return {number}
+ * @returns {number}
  */
 function toInt32(value) {
 	// value | 0 や value >> 0 でもいい
@@ -215,7 +216,7 @@ function toInt32(value) {
 
 /**
  * @param {any} value 
- * @return {number}
+ * @returns {number}
  */
 function toUint32 (value) {
 	return value >>> 0;
@@ -226,7 +227,7 @@ function toUint32 (value) {
  * @param {string} name
  * @param {T} [defaultValue]
  * @param {boolean} [expand]
- * @return {T}
+ * @returns {T}
  */
 function getRegValue(name, defaultValue, expand) {
 	var returnValue;
@@ -240,12 +241,12 @@ function getRegValue(name, defaultValue, expand) {
 	return expand && typeof returnValue == "string" ? returnValue.xExpand() : returnValue;
 }
 
-/** @return {string} */
+/** @returns {string} */
 function getSystemPath() {
 	return fso.GetSpecialFolder(/** @type {SpecialFolderConst.SystemFolder} */ (1)).Path;
 }
 
-/** @return {string} */
+/** @returns {string} */
 function getSysNativePath() {
 	return "%windir%\\SysNative".xExpand();
 }

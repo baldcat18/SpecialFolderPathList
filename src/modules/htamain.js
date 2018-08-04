@@ -21,7 +21,7 @@ var htaDebug = (function() {
 	
 	/**
 	 * @param {any} value 
-	 * @return {string}
+	 * @returns {string}
 	 */
 	function getType(value) {
 		if (value === null) return "null";

@@ -14,7 +14,7 @@ function updateSetting() {
 		c: "viewCategory",
 		d: "wshWriteDisplayName",
 		f: "wshForceWriteAllData",
-		o: "directoryOnly",
+		o: "fileFolderOnly",
 		t: "wshWriteType"
 	};
 	
@@ -56,9 +56,11 @@ function writeAppInfo() {
 }
 
 function writeList() {
+	var it = SpecialFolders.iterator();
 	for (;;) {
-		var folder = SpecialFolder.getObject();
-		if (!folder) break;
+		var result = it.next();
+		if (result.done) break;
+		var folder = result.value;
 		
 		try {
 			if (folder.category) {

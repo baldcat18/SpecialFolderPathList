@@ -1,5 +1,14 @@
 ﻿/// <reference path="decl-lib.d.ts" />
 
+declare enum ProcessorArchitecture {
+	intel = 0,
+	arm = 5,
+	ia64 = 6,
+	amd64 = 9,
+	arm64 = 12,
+	unknown = 0xFFFF,
+}
+
 declare enum Key {
 	backspace = 8,
 	tab = 9,
@@ -128,7 +137,7 @@ interface HTMLAnchorElement {
 
 declare var global: {
 	Setting: object;
-	SpecialFolder: Function;
+	SpecialFolders: object;
 	Version: Function;
 	window?: Window;
 	WScript?: object;
@@ -140,8 +149,8 @@ declare var Setting: {
 	
 	/** サポートされない古いOS上で実行した時に強制終了させる */
 	abortIfOldOS: boolean;
-	/** ディレクトリ(ファイル フォルダー)の情報だけを返す */
-	directoryOnly: boolean;
+	/** ファイル フォルダー(ディレクトリ)の情報だけを返す */
+	fileFolderOnly: boolean;
 	/** フォルダーのカテゴリの名前を表示する */
 	viewCategory: boolean;
 	
@@ -166,9 +175,11 @@ declare var Setting: {
 	wshWriteDisplayName?: boolean;
 	/** WSH版でフォルダーの種類も出力する */
 	wshWriteType?: boolean;
+	
+	/** @deprecated 移行先はfileFolderOnly */
+	directoryOnly?: boolean;
 };
 declare var Version: VersionConstructor;
-declare var SpecialFolder: SpecialFolderConstructor;
 
 declare function getRegValue(name: string, defaultValue:string, expand: true): string;
 
@@ -208,18 +219,6 @@ interface SpecialFolder {
 	showProperties(): void;
 }
 
-interface SpecialFolderConstructor {
-	/**
-	 * @param title ツール上に表示するフォルダーの名前
-	 * @param dir FolderItemオブジェクトを取得する時に使うフォルダーのパスまたはShellSpecialFolderConstants。パスのハードコードはなるべく避ける。shellスキームを使ったり、環境変数やレジストリから取得する
-	 * @param [option] オプション設定
-	*/
-	new (title: string, dir: (string | number), option?: SpecialFolderOption): SpecialFolder;
-	getObject(): SpecialFolder;
-	
-	prototype: SpecialFolder;
-}
-
 interface SpecialFolderOption {
 	/** フォルダーのカテゴリ名 */
 	category?: string;
@@ -235,6 +234,14 @@ interface SpecialFolderOption {
 	folderItemForProperties?: FolderItem;
 }
 
+interface SpecialFolderArgument {
+	title: string;
+	dir: string | number;
+	folderItem: FolderItem;
+	path: string;
+	option: SpecialFolderOption;
+}
+
 interface DialogArgument {
 	isFileFolder: boolean;
 	isWslEnabled: boolean;
@@ -242,4 +249,9 @@ interface DialogArgument {
 	extended: boolean;
 	explorerRunasLaunchingUser: boolean;
 	sendItem(item: string): void;
+}
+
+declare var SpecialFolders: {
+	item(itemIndex: number): SpecialFolder;
+	iterator(): { next: () => IteratorResult<SpecialFolder>; }
 }

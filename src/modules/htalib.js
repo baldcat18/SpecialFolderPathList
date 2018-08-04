@@ -118,9 +118,11 @@ function newListHtml() {
 	
 	let dl = document.createElement("dl");
 	
+	const it = SpecialFolders.iterator();
 	for (;;) {
-		const folder = SpecialFolder.getObject();
-		if (!folder) break;
+		const result = it.next();
+		if (result.done) break;
+		const folder = result.value;
 		
 		if (folder.category) {
 			fragment.appendChild(dl);
@@ -181,10 +183,13 @@ function addEventHandler() {
 		evt.preventDefault();
 		
 		const target = evt.target;
-		if (!(target instanceof HTMLAnchorElement)) return;
+		if (target instanceof HTMLAnchorElement) {
+			if (evt.altKey) command.copyAsPath(target);
+			else popup.show(evt);
+		} else if (Setting.debug && evt.altKey) {
+			htaDebug.breakpoint();
+		}
 		
-		if (evt.altKey) command.copyAsPath(target);
-		else popup.show(evt);
 	};
 	/** @param {KeyboardEvent} evt */
 	document.onkeyup =  function(evt) {
@@ -204,7 +209,7 @@ function addEventHandler() {
 
 /**
  * @param {MouseEvent} evt
- * @return {string}
+ * @returns {string}
  */
 function getVerb(evt) {
 	return evt.altKey ? "showProperty" :

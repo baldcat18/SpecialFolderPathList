@@ -2,23 +2,6 @@
 
 Element.prototype.remove = function() { this.parentNode.removeChild(this); };
 
-/** @type {typeof Key} */ 
-// @ts-ignore
-var Key = {
-	escape: 27,
-	a: 65,
-	e: 69,
-	h: 72,
-	i: 73,
-	l: 76,
-	o: 79,
-	p: 80,
-	r: 82,
-	s: 83,
-	w: 87,
-	x: 88
-};
-
 /** @type {HTMLDialog} */
 var dialog = this;
 /** @type {DialogArgument} */
@@ -32,21 +15,21 @@ document.onclick = document.oncontextmenu = function() {
 
 /** @type {{[x: number]: string}} */
 var items = {};
-items[Key.o] = "openFolder";
-items[Key.a] = "copyAsPath";
-items[Key.x] = "execExplorer";
-items[Key.e] = "execExplorerElevated";
-items[Key.p] = "execCmd";
-items[Key.w] = "execCmdElevated";
-items[Key.s] = "execPowershell";
-items[Key.h] = "execPowershellElevated";
-items[Key.l] = "execWsl";
-items[Key.i] = "execWslElevated";
-items[Key.r] = "showProperty";
+items[/** @type {Key.o} */ (79)] = "openFolder";
+items[/** @type {Key.a} */ (65)] = "copyAsPath";
+items[/** @type {Key.x} */ (88)] = "execExplorer";
+items[/** @type {Key.e} */ (69)] = "execExplorerElevated";
+items[/** @type {Key.p} */ (80)] = "execCmd";
+items[/** @type {Key.w} */ (87)] = "execCmdElevated";
+items[/** @type {Key.s} */ (83)] = "execPowershell";
+items[/** @type {Key.h} */ (72)] = "execPowershellElevated";
+items[/** @type {Key.l} */ (76)] = "execWsl";
+items[/** @type {Key.i} */ (73)] = "execWslElevated";
+items[/** @type {Key.r} */ (82)] = "showProperty";
 document.onkeyup = function() {
 	var evt = /** @type {KeyboardEvent} */ (event);
 	
-	if (evt.keyCode == Key.escape) window.close();
+	if (evt.keyCode == /** @type {Key.escape} */ (27)) window.close();
 	 
 	/** @type {string} */
 	var item = items[evt.keyCode];
