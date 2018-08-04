@@ -22,13 +22,14 @@ Windows 10 Creators Update      (バージョン 1703 ビルド 15063)
 
 32 ビット版・64 ビット版の両方で動作します。
 
+Windows 10 Insider Preview (ビルド 17713) でも動作すると思います。
+
 Windows 10 Anniversary Update (バージョン 1607 ビルド 14393) でも
 動作すると思いますが、動作確認していません。
 
 Windows 7 で実行するには Internet Explorer 11 が必要です。
 
-Windows RT、Windows 10 S などの
-HTA をサポートしない環境では動作しません。
+Windows RT、Windows 10 S などの HTA をサポートしない環境では動作しません。
 
 ・開発環境
 Visual Studio Code
