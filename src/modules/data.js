@@ -795,6 +795,7 @@
 			// shell:Fonts
 			return createSpecialFolder("フォント", "shell:ControlPanelFolder\\::{BD84B380-8CA2-1069-AB1D-08000948F534}", { path: "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{BD84B380-8CA2-1069-AB1D-08000948F534}" });
 		case 171:
+			// Win10 1803までサポート(?)
 			return createSpecialFolder("言語", "shell:ControlPanelFolder\\::{BF782CC9-5A52-4A17-806C-2A894FFEEAC5}");
 		case 172:
 			// Win10 1607までサポート
@@ -1356,7 +1357,7 @@
 		case 381:
 			return createSpecialFolder("Folder Shortcut", "shell:::{0AFACED1-E828-11D1-9187-B532F1E9575D}");
 		case 382:
-			return createSpecialFolder("", "shell:::{0C39A5CF-1A7A-40C8-BA74-8900E6DF5FCD}");
+			return createSpecialFolder("", WIN10_1803 ? "shell:::{0c39a5cf-1a7a-40c8-ba74-8900e6df5fcd}" : "shell:::{0C39A5CF-1A7A-40C8-BA74-8900E6DF5FCD}");
 		case 383:
 			return createSpecialFolder("", "shell:::{0D45D530-764B-11d0-A1CA-00AA00C16E65}");
 		case 384:
