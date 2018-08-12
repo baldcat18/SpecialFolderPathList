@@ -22,23 +22,28 @@ interface Window {
 	showModelessDialog(url?: string, argIn?: any, options?: any): Window;
 }
 
+
 /**
  * Provides access to information about an HTML dialog box.
- * @see https://msdn.microsoft.com/en-us/library/aa752691(v=vs.85).aspx
+ * @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa752684(v=vs.85)
 */
 interface HTMLDialog {
 	/** Gets the variable or array of variables passed into the modal dialog window. */
 	dialogArguments: any;
 	/** Sets or gets the height of the modal dialog window. */
 	dialogHeight: any;
+	dialogHide: string;
 	/** Sets or gets the left coordinate of the modal dialog window. */
 	dialogLeft: any;
 	/** Sets or gets the width of the modal dialog window. */
 	dialogWidth: any;
 	/** Sets or gets the top coordinate of the modal dialog window. */
 	dialogTop: any;
+	resizable: string;
 	/** Sets or gets the value returned from the modal dialog window. */
 	returnValue: any;
+	status: string;
+	unadorned: string;
 	
 	/** Closes the current browser window or HTA. */
 	close(): void;
