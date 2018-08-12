@@ -197,7 +197,7 @@ declare enum SpecialFolderConst {
 	TemporaryFolder = 2,
 }
 
-/** @see https://msdn.microsoft.com/en-us/library/y6hbz9es(v=vs.84).aspx */
+/** @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/windows-scripting/y6hbz9es(v=vs.84) */
 declare enum StandardStreamTypes {
 	/** Returns a TextStream object corresponding to the standard input stream. */
 	StdIn = 0,
@@ -536,7 +536,7 @@ interface Shell {
 
 /**
  * Represents a Shell folder. This object contains properties and methods that allow you to retrieve information about the folder.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb787854(v=vs.85).aspx
+ * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folder2
  */
 interface ShlFolder {
 	/** Contains the folder's Application object. */
@@ -614,7 +614,7 @@ interface FolderItem {
 
 /**
  * Represents the collection of items in a Shell folder. This object contains properties and methods that allow you to retrieve information about the collection.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb787789(v=vs.85).aspx
+ * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folderitems3
  */
 interface FolderItems {
 	/** Contains the Application object of the folder items collection. */
@@ -634,7 +634,7 @@ interface FolderItems {
 
 /**
  * Represents a single verb available to an item. This object contains properties and methods that allow you to retrieve information about the verb.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb774172(v=vs.85).aspx
+ * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folderitemverb
  */
 interface FolderItemVerb {
 	/** Contains the verb's name. */
@@ -646,7 +646,7 @@ interface FolderItemVerb {
 
 /**
  * Represents the collection of verbs for an item in a Shell folder. This object contains properties and methods that allow you to retrieve information about the collection.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb774160(v=vs.85).aspx
+ * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folderitemverbs
  */
 interface FolderItemVerbs {
 	/** Contains the number of items in the collection. */
@@ -658,7 +658,7 @@ interface FolderItemVerbs {
 
 /**
  * Manages Shell links.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb774114(v=vs.85).aspx
+ * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-ishelllinkdual2
  */
 interface ShellLinkObject {
 	/** Contains a link's arguments. */
