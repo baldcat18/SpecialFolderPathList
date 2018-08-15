@@ -8,6 +8,8 @@ data.jsのSpecialFolder.getObject()内で参照しているindex番号を振り�
 [CmdletBinding()]
 param()
 
+Set-StrictMode -Version Latest
+
 $dataFile = (Resolve-Path "$PSScriptRoot\..\src\modules\data.js").Path
 
 $tmpLine = New-Object System.Collections.Generic.List[string] 2048

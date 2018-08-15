@@ -6,6 +6,8 @@ data.jsに載っている特殊フォルダーとして使えないCLSIDがまだレジストリに存在してい
 [CmdletBinding()]
 param()
 
+Set-StrictMode -Version Latest
+
 $dataFile = (Resolve-Path "$($MyInvocation.MyCommand.Path)\..\..\src\modules\data.js").Path
 $dataText = @(Get-Content -LiteralPath $dataFile) -join "`n"
 $unusableText = ($dataText -csplit 'category: "Unusable"', 2, "SimpleMatch")[1]

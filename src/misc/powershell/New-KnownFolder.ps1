@@ -16,6 +16,8 @@ psobject[]
 [CmdletBinding()]
 param()
 
+Set-StrictMode -Version Latest
+
 [bool]$verbose = $VerbosePreference -eq "Continue"
 
 [string]$source = @'

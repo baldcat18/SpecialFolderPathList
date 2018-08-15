@@ -6,8 +6,10 @@ data.jsに載っていないshellコマンドの情報を返す
 [CmdletBinding()]
 param([switch]$All)
 
+Set-StrictMode -Version Latest
+
 function const ([string]$name, $value) {
-    New-Variable -Name $name -Value $value -Option Constant -Scope 1
+	New-Variable -Name $name -Value $value -Option Constant -Scope 1
 }
 
 if (!$All) {

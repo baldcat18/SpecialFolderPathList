@@ -6,6 +6,8 @@
 [CmdletBinding()]
 param([switch]$All)
 
+Set-StrictMode -Version Latest
+
 if (!$All) {
 	$dataFile = (Resolve-Path "$($MyInvocation.MyCommand.Path)\..\..\src\modules\data.js").Path
 	$dataText = @(Get-Content -LiteralPath $dataFile) -join "`n"
