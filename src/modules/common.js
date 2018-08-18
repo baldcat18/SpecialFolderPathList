@@ -225,18 +225,21 @@ function toUint32 (value) {
 /**
  * @template T
  * @param {string} name
- * @param {T} [defaultValue]
- * @param {boolean} [expand]
+ * @param {T} [defaultValue=null]
+ * @param {boolean} [expand=false]
  * @returns {T}
  */
 function getRegValue(name, defaultValue, expand) {
+	if (defaultValue === undefined) defaultValue = null;
+	if (expand === undefined) expand = false;
+	
 	var returnValue;
 	try {
 		returnValue = wShell.RegRead(name);
 	} catch (err) {
 		// 0x80070002: レジストリのキーや値が見つからない
 		if (toUint32(/** @type {Error} */ (err).number) != 0x80070002) throw err;
-		returnValue = defaultValue == undefined ? null : defaultValue;
+		returnValue = defaultValue;
 	}
 	return expand && typeof returnValue == "string" ? returnValue.xExpand() : returnValue;
 }

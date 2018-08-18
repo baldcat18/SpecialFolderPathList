@@ -73,18 +73,21 @@ var htaDebug = (function() {
 			this.write(dir, title);
 		},
 		/**
-		 * @param {function(string): any} [callEval] 
-		 * @param {string} [title]
+		 * @param {function(string): any} [callEval=eval] 
+		 * @param {string} [title=""]
 		 */
 		breakpoint: function(callEval, title) {
+			if (callEval === undefined) callEval = eval;
+			if (title === undefined) title = "";
+			
 			var expr = "";
 			var result = "";
 			
 			for (;;) {
-				expr = prompt(title || "", expr);
+				expr = prompt(title, expr);
 				if (!expr) break;
 				try {
-					result = String((callEval || eval)(expr));
+					result = String((callEval)(expr));
 				} catch (err) {
 					result = err instanceof Error ?
 						"{0} (0x{1})\n{2}".xFormat(err.name, (err.number || 0).xToHex(), err.message) : err;
