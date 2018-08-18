@@ -1,24 +1,37 @@
 ﻿declare var clipboardData: DataTransfer;
 
 interface Error {
-	/** 特定のエラーと関連付けられた数値を設定します。値の取得も可能です。 */
+	/**
+	 * 特定のエラーと関連付けられた数値を設定します。値の取得も可能です。
+	 * @see https://msdn.microsoft.com/ja-jp/library/cc427878.aspx
+	 */
     number: number;
 }
 
+/** @see https://msdn.microsoft.com/ja-jp/library/cc427715.aspx */
 interface ErrorConstructor {
 	new (number: number): Error;
 	new (number: number, message: string): Error;
 }
 
 interface Document {
-	/** Retrieves the document compatibility mode of the document. */
+	/**
+	 * Retrieves the document compatibility mode of the document.
+	 * @see https://web.archive.org/web/20140216144518/https://msdn.microsoft.com/en-us/library/cc196988.aspx
+	 */
 	readonly documentMode?: number;
 }
 
 interface Window {
-	/** Creates a modal dialog box that displays the specified HTML document. */
+	/**
+	 * Creates a modal dialog box that displays the specified HTML document.
+	 * @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741502(v=vs.85)
+	 */
 	showModalDialog(url: string, argIn?: any, options?: any): any;
-	/** Creates a modeless dialog box that displays the specified HTML document. */
+	/**
+	 * Creates a modeless dialog box that displays the specified HTML document.
+	 * @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741355(v=vs.85)
+	 */
 	showModelessDialog(url?: string, argIn?: any, options?: any): Window;
 }
 
