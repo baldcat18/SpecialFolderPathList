@@ -243,9 +243,10 @@
 		})(),
 		iterator: function() {
 			return {
+				/** @returns {IteratorResult<SpecialFolder>} */
 				next: function() {
 					return ++this._index.current == doneIteration ?
-						{ done: true } : { done: false, value: getSpecialFolder(this._index) };
+						{ done: true, value: undefined } : { done: false, value: getSpecialFolder(this._index) };
 				},
 				_index: { current: -1 }
 			}
