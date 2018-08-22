@@ -114,9 +114,9 @@ declare enum Key {
 }
 
 declare enum PropertyTypes {
-	ptDefault,
-	ptShellExecute,
-	ptVerb,
+	ptDefault = 0,
+	ptShellExecute = 1,
+	ptVerb = 2,
 }
 
 
