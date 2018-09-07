@@ -124,6 +124,10 @@ interface HTMLAnchorElement {
 declare var global: {
 	Setting: object;
 	SpecialFolders: object;
+	ssfDESKTOPDIRECTORY: ShellSpecialFolderConstants.ssfDESKTOPDIRECTORY;
+	ssfDRIVES: ShellSpecialFolderConstants.ssfDRIVES;
+	ssfPROFILE: ShellSpecialFolderConstants.ssfPROFILE;
+	TemporaryFolder: SpecialFolderConst.TemporaryFolder;
 	Version: Function;
 	window?: Window;
 	WScript?: object;
@@ -248,3 +252,13 @@ interface DialogArgument {
 	explorerRunasLaunchingUser: boolean;
 	sendItem(item: string): void;
 }
+
+
+/** @type {ShellSpecialFolderConstants.ssfDESKTOPDIRECTORY} */
+declare const ssfDESKTOPDIRECTORY = 16;
+/** @type {ShellSpecialFolderConstants.ssfDRIVES} */
+declare const ssfDRIVES = 17;
+/** @type {ShellSpecialFolderConstants.ssfPROFILE} */
+declare const ssfPROFILE = 40;
+/** @type {SpecialFolderConst.TemporaryFolder} */
+declare const TemporaryFolder = 2;
