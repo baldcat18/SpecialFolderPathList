@@ -13,6 +13,15 @@ if (!Object.getOwnPropertyNames) {
 	};
 }
 
+/** @type {ShellSpecialFolderConstants.ssfDESKTOPDIRECTORY} */
+var ssfDESKTOPDIRECTORY = 16;
+/** @type {ShellSpecialFolderConstants.ssfDRIVES} */
+var ssfDRIVES = 17;
+/** @type {ShellSpecialFolderConstants.ssfPROFILE} */
+var ssfPROFILE = 40;
+/** @type {SpecialFolderConst.TemporaryFolder} */
+var TemporaryFolder = 2;
+
 var htaDebug = (function() {
 	/** @type {Window} */
 	var dbgbox = null;

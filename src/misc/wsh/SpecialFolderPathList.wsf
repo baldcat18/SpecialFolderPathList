@@ -12,6 +12,8 @@ WSH による SpecialFolderPathList の実装です。
 <named name="f" helpstring="スクリプトを実行した環境ではサポートされないフォルダーの名前も出力します。"/>
 <named name="o" helpstring="ファイル フォルダー(ディレクトリ)の情報のみ出力します。仮想フォルダーの情報は出力しません。"/>
 </runtime>
+<reference object="Scripting.FileSystemObject" />
+<reference object="Shell.Application" />
 <script language="JavaScript" src="../../modules/common.js"></script>
 <script language="JavaScript" src="../../modules/settings.js"></script>
 <!-- <script language="JavaScript" src="../../modules/settings-custom.js"></script> -->

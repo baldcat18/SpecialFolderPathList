@@ -285,7 +285,7 @@
 			// shell:ThisDeviceFolder / shell:::{f8278c54-a712-415b-b593-b77a2be0dda9} ([このデバイス]) (Win10 1703から)
 			// %USERPROFILE%
 			// %HOMEDRIVE%%HOMEPATH%
-			return createSpecialFolder("個人用フォルダー", "shell:UsersFilesFolder", { category: "UserProfile", folderItemForProperties: shell.NameSpace(/** @type {ShellSpecialFolderConstants.ssfPROFILE} */ (40)).Self });
+			return createSpecialFolder("個人用フォルダー", "shell:UsersFilesFolder", { category: "UserProfile", folderItemForProperties: shell.NameSpace(ssfPROFILE).Self });
 		case 1:
 			// Win10からサポート
 			// shell:UsersFilesFolder\3D Objects
@@ -294,7 +294,7 @@
 			return createSpecialFolder("3D オブジェクト", "shell:3D Objects");
 		case 2:
 			// shell:MyComputerFolder\::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641} (Win8.1から)
-			return createSpecialFolder("デスクトップ ディレクトリ", WIN81 ? "shell:ThisPCDesktopFolder" : /** @type {ShellSpecialFolderConstants.ssfDESKTOPDIRECTORY} */ (16), WIN81 ? null : { propertyType: PT_VERB });
+			return createSpecialFolder("デスクトップ ディレクトリ", WIN81 ? "shell:ThisPCDesktopFolder" : ssfDESKTOPDIRECTORY, WIN81 ? null : { propertyType: PT_VERB });
 		case 3:
 			// shell:Local Documents / shell:MyComputerFolder\::{d3162b92-9365-467a-956b-92703aca08af} (Win10から)
 			// shell:::{450D8FBA-AD25-11D0-98A8-0800361B1103} ([マイ ドキュメント] (Win8.1から))
@@ -499,7 +499,7 @@
 		case 60:
 			// %TEMP%
 			// %TMP%
-			return createSpecialFolder("一時ファイル", fso.GetSpecialFolder(/** @type {SpecialFolderConst.TemporaryFolder} */ (2)).Path);
+			return createSpecialFolder("一時ファイル", fso.GetSpecialFolder(TemporaryFolder).Path);
 		case 61:
 			return createSpecialFolder("VirtualStore", "shell:Local AppData\\VirtualStore");
 		
@@ -705,7 +705,7 @@
 			return createSpecialFolder("デスクトップ", "shell:Desktop", { category: "Desktop / " + (WIN81 ? "ThisPC" : "Computer") });
 		case 128:
 			// shell:MyComputerFolderはWin10 1507/1511だとなぜかデスクトップになってしまう
-			return createSpecialFolder(WIN81 ? "PC" : "コンピューター", !WIN10_1507_to_1511 ? "shell:MyComputerFolder" : /** @type {ShellSpecialFolderConstants.ssfDRIVES} */ (17));
+			return createSpecialFolder(WIN81 ? "PC" : "コンピューター", !WIN10_1507_to_1511 ? "shell:MyComputerFolder" : ssfDRIVES);
 		case 129:
 			return createSpecialFolder(WIN10 ? "最近使ったフォルダー" : "最近表示した場所", "shell:::{22877a6d-37a1-461a-91b0-dbda5aaebc99}");
 		case 130:
@@ -1200,7 +1200,7 @@
 			return createSpecialFolder("shell:MyComputerFolder", "shell:MyComputerFolder");
 		
 		case 315:
-			return createSpecialFolder("ssfPROFILE", /** @type {ShellSpecialFolderConstants.ssfPROFILE} */ (40), { propertyType: PT_VERB });
+			return createSpecialFolder("ssfPROFILE", ssfPROFILE, { propertyType: PT_VERB });
 		
 		case 316:
 			return createSpecialFolder("%USERPROFILE%", "%USERPROFILE%".xExpand());
