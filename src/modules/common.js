@@ -10,6 +10,11 @@ if (!Object.create) {
 	};
 }
 
+/** 0x80070002 */
+var E_NOTFOUND = -2147024894;
+/** 0x800700E8: パイプを閉じています */
+var E_NODATA = -2147024664;
+
 var wShell = new ActiveXObject("WScript.Shell");
 var shell = new ActiveXObject("Shell.Application");
 var fso = new ActiveXObject("Scripting.FileSystemObject");
@@ -175,12 +180,12 @@ var State = (function() {
 	
 	function getPlatform() {
 		switch (shell.GetSystemInformation("ProcessorArchitecture")) {
-		case /** @type ProcessorArchitecture.amd64 */ (9):
-		case /** @type ProcessorArchitecture.arm64 */ (12):
-		// case /** @type ProcessorArchitecture.ia64 */ (6):
+		case /** @type {typeof PROCESSOR_ARCHITECTURE_AMD64} */ (9):
+		case /** @type {typeof PROCESSOR_ARCHITECTURE_ARM64} */ (12):
+		// case /** @type {typeof PROCESSOR_ARCHITECTURE_IA64} */ (6):
 			return 64;
-		case /** @type ProcessorArchitecture.intel */ (0):
-		case /** @type ProcessorArchitecture.arm */ (5):
+		case /** @type {typeof PROCESSOR_ARCHITECTURE_INTEL} */ (0):
+		case /** @type {typeof PROCESSOR_ARCHITECTURE_ARM} */ (5):
 			return 32;
 		default:
 			throw new Error("対応していないプラットフォームです。");
@@ -237,8 +242,8 @@ function getRegValue(name, defaultValue, expand) {
 	try {
 		returnValue = wShell.RegRead(name);
 	} catch (err) {
-		// 0x80070002: レジストリのキーや値が見つからない
-		if (toUint32(/** @type {Error} */ (err).number) != 0x80070002) throw err;
+		// E_NOTFOUND: レジストリのキーや値が見つからない
+		if (/** @type {Error} */ (err).number != E_NOTFOUND) throw err;
 		returnValue = defaultValue;
 	}
 	return expand && typeof returnValue == "string" ? returnValue.xExpand() : returnValue;
@@ -266,4 +271,4 @@ var writeError =
 		alert(text);
 	} :
 	State.Host.type == "cscript" ? function(text) { WScript.StdErr.WriteLine(text); } :
-	function(text) { wShell.Popup(text, 0, "SpecialFolderPathList", 0x30 /* MB_ICONWARNING */); };
+	function(text) { wShell.Popup(text, 0, "SpecialFolderPathList", /** @type {typeof MB_ICONWARNING} */ (0x30) ); };

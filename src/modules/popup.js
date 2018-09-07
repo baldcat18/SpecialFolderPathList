@@ -31,7 +31,6 @@ document.onkeyup = function() {
 	
 	if (evt.keyCode == /** @type {Key.escape} */ (27)) window.close();
 	 
-	/** @type {string} */
 	var item = items[evt.keyCode];
 	if (item) dlgargs.sendItem(item);
 };

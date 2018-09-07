@@ -1,14 +1,5 @@
 ﻿/// <reference path="decl-lib.d.ts" />
 
-declare enum ProcessorArchitecture {
-	intel = 0,
-	arm = 5,
-	ia64 = 6,
-	amd64 = 9,
-	arm64 = 12,
-	unknown = 0xFFFF,
-}
-
 declare enum Key {
 	backspace = 8,
 	tab = 9,
@@ -113,12 +104,6 @@ declare enum Key {
 	singleQuote = 222,
 }
 
-declare enum PropertyTypes {
-	ptDefault = 0,
-	ptShellExecute = 1,
-	ptVerb = 2,
-}
-
 
 // 追加したメソッドだとわかるようにプリフィックスxを付けている
 
@@ -135,6 +120,7 @@ interface HTMLAnchorElement {
 	xFolder: SpecialFolder;
 }
 
+
 declare var global: {
 	Setting: object;
 	SpecialFolders: object;
@@ -143,7 +129,7 @@ declare var global: {
 	WScript?: object;
 };
 
-declare var Setting: {
+declare const Setting: {
 	debug: boolean;
 	[name: string]: number | boolean;
 	
@@ -179,9 +165,9 @@ declare var Setting: {
 	/** @deprecated 移行先はfileFolderOnly */
 	directoryOnly?: boolean;
 };
-declare var Version: VersionConstructor;
 
 declare function getRegValue(name: string, defaultValue:string, expand: true): string;
+
 
 interface Version {
 	major: number;
@@ -201,6 +187,9 @@ interface VersionConstructor {
 	prototype: Version;
 }
 
+declare const Version: VersionConstructor;
+
+
 interface SpecialFolder {
 	readonly category?: string;
 	readonly title: string;
@@ -219,16 +208,15 @@ interface SpecialFolder {
 	showProperties(): void;
 }
 
+/** プロパティの表示方法 */
+type PropertyTypes = 0 | 1 | 2;
+
 interface SpecialFolderOption {
 	/** フォルダーのカテゴリ名 */
 	category?: string;
 	/** ツール上に表示するフォルダーのパス。FolderItem#Pathを使用したくないときに指定する */
 	path?: string;
-	/**
-	 * プロパティの表示方法。
-	 *   ptShellExecute: ShellExecuteメソッドを使う
-	 *   ptVerb: コンテキストメニューの[プロパティ]を使う
-	 */
+	/** プロパティの表示方法 */
 	propertyType?: PropertyTypes;
 	/** プロパティを表示するのに別のFolderItemオブジェクトを使いたい場合に指定する */
 	folderItemForProperties?: FolderItem;
@@ -242,6 +230,16 @@ interface SpecialFolderArgument {
 	option: SpecialFolderOption;
 }
 
+interface FolderIteratorIndex {
+	current: number;
+}
+
+declare const SpecialFolders: {
+	item(itemIndex: number): SpecialFolder;
+	iterator(): { next: () => IteratorResult<SpecialFolder>; }
+}
+
+
 interface DialogArgument {
 	isFileFolder: boolean;
 	isWslEnabled: boolean;
@@ -249,9 +247,4 @@ interface DialogArgument {
 	extended: boolean;
 	explorerRunasLaunchingUser: boolean;
 	sendItem(item: string): void;
-}
-
-declare var SpecialFolders: {
-	item(itemIndex: number): SpecialFolder;
-	iterator(): { next: () => IteratorResult<SpecialFolder>; }
 }

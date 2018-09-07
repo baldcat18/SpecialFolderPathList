@@ -22,7 +22,7 @@
 	
 	var WIN10_1507_to_1511 = WIN10 && !WIN10_1607;
 	
-	var is64bit = State.Host.platform == 64;
+	var IS64BIT = State.Host.platform == 64;
 	
 	var USER_SHELL_FOLDERS_KEY =
 		"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders\\";
@@ -34,12 +34,21 @@
 	
 	var WINDOWS_APPS_TITLE = WIN10 ? "Windows アプリ" : "ストアアプリ";
 	
+	/** @type {PropertyTypes} */
+	var PT_DEFAULT = 0;
+	/**
+	 * ShellExecuteメソッドを使う
+	 * @type {PropertyTypes}
+	 */
+	var PT_SHELLEXECUTE = 1;
+	/**
+	 * コンテキストメニューの[プロパティ]を使う
+	 * @type {PropertyTypes}
+	 */
+	var PT_VERB = 2;
+	
 	/** @type {SpecialFolderOption} */
-	var defaultOption = {};
-	/** @type {PropertyTypes.ptShellExecute} */
-	var ptShellExecute = 1;
-	/** @type {PropertyTypes.ptVerb} */
-	var ptVerb = 2;
+	var DEFAULT_OPTION = {};
 	
 	if (Setting.directoryOnly !== undefined && Setting.fileFolderOnly === undefined) {
 		Setting.fileFolderOnly = Setting.directoryOnly;
@@ -65,7 +74,7 @@
 		*/
 		
 		if (!Setting.debug) return null;
-		throw new Error(0x8000FFFF /* E_UNEXPECTED */, "フォルダーが見つからない: " + path);
+		throw new Error(/** @type {typeof E_UNEXPECTED} */ (0x8000FFFF), "フォルダーが見つからない: " + path);
 	}
 	
 	
@@ -80,11 +89,18 @@
 		this.folderItem = arg.folderItem;
 		this.path = arg.path;
 		this.category = arg.option.category || "";
+		/** @private */
 		this._folderItemForProperties = arg.option.folderItemForProperties;
 	}
-	/** @type {PropertyTypes} */
+	/**
+	 * @private
+	 * @type {PropertyTypes}
+	 */
 	SpecialFolder.prototype._propertyTypes = null;
-	/** @type {FolderItemVerb} */
+	/**
+	 * @private
+	 * @type {FolderItemVerb}
+	 */
 	SpecialFolder.prototype._properties = undefined;
 	SpecialFolder.prototype.open = function() { this.folderItem.InvokeVerb(); };
 	/** @param {string} [verb] */
@@ -93,7 +109,7 @@
 		shell.ShellExecute("explorer.exe", "\"{0}\"".xFormat(path), null, verb);
 	};
 	SpecialFolder.prototype.hasProperties = function() {
-		if (this._propertyTypes == ptShellExecute) return true;
+		if (this._propertyTypes == PT_SHELLEXECUTE) return true;
 		if (this._folderItemForProperties === null) return false;
 		
 		if (this._properties === undefined) {
@@ -112,7 +128,7 @@
 		return !!this._properties;
 	};
 	SpecialFolder.prototype.showProperties = function() {
-		if (this._propertyTypes == ptShellExecute) {
+		if (this._propertyTypes == PT_SHELLEXECUTE) {
 			var dir = /** @type {string} */ (this.dir);
 			var path = dir.slice(0, 6) == "shell:" ? dir : "file:" + dir;
 			shell.ShellExecute(path, "", "", "properties");
@@ -129,7 +145,7 @@
 	function FileFolder(arg) {
 		SpecialFolder.call(this, arg);
 		this._propertyTypes = arg.option.propertyType ||
-			(this._folderItemForProperties === undefined ? ptShellExecute : ptVerb);
+			(this._folderItemForProperties === undefined ? PT_SHELLEXECUTE : PT_VERB);
 	}
 	FileFolder.prototype = Object.create(SpecialFolder.prototype);
 	FileFolder.prototype.constructor = FileFolder;
@@ -156,7 +172,7 @@
 	 */
 	function VirtualFolder(arg) {
 		SpecialFolder.call(this, arg);
-		this._propertyTypes = arg.option.propertyType || ptVerb;
+		this._propertyTypes = arg.option.propertyType || PT_VERB;
 	}
 	VirtualFolder.prototype = Object.create(SpecialFolder.prototype);
 	VirtualFolder.prototype.constructor = VirtualFolder;
@@ -181,6 +197,7 @@
 	InvalidFolder.prototype = Object.create(SpecialFolder.prototype);
 	InvalidFolder.prototype.constructor = InvalidFolder;
 	InvalidFolder.prototype.isFileFolder = false;
+	/** @override */
 	InvalidFolder.prototype.getType = function() { return "使用不可"; };
 	
 	/** @type {SpecialFolderArgument} */
@@ -201,7 +218,7 @@
 	function createSpecialFolder(title, dir, option) {
 		sfArg.title = title;
 		sfArg.dir = dir;
-		sfArg.option = option || defaultOption;
+		sfArg.option = option || DEFAULT_OPTION;
 		
 		try { sfArg.folderItem = shell.NameSpace(dir).Self }
 		catch (err) { sfArg.folderItem = null; }
@@ -222,11 +239,11 @@
 		return new (sfArg.folderItem ? VirtualFolder : InvalidFolder)(sfArg);
 	}
 	
-	var doneIteration = Infinity;
+	var DONE_ITERATION = Infinity;
 	
 	global.SpecialFolders = {
 		item: (function() {
-			/** @type {{ current: number; }} */
+			/** @type {FolderIteratorIndex} */
 			var index = null;
 			return item;
 			
@@ -245,16 +262,20 @@
 			return {
 				/** @returns {IteratorResult<SpecialFolder>} */
 				next: function() {
-					return ++this._index.current == doneIteration ?
+					return ++this._index.current == DONE_ITERATION ?
 						{ done: true, value: undefined } : { done: false, value: getSpecialFolder(this._index) };
 				},
+				/**
+				 * @private
+				 * @type {FolderIteratorIndex}
+				 */
 				_index: { current: -1 }
 			}
 		}
 	};
 	
 	/**
-	 * @param {{ current: number; }} index
+	 * @param {FolderIteratorIndex} index
 	 */
 	function getSpecialFolder(index) {
 		switch (index.current) {
@@ -273,7 +294,7 @@
 			return createSpecialFolder("3D オブジェクト", "shell:3D Objects");
 		case 2:
 			// shell:MyComputerFolder\::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641} (Win8.1から)
-			return createSpecialFolder("デスクトップ ディレクトリ", WIN81 ? "shell:ThisPCDesktopFolder" : /** @type {ShellSpecialFolderConstants.ssfDESKTOPDIRECTORY} */ (16), WIN81 ? null : { propertyType: ptVerb });
+			return createSpecialFolder("デスクトップ ディレクトリ", WIN81 ? "shell:ThisPCDesktopFolder" : /** @type {ShellSpecialFolderConstants.ssfDESKTOPDIRECTORY} */ (16), WIN81 ? null : { propertyType: PT_VERB });
 		case 3:
 			// shell:Local Documents / shell:MyComputerFolder\::{d3162b92-9365-467a-956b-92703aca08af} (Win10から)
 			// shell:::{450D8FBA-AD25-11D0-98A8-0800361B1103} ([マイ ドキュメント] (Win8.1から))
@@ -418,24 +439,24 @@
 			// Win10からサポート
 			// shell:Libraries\CameraRoll.library-ms
 			// shell:Libraries\{2B20DF75-1EDA-4039-8097-38798227D5B7}
-			return createSpecialFolder("カメラ ロール ライブラリ", "shell:CameraRollLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{2B20DF75-1EDA-4039-8097-38798227D5B7}", LIBRARIES_PATH + "\\CameraRoll.library-ms", true), propertyType: ptShellExecute });
+			return createSpecialFolder("カメラ ロール ライブラリ", "shell:CameraRollLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{2B20DF75-1EDA-4039-8097-38798227D5B7}", LIBRARIES_PATH + "\\CameraRoll.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 43:
 			// shell:Libraries\{7b0db17d-9cd2-4a93-9733-46cc89022e7c}
-			return createSpecialFolder("ドキュメント ライブラリ", "shell:DocumentsLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{7b0db17d-9cd2-4a93-9733-46cc89022e7c}", LIBRARIES_PATH + "\\Documents.library-ms", true), propertyType: ptShellExecute });
+			return createSpecialFolder("ドキュメント ライブラリ", "shell:DocumentsLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{7b0db17d-9cd2-4a93-9733-46cc89022e7c}", LIBRARIES_PATH + "\\Documents.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 44:
 			// shell:Libraries\{2112AB0A-C86A-4ffe-A368-0DE96E47012E}
-			return createSpecialFolder("ミュージック ライブラリ", "shell:MusicLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{2112AB0A-C86A-4ffe-A368-0DE96E47012E}", LIBRARIES_PATH + "\\Music.library-ms", true), propertyType: ptShellExecute });
+			return createSpecialFolder("ミュージック ライブラリ", "shell:MusicLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{2112AB0A-C86A-4ffe-A368-0DE96E47012E}", LIBRARIES_PATH + "\\Music.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 45:
 			// shell:Libraries\{A990AE9F-A03B-4e80-94BC-9912D7504104}
-			return createSpecialFolder("ピクチャ ライブラリ", "shell:PicturesLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{A990AE9F-A03B-4e80-94BC-9912D7504104}", LIBRARIES_PATH + "\\Pictures.library-ms", true), propertyType: ptShellExecute });
+			return createSpecialFolder("ピクチャ ライブラリ", "shell:PicturesLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{A990AE9F-A03B-4e80-94BC-9912D7504104}", LIBRARIES_PATH + "\\Pictures.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 46:
 			// Win10からサポート
 			// shell:Libraries\SavedPictures.library-ms
 			// shell:Libraries\{E25B5812-BE88-4bd9-94B0-29233477B6C3}
-			return createSpecialFolder("保存済みの写真 ライブラリ", "shell:SavedPicturesLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{E25B5812-BE88-4bd9-94B0-29233477B6C3}", LIBRARIES_PATH + "\\SavedPictures.library-ms", true), propertyType: ptShellExecute });
+			return createSpecialFolder("保存済みの写真 ライブラリ", "shell:SavedPicturesLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{E25B5812-BE88-4bd9-94B0-29233477B6C3}", LIBRARIES_PATH + "\\SavedPictures.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 47:
 			// shell:::{031E4825-7B94-4dc3-B131-E946B44C8DD5}\{491E922F-5643-4af4-A7EB-4E7A138D8174}
-			return createSpecialFolder("ビデオ ライブラリ", "shell:VideosLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{491E922F-5643-4af4-A7EB-4E7A138D8174}", LIBRARIES_PATH + "\\Videos.library-ms", true), propertyType: ptShellExecute });
+			return createSpecialFolder("ビデオ ライブラリ", "shell:VideosLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{491E922F-5643-4af4-A7EB-4E7A138D8174}", LIBRARIES_PATH + "\\Videos.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		
 		case 48:
 			return createSpecialFolder("スタート メニュー", "shell:Start Menu", { category: "StartMenu" });
@@ -645,9 +666,9 @@
 			return createSpecialFolder("テーマのローカライズ リソース", "shell:LocalizedResourcesDir");
 		
 		case 116:
-			return createSpecialFolder("システム ディレクトリ", is64bit ? "shell:System" : "shell:SystemX86");
+			return createSpecialFolder("システム ディレクトリ", IS64BIT ? "shell:System" : "shell:SystemX86");
 		case 117:
-			return is64bit ?
+			return IS64BIT ?
 				createSpecialFolder("システム ディレクトリ (32 ビット)", "shell:SystemX86") :
 				createSpecialFolder("システム ディレクトリ (64 ビット)", getSysNativePath());
 		
@@ -661,7 +682,7 @@
 			// %ProgramFiles%
 			return createSpecialFolder("Program Files", "shell:ProgramFiles", { category: "ProgramFiles" });
 		case 121:
-			return is64bit ?
+			return IS64BIT ?
 				createSpecialFolder("Program Files (32 ビット)", "shell:ProgramFilesX86") :
 				createSpecialFolder("Program Files (64 ビット)", getRegValue(CURRENT_VERSION_KEY + "ProgramW6432Dir"));
 		case 122:
@@ -669,7 +690,7 @@
 			// %CommonProgramFiles%
 			return createSpecialFolder("Common Program Files", "shell:ProgramFilesCommon");
 		case 123:
-			return is64bit ?
+			return IS64BIT ?
 				createSpecialFolder("Common Program Files (32 ビット)", "shell:ProgramFilesCommonX86") :
 				createSpecialFolder("Common Program Files (64 ビット)", getRegValue(CURRENT_VERSION_KEY + "CommonW6432Dir"));
 		case 124:
@@ -917,7 +938,7 @@
 			// Win10 1709までサポート
 			return createSpecialFolder("ゲーム", "shell:Games");
 		case 215:
-			if (!Setting.debug) index.current = doneIteration;
+			if (!Setting.debug) index.current = DONE_ITERATION;
 			
 			return createSpecialFolder("Previous Versions Results Folder", "shell:::{f8c2ab3b-17bc-41da-9758-339d7dbf2d88}");
 		
@@ -926,14 +947,14 @@
 			// Win10から
 			// shell:::{5b934b42-522b-4c34-bbfe-37a3ef7b9c90} (Win10 1507から1607まで)
 			// shell:::{f8278c54-a712-415b-b593-b77a2be0dda9} (Win10 1703から)
-			return createSpecialFolder("このデバイス ({0})".xFormat(WIN10_1703 ? "個人用フォルダー" : "パブリック"), "shell:ThisDeviceFolder", { category: "AnotherName", propertyType: ptVerb });
+			return createSpecialFolder("このデバイス ({0})".xFormat(WIN10_1703 ? "個人用フォルダー" : "パブリック"), "shell:ThisDeviceFolder", { category: "AnotherName", propertyType: PT_VERB });
 		case 217:
 			// Win8までだと別名にならないので非表示に
 			return createSpecialFolder("マイ ドキュメント (ドキュメント)", WIN81 ? "shell:::{450D8FBA-AD25-11D0-98A8-0800361B1103}" : null);
 		case 218:
 			return createSpecialFolder("お気に入り (リンク)", "shell:::{323CA680-C24D-4099-B94D-446DD2D7249E}");
 		case 219:
-			return createSpecialFolder("Common Places FS Folder (リンク)", "shell:::{d34a6ca6-62c2-4c34-8a7c-14709c1ad938}", { propertyType: ptVerb });
+			return createSpecialFolder("Common Places FS Folder (リンク)", "shell:::{d34a6ca6-62c2-4c34-8a7c-14709c1ad938}", { propertyType: PT_VERB });
 		case 220:
 			return createSpecialFolder("printhood delegate folder (Printer Shortcuts)", "shell:::{ed50fc29-b964-48a9-afb3-15ebb9b97f36}");
 		case 221:
@@ -1179,7 +1200,7 @@
 			return createSpecialFolder("shell:MyComputerFolder", "shell:MyComputerFolder");
 		
 		case 315:
-			return createSpecialFolder("ssfPROFILE", /** @type {ShellSpecialFolderConstants.ssfPROFILE} */ (40), { propertyType: ptVerb });
+			return createSpecialFolder("ssfPROFILE", /** @type {ShellSpecialFolderConstants.ssfPROFILE} */ (40), { propertyType: PT_VERB });
 		
 		case 316:
 			return createSpecialFolder("%USERPROFILE%", "%USERPROFILE%".xExpand());
@@ -1454,11 +1475,11 @@
 		case 426:
 			return createSpecialFolder("History", "shell:::{FF393560-C2A7-11CF-BFF4-444553540000}");
 		case 427:
-			index.current = doneIteration;
+			index.current = DONE_ITERATION;
 			
 			return createSpecialFolder("Windows Photo Viewer Image Verbs", "shell:::{FFE2A43C-56B9-4bf5-9A79-CC6D4285608A}");
 		
-		case doneIteration:
+		case DONE_ITERATION:
 			return null;
 		
 		default:
