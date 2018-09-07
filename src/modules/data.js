@@ -74,7 +74,7 @@
 		*/
 		
 		if (!Setting.debug) return null;
-		throw new Error(/** @type {typeof E_UNEXPECTED} */ (0x8000FFFF), "フォルダーが見つからない: " + path);
+		throw new Error(E_UNEXPECTED, "フォルダーが見つからない: " + path);
 	}
 	
 	

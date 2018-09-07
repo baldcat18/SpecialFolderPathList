@@ -14,6 +14,31 @@ if (!Object.create) {
 var E_NOTFOUND = -2147024894;
 /** 0x800700E8: パイプを閉じています */
 var E_NODATA = -2147024664;
+/**
+ * Unexpected failure
+ * @see https://docs.microsoft.com/en-us/windows/desktop/seccrypto/common-hresult-values
+ */
+var E_UNEXPECTED = 0x8000FFFF;
+
+// https://msdn.microsoft.com/ja-jp/library/cc410914.aspx
+
+/** 感嘆符（!）アイコンを表示します。 */
+var MB_ICONWARNING = 0x30;
+
+// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724958(v=vs.85).aspx
+
+/** x86 */
+var PROCESSOR_ARCHITECTURE_INTEL = 0;
+/** ARM */
+var PROCESSOR_ARCHITECTURE_ARM = 5;
+/** Intel Itanium-based */
+var PROCESSOR_ARCHITECTURE_IA64 = 6;
+/** x64 (AMD or Intel) */
+var PROCESSOR_ARCHITECTURE_AMD64 = 9;
+/** ARM64 */
+var PROCESSOR_ARCHITECTURE_ARM64 = 12;
+/** Unknown architecture. */
+var PROCESSOR_ARCHITECTURE_UNKNOWN = 0xFFFF;
 
 var wShell = new ActiveXObject("WScript.Shell");
 var shell = new ActiveXObject("Shell.Application");
@@ -180,12 +205,12 @@ var State = (function() {
 	
 	function getPlatform() {
 		switch (shell.GetSystemInformation("ProcessorArchitecture")) {
-		case /** @type {typeof PROCESSOR_ARCHITECTURE_AMD64} */ (9):
-		case /** @type {typeof PROCESSOR_ARCHITECTURE_ARM64} */ (12):
-		// case /** @type {typeof PROCESSOR_ARCHITECTURE_IA64} */ (6):
+		case PROCESSOR_ARCHITECTURE_AMD64:
+		case PROCESSOR_ARCHITECTURE_ARM64:
+		// case PROCESSOR_ARCHITECTURE_IA64:
 			return 64;
-		case /** @type {typeof PROCESSOR_ARCHITECTURE_INTEL} */ (0):
-		case /** @type {typeof PROCESSOR_ARCHITECTURE_ARM} */ (5):
+		case PROCESSOR_ARCHITECTURE_INTEL:
+		case PROCESSOR_ARCHITECTURE_ARM:
 			return 32;
 		default:
 			throw new Error("対応していないプラットフォームです。");
@@ -271,4 +296,4 @@ var writeError =
 		alert(text);
 	} :
 	State.Host.type == "cscript" ? function(text) { WScript.StdErr.WriteLine(text); } :
-	function(text) { wShell.Popup(text, 0, "SpecialFolderPathList", /** @type {typeof MB_ICONWARNING} */ (0x30) ); };
+	function(text) { wShell.Popup(text, 0, "SpecialFolderPathList", MB_ICONWARNING); };

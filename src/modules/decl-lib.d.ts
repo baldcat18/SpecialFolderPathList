@@ -849,29 +849,3 @@ interface ActiveXObject {
 	new (s: "Shell.Application"): Shell;
 	new (s: "WScript.Shell"): WshShell;
 }
-
-
-// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724958(v=vs.85).aspx
-
-/** x64 (AMD or Intel) */
-declare const PROCESSOR_ARCHITECTURE_AMD64 = 9;
-/** ARM */
-declare const PROCESSOR_ARCHITECTURE_ARM = 5;
-/** ARM64 */
-declare const PROCESSOR_ARCHITECTURE_ARM64 = 12;
-/** Intel Itanium-based */
-declare const PROCESSOR_ARCHITECTURE_IA64 = 6;
-/** x86 */
-declare const PROCESSOR_ARCHITECTURE_INTEL = 0;
-/** Unknown architecture. */
-declare const PROCESSOR_ARCHITECTURE_UNKNOWN = 0xFFFF;
-
-// https://msdn.microsoft.com/ja-jp/library/cc410914.aspx
-
-/** 感嘆符（!）アイコンを表示します。 */
-declare const MB_ICONWARNING = 0x30;
-
-// https://docs.microsoft.com/en-us/windows/desktop/seccrypto/common-hresult-values
-
-/** Unexpected failure */
-declare const E_UNEXPECTED = 0x8000FFFF;
