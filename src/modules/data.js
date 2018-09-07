@@ -1,4 +1,5 @@
 ﻿/// <reference path="common.js" />
+/// <reference path="decl-wshref.d.ts" />
 
 "use strict";
 
