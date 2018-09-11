@@ -21,8 +21,12 @@ li {
 	margin: 0;
 	padding: 4px;
 	border: white solid 1px;
+	display: none;
 }
 li:hover {
 	border-color: blue;
 	background-color: lightcyan;
+}
+li.visible {
+	display: list-item;
 }

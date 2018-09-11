@@ -244,12 +244,18 @@ declare const SpecialFolders: {
 }
 
 
+interface DialogItem {
+	id: string;
+	caption: string;
+	key: string;
+	isConsole?: boolean;
+	isExtended?: boolean;
+	isAlwaysVisible?: boolean;
+	isVisible?: boolean;
+}
+
 interface DialogArgument {
-	isFileFolder: boolean;
-	isWslEnabled: boolean;
-	isPropertiesEnabled: boolean;
-	extended: boolean;
-	explorerRunasLaunchingUser: boolean;
+	items: DialogItem[];
 	sendItem(item: string): void;
 }
 
