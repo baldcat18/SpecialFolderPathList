@@ -1,6 +1,19 @@
 ﻿/// <reference path="common.js" />
 
-if (!Object.getOwnPropertyNames) {
+if (document.documentMode < 9) {
+	// @ts-ignore
+	Array.isArray = function(arg) {
+		return Object.prototype.toString.call(arg) == "[object Array]";
+	};
+	/**
+	 * @param {(value: any, index: number, array: any[]) => void} callbackfn 
+	 * @param {any} [thisArg]
+	 */
+	Array.prototype.forEach = function(callbackfn, thisArg) {
+		for (var i = 0; i < this.length; i++) {
+			if (i in this) callbackfn.call(thisArg || this, this[i], this);
+		}
+	};
 	Object.getOwnPropertyNames = function(o) {
 		/** @type {string[]} */
 		var names = [];
@@ -62,9 +75,9 @@ var htaDebug = (function() {
 		 * @param {{}} obj 
 		 * @param {string} [title]
 		 */
-		dir: function(obj, title) {
+		list: function(obj, title) {
 			var names = Object.getOwnPropertyNames(obj);
-			var dir = "\n";
+			var list = "\n";
 			
 			for (var i = 0; i < names.length; i++) {
 				var name = names[i];
@@ -72,10 +85,45 @@ var htaDebug = (function() {
 				var type = getType(value);
 				if (value == null || type == "function") value = "";
 				
-				dir += "{0}: [{1}] {2}\n".xFormat(name, type, value);
+				list += "{0}: [{1}] {2}\n".xFormat(name, type, value);
 			}
 			
-			this.write(dir, title);
+			this.write(list, title);
+		},
+		/**
+		 * @param {{}} obj
+		 * @param {number} [depth=4]
+		 */
+		dir: function(obj, depth) {
+			if (depth === undefined) depth = 4;
+			
+			this.write("\n" + createDir(obj, 0));
+			
+			/**
+			 * @param {any} value
+			 * @param {number} currentDepth
+			 * @returns {string}
+			 */
+			function createDir(value, currentDepth) {
+				var type = getType(value);
+				if (type == "function") return "function";
+				if (type == "null" || typeof value != "object") return String(value);
+				if (currentDepth >= depth) return Array.isArray(value) ? "[{0}]".xFormat(value) : value.toString();
+				
+				var tabs = "";
+				for (var i = 0; i < currentDepth; i++) tabs += "    ";
+				var tmp = "";
+				if (Array.isArray(value)) {
+					value.forEach(function(val) {
+						tmp += "{0}    {1}\n".xFormat(tabs, createDir(val, currentDepth + 1));
+					}, "");
+					return "[\n{0}{1}]".xFormat(tmp, tabs);
+				}
+				Object.getOwnPropertyNames(value).forEach(function(name) {
+					tmp +="{0}    {1}: {2}\n".xFormat(tabs, name, createDir(value[name], currentDepth + 1));
+				}, "");
+				return "{\n{0}{1}}".xFormat(tmp, tabs);;
+			}
 		},
 		/**
 		 * @param {function(string): any} [callEval=eval] 
