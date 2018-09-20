@@ -45,17 +45,17 @@ const popup = (function() {
 	let dialog = null;
 	/** @type {DialogItem[]} */
 	const items = [
-		{ id: "openFolder", caption: "開く", key: "O", isAlwaysVisible: true, },
-		{ id: "copyAsPath", caption: "パスのコピー", key: "A", isAlwaysVisible: true, },
-		{ id: "execExplorer", caption: "エクスプローラー", key: "X", isAlwaysVisible: false, },
-		{ id: "execExplorerElevated", caption: "エクスプローラーを管理者として開く", key: "E", isExtended: true, isAlwaysVisible: (isExplorerRunasLaunchingUser ? null : false)},
-		{ id: "execCmd", caption: "コマンドプロンプトを開く", key: "P", isConsole:true, },
-		{ id: "execCmdElevated", caption: "コマンドプロンプトを管理者として開く", key: "W", isConsole:true, isExtended: true, },
-		{ id: "execPowershell", caption: "Windows PowerShell を開く", key: "S", isConsole:true, },
-		{ id: "execPowershellElevated", caption: "Windows PowerShell を管理者として開く", key: "H", isConsole:true, isExtended: true, },
-		{ id: "execWsl", caption: "Linux シェルを開く", key: "L", isConsole:true, isAlwaysVisible: (isWslEnabled ? null : false), },
-		{ id: "execWslElevated", caption: "Linux シェルを管理者として開く", key: "I", isConsole:true, isExtended: true, isAlwaysVisible: (isWslEnabled ? null : false), },
-		{ id: "showProperty", caption: "プロパティ", key: "R", },
+		{ id: "openFolder", caption: "開く(&O)", isAlwaysVisible: true, },
+		{ id: "copyAsPath", caption: "パスのコピー(&A)", isAlwaysVisible: true, },
+		{ id: "execExplorer", caption: "エクスプローラー(&X)", isAlwaysVisible: false, },
+		{ id: "execExplorerElevated", caption: "エクスプローラーを管理者として開く(&E)", isExtended: true, isAlwaysVisible: (isExplorerRunasLaunchingUser ? null : false)},
+		{ id: "execCmd", caption: "コマンドプロンプトを開く(&P)", isConsole:true, },
+		{ id: "execCmdElevated", caption: "コマンドプロンプトを管理者として開く(&W)", isConsole:true, isExtended: true, },
+		{ id: "execPowershell", caption: "Windows PowerShell を開く(&S)", isConsole:true, },
+		{ id: "execPowershellElevated", caption: "Windows PowerShell を管理者として開く(&H)", isConsole:true, isExtended: true, },
+		{ id: "execWsl", caption: "Linux シェルを開く(&L)", isConsole:true, isAlwaysVisible: (isWslEnabled ? null : false), },
+		{ id: "execWslElevated", caption: "Linux シェルを管理者として開く(&I)", isConsole:true, isExtended: true, isAlwaysVisible: (isWslEnabled ? null : false), },
+		{ id: "showProperty", caption: "プロパティ(&R)", },
 	];
 	/** @type {DialogArgument} */
 	const dlgargs = {

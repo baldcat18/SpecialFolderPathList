@@ -247,11 +247,11 @@ declare const SpecialFolders: {
 interface DialogItem {
 	id: string;
 	caption: string;
-	key: string;
 	isConsole?: boolean;
 	isExtended?: boolean;
 	isAlwaysVisible?: boolean;
 	isVisible?: boolean;
+	key?: number;
 }
 
 interface DialogArgument {
