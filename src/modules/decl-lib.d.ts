@@ -642,7 +642,7 @@ interface FolderItems {
 	/** Executes a verb on a collection of FolderItem objects. */
 	InvokeVerbEx(vVerb?: any, vArgs?: any): void;
 	/** Retrieves the FolderItem object for a specified item in the collection. */
-	Item(iIndex?: number): FolderItem;
+	Item(iIndex?: any): FolderItem;
 }
 
 /**

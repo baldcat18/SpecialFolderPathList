@@ -14,11 +14,6 @@ if (!Object.create) {
 var E_NOTFOUND = -2147024894;
 /** 0x800700E8: パイプを閉じています */
 var E_NODATA = -2147024664;
-/**
- * Unexpected failure
- * @see https://docs.microsoft.com/en-us/windows/desktop/seccrypto/common-hresult-values
- */
-var E_UNEXPECTED = 0x8000FFFF;
 
 // https://msdn.microsoft.com/ja-jp/library/cc410914.aspx
 

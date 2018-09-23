@@ -1,5 +1,4 @@
 ﻿/// <reference path="common.js" />
-/// <reference path="decl-wshref.d.ts" />
 
 "use strict";
 
@@ -60,22 +59,7 @@
 	 * @returns {FolderItem}
 	 */
 	function getDirectoryFolderItem(path) {
-		var items = shell.NameSpace(fso.GetParentFolderName(path)).Items();
-		var name = fso.GetFileName(path);
-		
-		// @ts-ignore : 今の所 FolderItems.Item()に名前を渡しても機能する
-		var item = items.Item(name);
-		if (item) return item;
-		
-		/*
-		for (var i = 0; i < items.Count; i++) {
-			var item = items.Item(i);
-			if (item.Name == name) return item;
-		}
-		*/
-		
-		if (!Setting.debug) return null;
-		throw new Error(E_UNEXPECTED, "フォルダーが見つからない: " + path);
+		return shell.NameSpace(fso.GetParentFolderName(path)).Items().Item(fso.GetFileName(path));
 	}
 	
 	
