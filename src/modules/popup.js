@@ -2,7 +2,6 @@
 
 Element.prototype.remove = function() { this.parentNode.removeChild(this); };
 
-/** @type {Key.escape} */
 var VK_ESCAPE = 27;
 
 /** @type {HTMLDialog} */

@@ -2,7 +2,6 @@
 
 "use strict";
 
-/** @type {Key.enter} */
 const VK_RETURN = 13;
 
 const isExplorerRunasLaunchingUser = !getRegValue("HKCR\\AppID\\{CDCBCFCA-3CDC-436f-A4E2-0E02075250C2}\\RunAs");
