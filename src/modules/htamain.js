@@ -1,8 +1,8 @@
 ﻿/// <reference path="common.js" />
 
-if (document.documentMode < 9) {
-	// @ts-ignore
-	Array.isArray = function(arg) {
+if (getDocumentMode() < 9) {
+	/** @type {(arg: any) => boolean} */
+	global.Array.isArray = function(arg) {
 		return Object.prototype.toString.call(arg) == "[object Array]";
 	};
 	/**
@@ -38,7 +38,7 @@ var htaDebug = (function() {
 	var logBox = null;
 	
 	/**
-	 * @param {any} value 
+	 * @param {any} value
 	 * @returns {string}
 	 */
 	function getType(value) {
@@ -52,7 +52,7 @@ var htaDebug = (function() {
 	
 	var retobj = {
 		/**
-		 * @param {string} message 
+		 * @param {string} message
 		 * @param {string} [title]
 		 */
 		write: function(message, title) {
@@ -72,7 +72,7 @@ var htaDebug = (function() {
 			dbgbox.location.hash = "#bottom";
 		},
 		/**
-		 * @param {{}} obj 
+		 * @param {{}} obj
 		 * @param {string} [title]
 		 */
 		list: function(obj, title) {
@@ -90,10 +90,7 @@ var htaDebug = (function() {
 			
 			this.write(list, title);
 		},
-		/**
-		 * @param {{}} obj
-		 * @param {number} [depth=4]
-		 */
+		/** @type {(obj: {}, depth?: number = 4) => void} */
 		dir: function(obj, depth) {
 			if (depth === undefined) depth = 4;
 			
@@ -108,7 +105,7 @@ var htaDebug = (function() {
 				var type = getType(value);
 				if (type == "function") return "function";
 				if (type == "null" || typeof value != "object") return String(value);
-				if (currentDepth >= depth) return Array.isArray(value) ? "[{0}]".xFormat(value) : value.toString();
+				if (currentDepth >= depth) return Array.isArray(value) ? "[{0}]".xFormat(value) : String(value);
 				
 				var tabs = "";
 				for (var i = 0; i < currentDepth; i++) tabs += "    ";
@@ -126,7 +123,7 @@ var htaDebug = (function() {
 			}
 		},
 		/**
-		 * @param {function(string): any} [callEval=eval] 
+		 * @param {function(string): any} [callEval=eval]
 		 * @param {string} [title=""]
 		 */
 		breakpoint: function(callEval, title) {

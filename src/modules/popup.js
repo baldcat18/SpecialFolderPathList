@@ -1,7 +1,5 @@
 ﻿/// <reference path="decl-userdef.d.ts" />
 
-Element.prototype.remove = function() { this.parentNode.removeChild(this); };
-
 var VK_ESCAPE = 27;
 
 /** @type {HTMLDialog} */

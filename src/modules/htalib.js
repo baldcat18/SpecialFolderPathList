@@ -202,7 +202,7 @@ function addEventHandler() {
 		if (target instanceof HTMLAnchorElement) {
 			if (evt.altKey) command.copyAsPath(target);
 			else popup.show(evt);
-		} else if (Setting.debug && evt.altKey) {
+		} else if (evt.altKey) {
 			htaDebug.breakpoint();
 		}
 		

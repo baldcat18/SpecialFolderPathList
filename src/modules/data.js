@@ -1468,7 +1468,7 @@
 			return null;
 		
 		default:
-			throw new Error("indexが不正: " + index);
+			throw new Error("indexが不正: " + index.current);
 		}
 	};
 })();

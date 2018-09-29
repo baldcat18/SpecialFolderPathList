@@ -17,12 +17,13 @@ interface HTMLAnchorElement {
 
 
 declare var global: {
+	Array: { isArray: Function };
 	Setting: object;
 	SpecialFolders: object;
-	ssfDESKTOPDIRECTORY: ShellSpecialFolderConstants.ssfDESKTOPDIRECTORY;
-	ssfDRIVES: ShellSpecialFolderConstants.ssfDRIVES;
-	ssfPROFILE: ShellSpecialFolderConstants.ssfPROFILE;
-	TemporaryFolder: SpecialFolderConst.TemporaryFolder;
+	ssfDESKTOPDIRECTORY: number;
+	ssfDRIVES: number;
+	ssfPROFILE: number;
+	TemporaryFolder: number;
 	Version: Function;
 	window?: Window;
 	WScript?: object;
