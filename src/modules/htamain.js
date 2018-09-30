@@ -1,5 +1,15 @@
 ﻿/// <reference path="common.js" />
 
+/**
+ * @param {string} msg
+ * @param {string} url
+ * @param {number} line
+*/
+window.onerror = function(msg, url, line) {
+	writeError("{0}\n\nurl: {1}\nline: {2}".xFormat(msg, url, line));
+	return true;
+};
+
 if (getDocumentMode() < 9) {
 	/** @type {(arg: any) => boolean} */
 	global.Array.isArray = function(arg) {
@@ -37,10 +47,7 @@ var htaDebug = (function() {
 	/** @type {HTMLDivElement} */
 	var logBox = null;
 	
-	/**
-	 * @param {any} value
-	 * @returns {string}
-	 */
+	/** @type {(value: any) => string} */
 	function getType(value) {
 		if (value === null) return "null";
 		var type = typeof value;
@@ -51,10 +58,7 @@ var htaDebug = (function() {
 	}
 	
 	var retobj = {
-		/**
-		 * @param {string} message
-		 * @param {string} [title]
-		 */
+		/** @type {(message: string, title?: string) => void} */
 		write: function(message, title) {
 			if (!dbgbox || dbgbox.closed) {
 				dbgbox =
@@ -71,10 +75,7 @@ var htaDebug = (function() {
 			
 			dbgbox.location.hash = "#bottom";
 		},
-		/**
-		 * @param {{}} obj
-		 * @param {string} [title]
-		 */
+		/** @type {(obj: {}, title?: string) => void} */
 		list: function(obj, title) {
 			var names = Object.getOwnPropertyNames(obj);
 			var list = "\n";
@@ -90,17 +91,13 @@ var htaDebug = (function() {
 			
 			this.write(list, title);
 		},
-		/** @type {(obj: {}, depth?: number = 4) => void} */
+		/** @type {(obj: {}, depth: number = 4) => void} */
 		dir: function(obj, depth) {
 			if (depth === undefined) depth = 4;
 			
 			this.write("\n" + createDir(obj, 0));
 			
-			/**
-			 * @param {any} value
-			 * @param {number} currentDepth
-			 * @returns {string}
-			 */
+			/** @type {(value: any, currentDepth: number) => string} */
 			function createDir(value, currentDepth) {
 				var type = getType(value);
 				if (type == "function") return "function";
@@ -122,10 +119,7 @@ var htaDebug = (function() {
 				return "{\n{0}{1}}".xFormat(tmp, tabs);;
 			}
 		},
-		/**
-		 * @param {function(string): any} [callEval=eval]
-		 * @param {string} [title=""]
-		 */
+		/** @type {(callEval: (expr: string) => any = eval, title: string = "") => void} */
 		breakpoint: function(callEval, title) {
 			if (callEval === undefined) callEval = eval;
 			if (title === undefined) title = "";
@@ -144,6 +138,13 @@ var htaDebug = (function() {
 				}
 				this.write(result, expr);
 			}
+		},
+		/**
+		 * @type {(expression: string, callEval: (expr: string) => any) => void}
+		 * @example htaDebug.assert("foo", function(x){return eval(x);});
+		 */
+		assert: function(expression, callEval) {
+			if (!callEval(expression)) throw new Error("Assertion failed: " + expression);
 		}
 	};
 	
@@ -154,16 +155,6 @@ var htaDebug = (function() {
 	
 	return retobj;
 })();
-
-/**
- * @param {string} msg
- * @param {string} url
- * @param {number} line
-*/
-window.onerror = function(msg, url, line) {
-	writeError("{0}\n\nurl: {1}\nline: {2}".xFormat(msg, url, line));
-	return true;
-};
 
 function main() {
 	if (Setting.abortIfOldOS && !State.OS.isSuppoertedVersion) {
