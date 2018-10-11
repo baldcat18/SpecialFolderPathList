@@ -11,8 +11,9 @@ Set-StrictMode -Version Latest
 $dataFile = (Resolve-Path "$($MyInvocation.MyCommand.Path)\..\..\src\modules\data.js").Path
 $dataText = @(Get-Content -LiteralPath $dataFile) -join "`n"
 $unusableText = ($dataText -csplit 'category: "Unusable"', 2, "SimpleMatch")[1]
+$ignoreCase = [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
 
-([regex]"\{\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\}").Matches($unusableText) |
+([regex]"\{\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\}").Matches($unusableText, $ignoreCase) |
 	ForEach-Object {
 		$clsid = $_.Value
 		$path = "Microsoft.PowerShell.Core\Registry::HKEY_CLASSES_ROOT\CLSID\$clsid"

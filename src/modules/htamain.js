@@ -12,13 +12,11 @@ window.onerror = function(msg, url, line) {
 
 if (getDocumentMode() < 9) {
 	/** @type {(arg: any) => boolean} */
-	global.Array.isArray = function(arg) {
+	// @ts-ignore
+	Array.isArray = function(arg) {
 		return Object.prototype.toString.call(arg) == "[object Array]";
 	};
-	/**
-	 * @param {(value: any, index: number, array: any[]) => void} callbackfn 
-	 * @param {any} [thisArg]
-	 */
+	/** @type {(callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void} */
 	Array.prototype.forEach = function(callbackfn, thisArg) {
 		for (var i = 0; i < this.length; i++) {
 			if (i in this) callbackfn.call(thisArg || this, this[i], this);
@@ -42,6 +40,9 @@ global.ssfPROFILE = 40;
 global.TemporaryFolder = 2;
 
 var htaDebug = (function() {
+	/** 0x800A01B6: オブジェクトでサポートされていないプロパティまたはメソッドです */
+	var E_NO_PROPERTY = -2146827850;
+	
 	/** @type {Window} */
 	var dbgbox = null;
 	/** @type {HTMLDivElement} */
@@ -52,12 +53,42 @@ var htaDebug = (function() {
 		if (value === null) return "null";
 		var type = typeof value;
 		if (type != "object") return type;
-		/** @type {string} */
-		var name = Object.prototype.toString.call(value).replace(/^\[object (.+)\]$/,"$1");
+		var name = /** @type {string} */ (Object.prototype.toString.call(value)).replace(/^\[object (.+)\]$/, "$1");
 		return (name != "Object" || value.construcor == Object) ? name : type;
 	}
 	
+	/** @type {(value: any) => string} */
+	function getString(value) {
+		try {
+			return String(value);
+		} catch (err) {
+			if (/** @type {Error} */ (err).number != E_NO_PROPERTY) throw err;
+			return "unprintable object";
+		}
+	}
+	
 	var retobj = {
+		/**
+		 * @type {(expression: string, callEval: (expr: string) => any, message?: string) => void}
+		 * @example htaDebug.assert("str === 'foo'", function(x){return eval(x);});
+		 */
+		assert: function(expression, callEval, message) {
+			if (!message) {
+				message = "Assertion failed: " + expression;
+				if (getDocumentMode() >= 10) {
+					try {
+						throw new Error(message);
+					} catch (err) {
+						message = /** @type {Error} */ (err).stack;
+					}
+				}
+			}
+			
+			if (!callEval(expression)) {
+				writeError(message);
+				window.close();
+			}
+		},
 		/** @type {(message: string, title?: string) => void} */
 		write: function(message, title) {
 			if (!dbgbox || dbgbox.closed) {
@@ -86,12 +117,12 @@ var htaDebug = (function() {
 				var type = getType(value);
 				if (value == null || type == "function") value = "";
 				
-				list += "{0}: [{1}] {2}\n".xFormat(name, type, value);
+				list += "{0}: [{1}] {2}\n".xFormat(name, type, getString(value));
 			}
 			
 			this.write(list, title);
 		},
-		/** @type {(obj: {}, depth: number = 4) => void} */
+		/** @type {(obj: {}, depth = 4) => void} */
 		dir: function(obj, depth) {
 			if (depth === undefined) depth = 4;
 			
@@ -102,7 +133,7 @@ var htaDebug = (function() {
 				var type = getType(value);
 				if (type == "function") return "function";
 				if (type == "null" || typeof value != "object") return String(value);
-				if (currentDepth >= depth) return Array.isArray(value) ? "[{0}]".xFormat(value) : String(value);
+				if (currentDepth >= depth) return Array.isArray(value) ? "[{0}]".xFormat(value) : getString(value);
 				
 				var tabs = "";
 				for (var i = 0; i < currentDepth; i++) tabs += "    ";
@@ -116,10 +147,10 @@ var htaDebug = (function() {
 				Object.getOwnPropertyNames(value).forEach(function(name) {
 					tmp +="{0}    {1}: {2}\n".xFormat(tabs, name, createDir(value[name], currentDepth + 1));
 				}, "");
-				return "{\n{0}{1}}".xFormat(tmp, tabs);;
+				return "{\n{0}{1}}".xFormat(tmp, tabs);
 			}
 		},
-		/** @type {(callEval: (expr: string) => any = eval, title: string = "") => void} */
+		/** @type {(callEval = eval, title = "") => void} */
 		breakpoint: function(callEval, title) {
 			if (callEval === undefined) callEval = eval;
 			if (title === undefined) title = "";
@@ -131,20 +162,13 @@ var htaDebug = (function() {
 				expr = prompt(title, expr);
 				if (!expr) break;
 				try {
-					result = String((callEval)(expr));
+					result = getString((callEval)(expr));
 				} catch (err) {
 					result = err instanceof Error ?
 						"{0} (0x{1})\n{2}".xFormat(err.name, (err.number || 0).xToHex(), err.message) : err;
 				}
 				this.write(result, expr);
 			}
-		},
-		/**
-		 * @type {(expression: string, callEval: (expr: string) => any) => void}
-		 * @example htaDebug.assert("foo", function(x){return eval(x);});
-		 */
-		assert: function(expression, callEval) {
-			if (!callEval(expression)) throw new Error("Assertion failed: " + expression);
 		}
 	};
 	
@@ -199,7 +223,7 @@ function getDocumentMode() {
 
 /**
  * @param {string} name
- * @param {function(): void} [onload]
+ * @param {() => void} [onload]
  */
 function loadScript(name, onload) {
 	var script = document.createElement("script");

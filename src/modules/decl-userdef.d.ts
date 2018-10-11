@@ -17,7 +17,6 @@ interface HTMLAnchorElement {
 
 
 declare var global: {
-	Array: { isArray: Function };
 	Setting: object;
 	SpecialFolders: object;
 	ssfDESKTOPDIRECTORY: number;

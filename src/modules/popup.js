@@ -16,10 +16,10 @@ document.onclick = document.oncontextmenu = function() {
 var items = dlgargs.items;
 document.onkeyup = function() {
 	var evt = /** @type {KeyboardEvent} */ (event);
-	
-	if (evt.keyCode == VK_ESCAPE) window.close();
-	
 	var code = evt.keyCode;
+	
+	if (code == VK_ESCAPE) window.close();
+	
 	/** @type {DialogItem} */
 	var item = null;
 	for (var i = 0; i < items.length; i++) {

@@ -12,8 +12,8 @@ WSH による SpecialFolderPathList の実装です。
 <named name="f" helpstring="スクリプトを実行した環境ではサポートされないフォルダーの名前も出力します。"/>
 <named name="o" helpstring="ファイル フォルダー(ディレクトリ)の情報のみ出力します。仮想フォルダーの情報は出力しません。"/>
 </runtime>
-<reference guid="{420B2830-E718-11CF-893D-00A0C9054228}" /> <!-- Scripting.FileSystemObject -->
-<reference guid="{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}" /> <!-- Shell.Application -->
+<reference guid="{420B2830-E718-11CF-893D-00A0C9054228}" /> <!-- scrrun.dll -->
+<reference guid="{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}" /> <!-- shell32.dll -->
 <script language="JavaScript" src="../../modules/common.js"></script>
 <script language="JavaScript" src="../../modules/settings.js"></script>
 <!-- <script language="JavaScript" src="../../modules/settings-custom.js"></script> -->
