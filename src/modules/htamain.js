@@ -34,8 +34,6 @@ if (getDocumentMode() < 9) {
 	};
 }
 
-global.ssfDESKTOPDIRECTORY = 16;
-global.ssfDRIVES = 17;
 global.ssfPROFILE = 40;
 global.TemporaryFolder = 2;
 

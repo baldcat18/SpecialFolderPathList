@@ -19,8 +19,6 @@ interface HTMLAnchorElement {
 declare var global: {
 	Setting: object;
 	SpecialFolders: object;
-	ssfDESKTOPDIRECTORY: number;
-	ssfDRIVES: number;
 	ssfPROFILE: number;
 	TemporaryFolder: number;
 	Version: Function;
@@ -123,7 +121,7 @@ interface SpecialFolderOption {
 
 interface SpecialFolderArgument {
 	title: string;
-	dir: string | number;
+	dir: string;
 	folderItem: FolderItem;
 	path: string;
 	option: SpecialFolderOption;
@@ -155,10 +153,6 @@ interface DialogArgument {
 }
 
 
-/** @type {ShellSpecialFolderConstants.ssfDESKTOPDIRECTORY} */
-declare const ssfDESKTOPDIRECTORY = 16;
-/** @type {ShellSpecialFolderConstants.ssfDRIVES} */
-declare const ssfDRIVES = 17;
 /** @type {ShellSpecialFolderConstants.ssfPROFILE} */
 declare const ssfPROFILE = 40;
 /** @type {SpecialFolderConst.TemporaryFolder} */
