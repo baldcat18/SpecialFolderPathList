@@ -331,6 +331,7 @@
 		case 13:
 			// Win10からサポート
 			// shell:My Video\Captures
+			// ゲームバーで動画やスクリーンショットを保存する時に自動生成される
 			return createSpecialFolder("キャプチャ", "shell:Captures");
 		
 		case 14:
