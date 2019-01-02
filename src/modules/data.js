@@ -804,7 +804,7 @@
 			// shell:Fonts
 			return createSpecialFolder("フォント", "shell:ControlPanelFolder\\::{BD84B380-8CA2-1069-AB1D-08000948F534}", { path: "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{BD84B380-8CA2-1069-AB1D-08000948F534}" });
 		case 171:
-			// Win10 1803までサポート(?)
+			// Win10 1803までサポート
 			return createSpecialFolder("言語", "shell:ControlPanelFolder\\::{BF782CC9-5A52-4A17-806C-2A894FFEEAC5}");
 		case 172:
 			// Win10 1607までサポート
