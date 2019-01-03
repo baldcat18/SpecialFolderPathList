@@ -5,7 +5,7 @@
 既知のフォルダー (Known Folders) をまとめて作成します。
 一部のフォルダーは作成するのに管理者権限が必要です。
 既知のフォルダーの一覧は Microsot のサイトにあります。
-https://msdn.microsoft.com/en-us/library/windows/desktop/dd378457(v=vs.85).aspx
+https://docs.microsoft.com/en-us/windows/desktop/shell/knownfolderid
 .INPUTS
 なし
 .OUTPUTS
@@ -15,6 +15,8 @@ psobject[]
 
 [CmdletBinding()]
 param()
+
+Set-StrictMode -Version Latest
 
 [bool]$verbose = $VerbosePreference -eq "Continue"
 

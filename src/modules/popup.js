@@ -1,6 +1,6 @@
 ﻿/// <reference path="decl-userdef.d.ts" />
 
-Element.prototype.remove = function() { this.parentNode.removeChild(this); };
+var VK_ESCAPE = 27;
 
 /** @type {HTMLDialog} */
 var dialog = this;
@@ -13,37 +13,39 @@ document.onclick = document.oncontextmenu = function() {
 	if (target.tagName == "LI") dlgargs.sendItem(target.id);
 };
 
-/** @type {{[x: number]: string}} */
-var items = {};
-items[/** @type {Key.o} */ (79)] = "openFolder";
-items[/** @type {Key.a} */ (65)] = "copyAsPath";
-items[/** @type {Key.x} */ (88)] = "execExplorer";
-items[/** @type {Key.e} */ (69)] = "execExplorerElevated";
-items[/** @type {Key.p} */ (80)] = "execCmd";
-items[/** @type {Key.w} */ (87)] = "execCmdElevated";
-items[/** @type {Key.s} */ (83)] = "execPowershell";
-items[/** @type {Key.h} */ (72)] = "execPowershellElevated";
-items[/** @type {Key.l} */ (76)] = "execWsl";
-items[/** @type {Key.i} */ (73)] = "execWslElevated";
-items[/** @type {Key.r} */ (82)] = "showProperty";
+var items = dlgargs.items;
 document.onkeyup = function() {
 	var evt = /** @type {KeyboardEvent} */ (event);
+	var code = evt.keyCode;
 	
-	if (evt.keyCode == /** @type {Key.escape} */ (27)) window.close();
-	 
-	/** @type {string} */
-	var item = items[evt.keyCode];
-	if (item) dlgargs.sendItem(item);
+	if (code == VK_ESCAPE) window.close();
+	
+	/** @type {DialogItem} */
+	var item = null;
+	for (var i = 0; i < items.length; i++) {
+		if (items[i].key == code) {
+			item = items[i];
+			break;
+		}
+	}
+	if (item) dlgargs.sendItem(item.id);
 };
 
 window.onload = function() {
-	if (!dlgargs.explorerRunasLaunchingUser) document.getElementById("execExplorerElevated").remove();
-	if (!dlgargs.isWslEnabled) removeElements(".wsl");
-	if (!dlgargs.isPropertiesEnabled) document.getElementById("showProperty").remove();
-	if (!dlgargs.isFileFolder) removeElements(".console");
-	if (!dlgargs.extended) removeElements(".extended");
-	
 	var menu = document.querySelector("menu");
+	
+	for (var i = 0; i < items.length; i++) {
+		var item = items[i];
+		
+		var li = document.createElement("li");
+		li.id = item.id;
+		if (item.isVisible) li.className = "visible";
+		li.innerHTML = item.caption.replace(/&(\w)/, "<u>$1</u>");
+		menu.appendChild(li);
+		
+		item.key = RegExp.$1.toUpperCase().charCodeAt(0);
+	}
+	
 	dialog.dialogWidth = menu.offsetWidth + "px";
 	dialog.dialogHeight = menu.offsetHeight + "px";
 };
@@ -51,10 +53,3 @@ window.onbeforeunload = function() {
 	dialog = null;
 	dlgargs = null;
 };
-
-/** @param {string} v */
-function removeElements(v) {
-	var nodelist = document.querySelectorAll(v);
-	
-	for (var i = nodelist.length - 1; i >= 0; i--) nodelist[i].remove();
-}

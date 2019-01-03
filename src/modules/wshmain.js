@@ -1,7 +1,6 @@
 ﻿/// <reference path="common.js" />
 
-var stdout = WScript.StdOut;
-var stderr = WScript.StdErr;
+var STDOUT = WScript.StdOut;
 
 function updateSetting() {
 	/** @type {WshNamed} */
@@ -42,17 +41,17 @@ function main() {
 		}
 	}
 	
-	if (Setting.wshWriteBom) stdout.Write("\uFEFF");
+	if (Setting.wshWriteBom) STDOUT.Write("\uFEFF");
 	if (Setting.debug) writeAppInfo();
 	writeList();
 }
 
 function writeAppInfo() {
-	stdout.WriteLine("Version: " + State.version);
-	stdout.WriteLine("OS: " + State.OS.caption);
-	stdout.Write("Platform: " + State.Host.platform + " bit");
-	if (State.Host.isWow64) stdout.Write(" (Wow64)");
-	stdout.WriteLine("\n");
+	STDOUT.WriteLine("Version: " + State.version);
+	STDOUT.WriteLine("OS: " + State.OS.caption);
+	STDOUT.Write("Platform: " + State.Host.platform + " bit");
+	if (State.Host.isWow64) STDOUT.Write(" (Wow64)");
+	STDOUT.WriteLine("\n");
 }
 
 function writeList() {
@@ -64,22 +63,22 @@ function writeList() {
 		
 		try {
 			if (folder.category) {
-				stdout.WriteLine("");
-				if (Setting.viewCategory) stdout.WriteLine("Category: {0}\n".xFormat(folder.category));
+				STDOUT.WriteLine("");
+				if (Setting.viewCategory) STDOUT.WriteLine("Category: {0}\n".xFormat(folder.category));
 			}
 			
 			if (!folder.folderItem && !Setting.wshForceWriteAllData) continue;
 			
-			stdout.WriteLine("Title: " + folder.title);
-			if (Setting.wshWriteDir) stdout.WriteLine("Dir: " + (folder.dir || ""));
+			STDOUT.WriteLine("Title: " + folder.title);
+			if (Setting.wshWriteDir) STDOUT.WriteLine("Dir: " + (folder.dir || ""));
 			if (folder.folderItem) {
-				stdout.WriteLine("Path: " + folder.path);
-				if (Setting.wshWriteDisplayName) stdout.WriteLine("DisplayName: " + folder.folderItem.Name);
+				STDOUT.WriteLine("Path: " + folder.path);
+				if (Setting.wshWriteDisplayName) STDOUT.WriteLine("DisplayName: " + folder.folderItem.Name);
 			}
-			if (Setting.wshWriteType) stdout.WriteLine("Type: " + folder.getType());
-			stdout.WriteLine("");
+			if (Setting.wshWriteType) STDOUT.WriteLine("Type: " + folder.getType());
+			STDOUT.WriteLine("");
 		} catch (err) {
-			if (toUint32(/** @type {Error} */ (err).number) == 0x800700E8) { // パイプを閉じています
+			if (/** @type {Error} */ (err).number == E_NODATA) {
 				writeError(newErrorMessage(err, "パイプを閉じています。"));
 				WScript.Quit(1);
 			} else {

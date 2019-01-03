@@ -6,6 +6,8 @@
 [CmdletBinding()]
 param([switch]$All)
 
+Set-StrictMode -Version Latest
+
 if (!$All) {
 	$dataFile = (Resolve-Path "$($MyInvocation.MyCommand.Path)\..\..\src\modules\data.js").Path
 	$dataText = @(Get-Content -LiteralPath $dataFile) -join "`n"
@@ -19,7 +21,7 @@ reg.exe export HKCR\CLSID $regFile > $null
 
 Get-Content -LiteralPath $regFile |
 	Where-Object { $_ -match "^\[HKEY_CLASSES_ROOT\\CLSID\\({.+?})\\(?:ShellFolder|shell(?:ex)?)\]$"} |
-	ForEach-Object { $matches[1] } |
+	ForEach-Object { $matches[1].ToUpper() } |
 	Get-Unique |
 	Where-Object { $All -or !$datatext.Contains($_) } |
 	ForEach-Object {

@@ -1,44 +1,62 @@
 ﻿declare var clipboardData: DataTransfer;
 
 interface Error {
-	/** 特定のエラーと関連付けられた数値を設定します。値の取得も可能です。 */
+	/**
+	 * 特定のエラーと関連付けられた数値を設定します。値の取得も可能です。
+	 * @see https://msdn.microsoft.com/ja-jp/library/cc427878.aspx
+	 */
     number: number;
 }
 
+/** @see https://msdn.microsoft.com/ja-jp/library/cc427715.aspx */
 interface ErrorConstructor {
 	new (number: number): Error;
 	new (number: number, message: string): Error;
 }
 
 interface Document {
-	/** Retrieves the document compatibility mode of the document. */
+	/**
+	 * Retrieves the document compatibility mode of the document.
+	 * @see https://web.archive.org/web/20140216144518/https://msdn.microsoft.com/en-us/library/cc196988.aspx
+	 */
 	readonly documentMode?: number;
 }
 
 interface Window {
-	/** Creates a modal dialog box that displays the specified HTML document. */
+	/**
+	 * Creates a modal dialog box that displays the specified HTML document.
+	 * @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741502(v=vs.85)
+	 */
 	showModalDialog(url: string, argIn?: any, options?: any): any;
-	/** Creates a modeless dialog box that displays the specified HTML document. */
+	/**
+	 * Creates a modeless dialog box that displays the specified HTML document.
+	 * @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741355(v=vs.85)
+	 */
 	showModelessDialog(url?: string, argIn?: any, options?: any): Window;
 }
 
+
 /**
  * Provides access to information about an HTML dialog box.
- * @see https://msdn.microsoft.com/en-us/library/aa752691(v=vs.85).aspx
+ * @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa752684(v=vs.85)
 */
 interface HTMLDialog {
 	/** Gets the variable or array of variables passed into the modal dialog window. */
 	dialogArguments: any;
 	/** Sets or gets the height of the modal dialog window. */
 	dialogHeight: any;
+	dialogHide: string;
 	/** Sets or gets the left coordinate of the modal dialog window. */
 	dialogLeft: any;
 	/** Sets or gets the width of the modal dialog window. */
 	dialogWidth: any;
 	/** Sets or gets the top coordinate of the modal dialog window. */
 	dialogTop: any;
+	resizable: string;
 	/** Sets or gets the value returned from the modal dialog window. */
 	returnValue: any;
+	status: string;
+	unadorned: string;
 	
 	/** Closes the current browser window or HTA. */
 	close(): void;
@@ -192,7 +210,7 @@ declare enum SpecialFolderConst {
 	TemporaryFolder = 2,
 }
 
-/** @see https://msdn.microsoft.com/en-us/library/y6hbz9es(v=vs.84).aspx */
+/** @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/windows-scripting/y6hbz9es(v=vs.84) */
 declare enum StandardStreamTypes {
 	/** Returns a TextStream object corresponding to the standard input stream. */
 	StdIn = 0,
@@ -531,7 +549,7 @@ interface Shell {
 
 /**
  * Represents a Shell folder. This object contains properties and methods that allow you to retrieve information about the folder.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb787854(v=vs.85).aspx
+ * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folder2
  */
 interface ShlFolder {
 	/** Contains the folder's Application object. */
@@ -609,7 +627,7 @@ interface FolderItem {
 
 /**
  * Represents the collection of items in a Shell folder. This object contains properties and methods that allow you to retrieve information about the collection.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb787789(v=vs.85).aspx
+ * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folderitems3
  */
 interface FolderItems {
 	/** Contains the Application object of the folder items collection. */
@@ -624,12 +642,12 @@ interface FolderItems {
 	/** Executes a verb on a collection of FolderItem objects. */
 	InvokeVerbEx(vVerb?: any, vArgs?: any): void;
 	/** Retrieves the FolderItem object for a specified item in the collection. */
-	Item(iIndex?: number): FolderItem;
+	Item(iIndex?: any): FolderItem;
 }
 
 /**
  * Represents a single verb available to an item. This object contains properties and methods that allow you to retrieve information about the verb.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb774172(v=vs.85).aspx
+ * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folderitemverb
  */
 interface FolderItemVerb {
 	/** Contains the verb's name. */
@@ -641,7 +659,7 @@ interface FolderItemVerb {
 
 /**
  * Represents the collection of verbs for an item in a Shell folder. This object contains properties and methods that allow you to retrieve information about the collection.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb774160(v=vs.85).aspx
+ * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folderitemverbs
  */
 interface FolderItemVerbs {
 	/** Contains the number of items in the collection. */
@@ -653,7 +671,7 @@ interface FolderItemVerbs {
 
 /**
  * Manages Shell links.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb774114(v=vs.85).aspx
+ * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-ishelllinkdual2
  */
 interface ShellLinkObject {
 	/** Contains a link's arguments. */

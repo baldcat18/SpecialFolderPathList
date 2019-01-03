@@ -6,6 +6,8 @@ SpecialFolderPathList.wsfの出力をファイルに保存する
 [CmdletBinding()]
 param()
 
+Set-StrictMode -Version Latest
+
 $osVersion = [System.Environment]::OSVersion.Version.ToString(3)
 $cpu = $env:PROCESSOR_ARCHITECTURE
 $edition = (Get-Item "HKLM:/SOFTWARE/Microsoft/Windows NT/CurrentVersion").GetValue("EditionID")

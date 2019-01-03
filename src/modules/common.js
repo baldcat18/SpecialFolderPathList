@@ -10,6 +10,31 @@ if (!Object.create) {
 	};
 }
 
+/** 0x80070002 */
+var E_NOTFOUND = -2147024894;
+/** 0x800700E8: パイプを閉じています */
+var E_NODATA = -2147024664;
+
+// https://msdn.microsoft.com/ja-jp/library/cc410914.aspx
+
+/** 感嘆符（!）アイコンを表示します。 */
+var MB_ICONWARNING = 0x30;
+
+// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724958(v=vs.85).aspx
+
+/** x86 */
+var PROCESSOR_ARCHITECTURE_INTEL = 0;
+/** ARM */
+var PROCESSOR_ARCHITECTURE_ARM = 5;
+/** Intel Itanium-based */
+var PROCESSOR_ARCHITECTURE_IA64 = 6;
+/** x64 (AMD or Intel) */
+var PROCESSOR_ARCHITECTURE_AMD64 = 9;
+/** ARM64 */
+var PROCESSOR_ARCHITECTURE_ARM64 = 12;
+/** Unknown architecture. */
+var PROCESSOR_ARCHITECTURE_UNKNOWN = 0xFFFF;
+
 var wShell = new ActiveXObject("WScript.Shell");
 var shell = new ActiveXObject("Shell.Application");
 var fso = new ActiveXObject("Scripting.FileSystemObject");
@@ -124,7 +149,7 @@ global.Version = (function() {
 })();
 
 var State = (function() {
-	var appVersion = "1.3.2.0 beta";
+	var appVersion = "1.3.2.1 alpha";
 	
 	/**
 	 * @template T
@@ -159,7 +184,8 @@ var State = (function() {
 		caption: "{0}{1} ({2})\n    {3}".xFormat(
 			getWinNTCurrentVersionValue("ProductName"), releaseId ? " " + releaseId : "", osVersion, buildLab),
 		isSuppoertedVersion:
-			osVersion.isGreaterThan(new Version(10, 0, 15063)) || // Win10 1703以降
+			osVersion.isGreaterThan(new Version(10, 0, 16299)) || // Win10 1709以降
+			osVersionString == "10.0.15063" || // Win10 1703 Enterprise
 			osVersionString == "10.0.14393" || // Win10 1607 LTSB | Enterprise
 			osVersionString == "10.0.10240" || // Win10 1507 LTSB
 			osVersionString == "6.3.9600" &&  osVersion.revision >= 17031 || // Win8.1 Update
@@ -175,12 +201,12 @@ var State = (function() {
 	
 	function getPlatform() {
 		switch (shell.GetSystemInformation("ProcessorArchitecture")) {
-		case /** @type ProcessorArchitecture.amd64 */ (9):
-		case /** @type ProcessorArchitecture.arm64 */ (12):
-		// case /** @type ProcessorArchitecture.ia64 */ (6):
+		case PROCESSOR_ARCHITECTURE_AMD64:
+		case PROCESSOR_ARCHITECTURE_ARM64:
+		// case PROCESSOR_ARCHITECTURE_IA64:
 			return 64;
-		case /** @type ProcessorArchitecture.intel */ (0):
-		case /** @type ProcessorArchitecture.arm */ (5):
+		case PROCESSOR_ARCHITECTURE_INTEL:
+		case PROCESSOR_ARCHITECTURE_ARM:
 			return 32;
 		default:
 			throw new Error("対応していないプラットフォームです。");
@@ -225,18 +251,21 @@ function toUint32 (value) {
 /**
  * @template T
  * @param {string} name
- * @param {T} [defaultValue]
- * @param {boolean} [expand]
+ * @param {T} [defaultValue=null]
+ * @param {boolean} [expand=false]
  * @returns {T}
  */
 function getRegValue(name, defaultValue, expand) {
+	if (defaultValue === undefined) defaultValue = null;
+	if (expand === undefined) expand = false;
+	
 	var returnValue;
 	try {
 		returnValue = wShell.RegRead(name);
 	} catch (err) {
-		// 0x80070002: レジストリのキーや値が見つからない
-		if (toUint32(/** @type {Error} */ (err).number) != 0x80070002) throw err;
-		returnValue = defaultValue == undefined ? null : defaultValue;
+		// E_NOTFOUND: レジストリのキーや値が見つからない
+		if (/** @type {Error} */ (err).number != E_NOTFOUND) throw err;
+		returnValue = defaultValue;
 	}
 	return expand && typeof returnValue == "string" ? returnValue.xExpand() : returnValue;
 }
@@ -263,4 +292,4 @@ var writeError =
 		alert(text);
 	} :
 	State.Host.type == "cscript" ? function(text) { WScript.StdErr.WriteLine(text); } :
-	function(text) { wShell.Popup(text, 0, "SpecialFolderPathList", 0x30 /* MB_ICONWARNING */); };
+	function(text) { wShell.Popup(text, 0, "SpecialFolderPathList", MB_ICONWARNING); };

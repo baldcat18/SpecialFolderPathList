@@ -1,6 +1,27 @@
 ﻿/// <reference path="common.js" />
 
-if (!Object.getOwnPropertyNames) {
+/**
+ * @param {string} msg
+ * @param {string} url
+ * @param {number} line
+*/
+window.onerror = function(msg, url, line) {
+	writeError("{0}\n\nurl: {1}\nline: {2}".xFormat(msg, url, line));
+	return true;
+};
+
+if (getDocumentMode() < 9) {
+	/** @type {(arg: any) => boolean} */
+	// @ts-ignore
+	Array.isArray = function(arg) {
+		return Object.prototype.toString.call(arg) == "[object Array]";
+	};
+	/** @type {(callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void} */
+	Array.prototype.forEach = function(callbackfn, thisArg) {
+		for (var i = 0; i < this.length; i++) {
+			if (i in this) callbackfn.call(thisArg || this, this[i], this);
+		}
+	};
 	Object.getOwnPropertyNames = function(o) {
 		/** @type {string[]} */
 		var names = [];
@@ -13,30 +34,60 @@ if (!Object.getOwnPropertyNames) {
 	};
 }
 
+global.ssfPROFILE = 40;
+global.TemporaryFolder = 2;
+
 var htaDebug = (function() {
+	/** 0x800A01B6: オブジェクトでサポートされていないプロパティまたはメソッドです */
+	var E_NO_PROPERTY = -2146827850;
+	
 	/** @type {Window} */
 	var dbgbox = null;
 	/** @type {HTMLDivElement} */
 	var logBox = null;
 	
-	/**
-	 * @param {any} value 
-	 * @returns {string}
-	 */
+	/** @type {(value: any) => string} */
 	function getType(value) {
 		if (value === null) return "null";
 		var type = typeof value;
 		if (type != "object") return type;
-		/** @type {string} */
-		var name = Object.prototype.toString.call(value).replace(/^\[object (.+)\]$/,"$1");
+		var name = /** @type {string} */ (Object.prototype.toString.call(value)).replace(/^\[object (.+)\]$/, "$1");
 		return (name != "Object" || value.construcor == Object) ? name : type;
+	}
+	
+	/** @type {(value: any) => string} */
+	function getString(value) {
+		try {
+			return String(value);
+		} catch (err) {
+			if (/** @type {Error} */ (err).number != E_NO_PROPERTY) throw err;
+			return "unprintable object";
+		}
 	}
 	
 	var retobj = {
 		/**
-		 * @param {string} message 
-		 * @param {string} [title]
+		 * @type {(expression: string, callEval: (expr: string) => any, message?: string) => void}
+		 * @example htaDebug.assert("str === 'foo'", function(x){return eval(x);});
 		 */
+		assert: function(expression, callEval, message) {
+			if (!message) {
+				message = "Assertion failed: " + expression;
+				if (getDocumentMode() >= 10) {
+					try {
+						throw new Error(message);
+					} catch (err) {
+						message = /** @type {Error} */ (err).stack;
+					}
+				}
+			}
+			
+			if (!callEval(expression)) {
+				writeError(message);
+				window.close();
+			}
+		},
+		/** @type {(message: string, title?: string) => void} */
 		write: function(message, title) {
 			if (!dbgbox || dbgbox.closed) {
 				dbgbox =
@@ -53,13 +104,10 @@ var htaDebug = (function() {
 			
 			dbgbox.location.hash = "#bottom";
 		},
-		/**
-		 * @param {{}} obj 
-		 * @param {string} [title]
-		 */
-		dir: function(obj, title) {
+		/** @type {(obj: {}, title?: string) => void} */
+		list: function(obj, title) {
 			var names = Object.getOwnPropertyNames(obj);
-			var dir = "\n";
+			var list = "\n";
 			
 			for (var i = 0; i < names.length; i++) {
 				var name = names[i];
@@ -67,24 +115,52 @@ var htaDebug = (function() {
 				var type = getType(value);
 				if (value == null || type == "function") value = "";
 				
-				dir += "{0}: [{1}] {2}\n".xFormat(name, type, value);
+				list += "{0}: [{1}] {2}\n".xFormat(name, type, getString(value));
 			}
 			
-			this.write(dir, title);
+			this.write(list, title);
 		},
-		/**
-		 * @param {function(string): any} [callEval] 
-		 * @param {string} [title]
-		 */
+		/** @type {(obj: {}, depth = 4) => void} */
+		dir: function(obj, depth) {
+			if (depth === undefined) depth = 4;
+			
+			this.write("\n" + createDir(obj, 0));
+			
+			/** @type {(value: any, currentDepth: number) => string} */
+			function createDir(value, currentDepth) {
+				var type = getType(value);
+				if (type == "function") return "function";
+				if (type == "null" || typeof value != "object") return String(value);
+				if (currentDepth >= depth) return Array.isArray(value) ? "[{0}]".xFormat(value) : getString(value);
+				
+				var tabs = "";
+				for (var i = 0; i < currentDepth; i++) tabs += "    ";
+				var tmp = "";
+				if (Array.isArray(value)) {
+					value.forEach(function(val) {
+						tmp += "{0}    {1}\n".xFormat(tabs, createDir(val, currentDepth + 1));
+					}, "");
+					return "[\n{0}{1}]".xFormat(tmp, tabs);
+				}
+				Object.getOwnPropertyNames(value).forEach(function(name) {
+					tmp +="{0}    {1}: {2}\n".xFormat(tabs, name, createDir(value[name], currentDepth + 1));
+				}, "");
+				return "{\n{0}{1}}".xFormat(tmp, tabs);
+			}
+		},
+		/** @type {(callEval = eval, title = "") => void} */
 		breakpoint: function(callEval, title) {
+			if (callEval === undefined) callEval = eval;
+			if (title === undefined) title = "";
+			
 			var expr = "";
 			var result = "";
 			
 			for (;;) {
-				expr = prompt(title || "", expr);
+				expr = prompt(title, expr);
 				if (!expr) break;
 				try {
-					result = String((callEval || eval)(expr));
+					result = getString((callEval)(expr));
 				} catch (err) {
 					result = err instanceof Error ?
 						"{0} (0x{1})\n{2}".xFormat(err.name, (err.number || 0).xToHex(), err.message) : err;
@@ -101,16 +177,6 @@ var htaDebug = (function() {
 	
 	return retobj;
 })();
-
-/**
- * @param {string} msg
- * @param {string} url
- * @param {number} line
-*/
-window.onerror = function(msg, url, line) {
-	writeError("{0}\n\nurl: {1}\nline: {2}".xFormat(msg, url, line));
-	return true;
-};
 
 function main() {
 	if (Setting.abortIfOldOS && !State.OS.isSuppoertedVersion) {
@@ -155,7 +221,7 @@ function getDocumentMode() {
 
 /**
  * @param {string} name
- * @param {function(): void} [onload]
+ * @param {() => void} [onload]
  */
 function loadScript(name, onload) {
 	var script = document.createElement("script");

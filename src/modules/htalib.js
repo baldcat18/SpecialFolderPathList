@@ -2,6 +2,8 @@
 
 "use strict";
 
+const VK_RETURN = 13;
+
 const isExplorerRunasLaunchingUser = !getRegValue("HKCR\\AppID\\{CDCBCFCA-3CDC-436f-A4E2-0E02075250C2}\\RunAs");
 const isWslEnabled = fso.FileExists(getSystemPath() + "\\wsl.exe");
 
@@ -40,13 +42,23 @@ const popup = (function() {
 	let target = null;
 	/** @type {Window} */
 	let dialog = null;
+	/** @type {DialogItem[]} */
+	const items = [
+		{ id: "openFolder", caption: "開く(&O)", isAlwaysVisible: true, },
+		{ id: "copyAsPath", caption: "パスのコピー(&A)", isAlwaysVisible: true, },
+		{ id: "execExplorer", caption: "エクスプローラー(&X)", isAlwaysVisible: false, },
+		{ id: "execExplorerElevated", caption: "エクスプローラーを管理者として開く(&E)", isExtended: true, isAlwaysVisible: (isExplorerRunasLaunchingUser ? null : false)},
+		{ id: "execCmd", caption: "コマンドプロンプトを開く(&P)", isConsole:true, },
+		{ id: "execCmdElevated", caption: "コマンドプロンプトを管理者として開く(&W)", isConsole:true, isExtended: true, },
+		{ id: "execPowershell", caption: "Windows PowerShell を開く(&S)", isConsole:true, },
+		{ id: "execPowershellElevated", caption: "Windows PowerShell を管理者として開く(&H)", isConsole:true, isExtended: true, },
+		{ id: "execWsl", caption: "Linux シェルを開く(&L)", isConsole:true, isAlwaysVisible: (isWslEnabled ? null : false), },
+		{ id: "execWslElevated", caption: "Linux シェルを管理者として開く(&I)", isConsole:true, isExtended: true, isAlwaysVisible: (isWslEnabled ? null : false), },
+		{ id: "showProperty", caption: "プロパティ(&R)", },
+	];
 	/** @type {DialogArgument} */
 	const dlgargs = {
-		isFileFolder: false,
-		isWslEnabled: isWslEnabled,
-		isPropertiesEnabled: false,
-		extended: false,
-		explorerRunasLaunchingUser: isExplorerRunasLaunchingUser,
+		items: items,
 		/** @param {string} item */
 		sendItem: function(item) {
 			popup.hide();
@@ -73,6 +85,14 @@ const popup = (function() {
 			target = /** @type {HTMLAnchorElement} */ (evt.target);
 			const folder = target.xFolder;
 			
+			items.forEach(function(item) {
+				item.isVisible =
+					item.isAlwaysVisible != null ? item.isAlwaysVisible :
+					item.isConsole && !folder.isFileFolder ? false :
+					item.id == "showProperty" ? folder.hasProperties() :
+					item.isExtended ? evt.shiftKey : true;
+			});
+			
 			let left = evt.screenX;
 			let top = evt.screenY;
 			// 右クリックではなくshift+F10等を使った場合
@@ -81,10 +101,6 @@ const popup = (function() {
 				left = rect.left + window.screenLeft + 8;
 				top = rect.top + window.screenTop + 8;
 			}
-			
-			dlgargs.isFileFolder = folder.isFileFolder;
-			dlgargs.isPropertiesEnabled = folder.hasProperties();
-			dlgargs.extended = evt.shiftKey;
 			
 			const dlgopts = "dialogWidth: 0px; dialogHeight: 0px; unadorned: 1; " +
 				"dialogLeft: " + left + "; dialogTop: " + top;
@@ -186,7 +202,7 @@ function addEventHandler() {
 		if (target instanceof HTMLAnchorElement) {
 			if (evt.altKey) command.copyAsPath(target);
 			else popup.show(evt);
-		} else if (Setting.debug && evt.altKey) {
+		} else if (evt.altKey) {
 			htaDebug.breakpoint();
 		}
 		
@@ -197,7 +213,7 @@ function addEventHandler() {
 		
 		const target = evt.target;
 		if (!(target instanceof HTMLAnchorElement)) return;
-		if (evt.keyCode == /** @type {Key.enter} */ (13) && evt.altKey) command.showProperty(target);
+		if (evt.keyCode == VK_RETURN && evt.altKey) command.showProperty(target);
 	};
 	/** @param {DragEvent} evt */
 	document.ondragstart = function(evt) { evt.preventDefault(); };
