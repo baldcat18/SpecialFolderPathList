@@ -149,7 +149,7 @@ global.Version = (function() {
 })();
 
 var State = (function() {
-	var appVersion = "1.3.2.1 alpha";
+	var appVersion = "1.3.3.0 alpha";
 	
 	/**
 	 * @template T
