@@ -804,7 +804,7 @@
 			// shell:Fonts
 			return createSpecialFolder("フォント", "shell:ControlPanelFolder\\::{BD84B380-8CA2-1069-AB1D-08000948F534}", { path: "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{BD84B380-8CA2-1069-AB1D-08000948F534}" });
 		case 171:
-			// Win10 1803までサポート
+			// Win7からWin10 1803までサポート
 			return createSpecialFolder("言語", "shell:ControlPanelFolder\\::{BF782CC9-5A52-4A17-806C-2A894FFEEAC5}");
 		case 172:
 			// Win10 1607までサポート
@@ -1142,7 +1142,7 @@
 			return createSpecialFolder("ペンとタッチ", "shell:::{F82DF8F7-8B9F-442E-A48C-818EA735FF9B}");
 		
 		// 上にあるのとは違うデータでフォルダーの情報を取得する
-		// CSIDLは一部を除いて扱わない
+		// CSIDLは扱わない
 		case 295:
 			return createSpecialFolder("shell:Profile", "shell:Profile", { category: "OtherDir" });
 		case 296:
@@ -1265,82 +1265,84 @@
 			// パブリック
 			return createSpecialFolder("Public Folder", "shell:::{4336A54D-038B-4685-AB02-99BB52D3FB8B}");
 		case 347:
-			// すべてのコントロール パネル項目
-			return createSpecialFolder("Control Panel command object for Start menu and desktop", "shell:::{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}");
-		case 348:
 			return createSpecialFolder("UsersFiles", "shell:::{59031A47-3F72-44A7-89C5-5595FE6B30EE}");
-		case 349:
+		case 348:
 			// このデバイス
 			return createSpecialFolder("This Device", "shell:::{5B934B42-522B-4C34-BBFE-37A3EF7B9C90}");
-		case 350:
+		case 349:
 			// ごみ箱
 			return createSpecialFolder("Recycle Bin", "shell:::{645FF040-5081-101B-9F08-00AA002F954E}");
-		case 351:
+		case 350:
 			// プログラムと機能
 			return createSpecialFolder("Programs and Features", "shell:::{7B81BE6A-CE2B-4676-A29E-EB907A5126C5}");
-		case 352:
+		case 351:
 			// ネットワーク接続
 			return createSpecialFolder("Network Connections", "shell:::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");
-		case 353:
+		case 352:
 			// プリンター
 			return createSpecialFolder("Remote Printers", "shell:::{863AA9FD-42DF-457B-8E4D-0DE1B8015C60}");
-		case 354:
+		case 353:
 			// インターネット
 			return createSpecialFolder("Internet Folder", "shell:::{871C5380-42A0-1069-A2EA-08002B30309D}");
-		case 355:
+		case 354:
 			// Win8.1のみ
 			return createSpecialFolder("OneDrive", "shell:::{8E74D236-7F35-4720-B138-1FED0B85EA75}");
-		case 356:
+		case 355:
 			// 検索結果
 			return createSpecialFolder("CLSID_SearchHome", "shell:::{9343812E-1C37-4A49-A12E-4B2D810D956B}");
-		case 357:
+		case 356:
 			// 同期センター
 			return createSpecialFolder("Sync Center Folder", "shell:::{9C73F5E5-7AE7-4E32-A8E8-8D23B85255BF}");
-		case 358:
+		case 357:
 			// ネットワーク接続
 			return createSpecialFolder("Network Connections", "shell:::{992CFFA0-F557-101A-88EC-00DD010CCC48}");
-		case 359:
+		case 358:
 			// Win8.1から
 			return createSpecialFolder("My Video", "shell:::{A0953C92-50DC-43BF-BE83-3742FED03C9C}");
-		case 360:
+		case 359:
 			// Win8.1から
 			return createSpecialFolder("Personal", "shell:::{A8CDFF1C-4878-43BE-B5FD-F8091C1C60D0}");
-		case 361:
+		case 360:
 			// Win8.1 UpdateからWin10 1511まで
 			return createSpecialFolder("StartMenuAllPrograms", "shell:::{ADFA80E7-9769-4AD9-992C-55DC57E1008C}");
-		case 362:
+		case 361:
 			// Win8.1から
 			return createSpecialFolder("ThisPCDesktopFolder", "shell:::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}");
-		case 363:
+		case 362:
 			// ホームグループ
 			return createSpecialFolder("Other Users Folder", "shell:::{B4FB3F98-C1EA-428D-A78A-D1F5659CBA93}");
-		case 364:
+		case 363:
 			// フォント
 			return createSpecialFolder("Microsoft Windows Font Folder", "shell:ControlPanelFolder\\::{BD84B380-8CA2-1069-AB1D-08000948F534}");
-		case 365:
+		case 364:
 			// 管理ツール (All Users)
 			return createSpecialFolder("Administrative Tools", "shell:::{D20EA4E1-3957-11D2-A40B-0C5020524153}");
-		case 366:
+		case 365:
 			// Win10から
 			return createSpecialFolder("Local Documents", "shell:::{D3162B92-9365-467A-956B-92703ACA08AF}");
-		case 367:
+		case 366:
 			// インストールされた更新プログラム
 			return createSpecialFolder("Installed Updates", "shell:::{D450A8A1-9568-45C7-9C0E-B4F9FB4537BD}");
-		case 368:
-			return createSpecialFolder("Default Programs command object for Start menu", "shell:::{E44E5D18-0652-4508-A4E2-8A090067BCB0}");
-		case 369:
+		case 367:
 			// ゲーム
 			// Win10 1709までサポート
 			return createSpecialFolder("Games Explorer", "shell:::{ED228FDF-9EA8-4870-83B1-96B02CFE0D52}");
-		case 370:
+		case 368:
 			// ネットワーク
 			return createSpecialFolder("Computers and Devices", "shell:::{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}");
-		case 371:
+		case 369:
 			// このデバイス (Win10 1703から)
 			return createSpecialFolder("This Device", "shell:::{F8278C54-A712-415B-B593-B77A2BE0DDA9}");
-		case 372:
+		case 370:
 			// Win10から
 			return createSpecialFolder("Local Videos", "shell:::{F86FA3AB-70D2-4FC7-9C99-FCBF05467F3A}");
+		
+		case 371:
+			// すべてのコントロール パネル項目
+			return createSpecialFolder("Control Panel command object for Start menu and desktop", "shell:::{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}");
+		case 372:
+			// 既定のプログラム
+			return createSpecialFolder("Default Programs command object for Start menu", "shell:::{E44E5D18-0652-4508-A4E2-8A090067BCB0}");
 		
 		// フォルダーとして使えないshellコマンド
 		// Get-Clsid.ps1やGet-ShellCommand.ps1でヒットしないようにするためのもの
