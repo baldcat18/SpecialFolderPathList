@@ -689,7 +689,7 @@
 			return createSpecialFolder("ガジェット (All Users)", "shell:ProgramFiles\\Windows Sidebar\\Shared Gadgets");
 		
 		case 127:
-			return createSpecialFolder("デスクトップ", "shell:Desktop", { category: "Desktop / " + (WIN81 ? "ThisPC" : "Computer") });
+			return createSpecialFolder("デスクトップ", "shell:Desktop", { category: "Desktop / MyComputer" });
 		case 128:
 			// shell:MyComputerFolderはWin10 1507/1511だとなぜかデスクトップになってしまう
 			return createSpecialFolder(WIN81 ? "PC" : "コンピューター", !WIN10_1507_to_1511 ? "shell:MyComputerFolder" : "shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}");
@@ -934,7 +934,7 @@
 			// Win10から
 			// shell:::{5B934B42-522B-4C34-BBFE-37A3EF7B9C90} (Win10 1507から1607まで)
 			// shell:::{F8278C54-A712-415B-B593-B77A2BE0DDA9} (Win10 1703から)
-			return createSpecialFolder("このデバイス ({0})".xFormat(WIN10_1703 ? "個人用フォルダー" : "パブリック"), "shell:ThisDeviceFolder", { category: "AnotherName", propertyType: PT_VERB });
+			return createSpecialFolder("このデバイス ({0})".xFormat(WIN10_1703 ? "個人用フォルダー" : "パブリック"), "shell:ThisDeviceFolder", { category: "OtherNames", propertyType: PT_VERB });
 		case 217:
 			// Win8までだと別名にならないので非表示に
 			return createSpecialFolder("マイ ドキュメント (ドキュメント)", WIN81 ? "shell:::{450D8FBA-AD25-11D0-98A8-0800361B1103}" : null);
@@ -1144,7 +1144,7 @@
 		// 上にあるのとは違うデータでフォルダーの情報を取得する
 		// CSIDLは扱わない
 		case 295:
-			return createSpecialFolder("shell:Profile", "shell:Profile", { category: "OtherDir" });
+			return createSpecialFolder("shell:Profile", "shell:Profile", { category: "OtherDirs" });
 		case 296:
 			return createSpecialFolder("shell:Local Documents", "shell:Local Documents");
 		case 297:
