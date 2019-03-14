@@ -22,6 +22,8 @@ Windows 10 Fall Creators Update (バージョン 1709 ビルド 16299)
 
 32 ビット版・64 ビット版の両方で動作します。
 
+Windows 10 Insider Preview (ビルド 18343) でも動作すると思います。
+
 Windows 10 Creators Update (バージョン 1703 ビルド 15063) でも
 動作すると思いますが、動作確認していません。
 
