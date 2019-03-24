@@ -135,8 +135,6 @@
 	FileFolder.prototype = Object.create(SpecialFolder.prototype);
 	FileFolder.prototype.constructor = FileFolder;
 	FileFolder.prototype.isFileFolder = true;
-	// メソッドでthis.pathが未定義だといわれないようにするためのもの
-	FileFolder.prototype.path = "";
 	/** @param {string} [verb] */
 	FileFolder.prototype.execCmd = function(verb) {
 		shell.ShellExecute("cmd.exe", "/k pushd \"{0}\"".xFormat(this.path), null, verb);
@@ -150,6 +148,12 @@
 	FileFolder.prototype.execWsl = function(verb) {
 		shell.ShellExecute("cmd.exe", "/c pushd \"{0}\" & wsl.exe".xFormat(this.path), null, verb);
 	};
+	
+	// メソッドでthis.pathやthis._folderItemForPropertiesが未定義だと言われないようにするためのもの
+	// 普通に実行するだけなら不要
+	FileFolder.prototype.path = "";
+	/** @type {FolderItem} */
+	FileFolder.prototype._folderItemForProperties = undefined;
 	
 	/**
 	 * @class
