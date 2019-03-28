@@ -52,6 +52,11 @@
 	/** @type {SpecialFolderOption} */
 	var DEFAULT_OPTION = {};
 	
+	var PROPERTIES_NAME = (function() {
+		var verbs = shell.NameSpace(0).Self.Verbs();
+		return verbs.Item(verbs.Count - 1).Name;
+	})();
+	
 	if (Setting.directoryOnly !== undefined && Setting.fileFolderOnly === undefined) {
 		Setting.fileFolderOnly = Setting.directoryOnly;
 	}
@@ -103,14 +108,9 @@
 		if (this._properties === undefined) {
 			this._properties = null;
 			var verbs = (this._folderItemForProperties || this.folderItem).Verbs();
-			if (verbs) {
-				for (var i = verbs.Count - 1; i >= 0; i--) {
-					var verb = verbs.Item(i);
-					if (verb.Name == "プロパティ(&R)") {
-						this._properties = verb;
-						break;
-					}
-				}
+			if (verbs && verbs.Count) {
+				var verb = verbs.Item(verbs.Count - 1);
+				if (verb.Name == PROPERTIES_NAME) this._properties = verb;
 			}
 		}
 		return !!this._properties;
@@ -135,8 +135,6 @@
 	FileFolder.prototype = Object.create(SpecialFolder.prototype);
 	FileFolder.prototype.constructor = FileFolder;
 	FileFolder.prototype.isFileFolder = true;
-	// メソッドでthis.pathが未定義だといわれないようにするためのもの
-	FileFolder.prototype.path = "";
 	/** @param {string} [verb] */
 	FileFolder.prototype.execCmd = function(verb) {
 		shell.ShellExecute("cmd.exe", "/k pushd \"{0}\"".xFormat(this.path), null, verb);
@@ -150,6 +148,12 @@
 	FileFolder.prototype.execWsl = function(verb) {
 		shell.ShellExecute("cmd.exe", "/c pushd \"{0}\" & wsl.exe".xFormat(this.path), null, verb);
 	};
+	
+	// メソッドでthis.pathやthis._folderItemForPropertiesが未定義だと言われないようにするためのもの
+	// 普通に実行するだけなら不要
+	FileFolder.prototype.path = "";
+	/** @type {FolderItem} */
+	FileFolder.prototype._folderItemForProperties = undefined;
 	
 	/**
 	 * @class
