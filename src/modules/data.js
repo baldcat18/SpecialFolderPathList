@@ -52,6 +52,11 @@
 	/** @type {SpecialFolderOption} */
 	var DEFAULT_OPTION = {};
 	
+	var PROPERTIES_NAME = (function() {
+		var verbs = shell.NameSpace(0).Self.Verbs();
+		return verbs.Item(verbs.Count - 1).Name;
+	})();
+	
 	if (Setting.directoryOnly !== undefined && Setting.fileFolderOnly === undefined) {
 		Setting.fileFolderOnly = Setting.directoryOnly;
 	}
@@ -103,14 +108,9 @@
 		if (this._properties === undefined) {
 			this._properties = null;
 			var verbs = (this._folderItemForProperties || this.folderItem).Verbs();
-			if (verbs) {
-				for (var i = verbs.Count - 1; i >= 0; i--) {
-					var verb = verbs.Item(i);
-					if (verb.Name == "プロパティ(&R)") {
-						this._properties = verb;
-						break;
-					}
-				}
+			if (verbs && verbs.Count) {
+				var verb = verbs.Item(verbs.Count - 1);
+				if (verb.Name == PROPERTIES_NAME) this._properties = verb;
 			}
 		}
 		return !!this._properties;
