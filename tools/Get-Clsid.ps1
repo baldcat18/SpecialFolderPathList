@@ -13,14 +13,14 @@ if (!$All) {
 	$dataText = @(Get-Content -LiteralPath $dataFile) -join "`n"
 }
 
-$clsidKey = Get-Item "Microsoft.PowerShell.Core\Registry::HKEY_CLASSES_ROOT\CLSID"
+$clsidKey = Get-Item 'Microsoft.PowerShell.Core\Registry::HKEY_CLASSES_ROOT\CLSID'
 
 # CLSIDは数が多すぎるのでいったんエクスポートしてから処理する
-$regFile = [System.IO.Path]::GetTempPath() + [System.IO.Path]::GetRandomFileName()
-reg.exe export HKCR\CLSID $regFile > $null
+$regFile = [System.IO.Path]::GetTempFileName()
+reg.exe export HKCR\CLSID $regFile /y > $null
 
 Get-Content -LiteralPath $regFile |
-	Where-Object { $_ -match "^\[HKEY_CLASSES_ROOT\\CLSID\\({.+?})\\(?:ShellFolder|shell(?:ex)?)\]$"} |
+	Where-Object { $_ -match '^\[HKEY_CLASSES_ROOT\\CLSID\\({.+?})\\(?:ShellFolder|shell(?:ex)?)\]$' } |
 	ForEach-Object { $matches[1].ToUpper() } |
 	Get-Unique |
 	Where-Object { $All -or !$datatext.Contains($_) } |
@@ -31,8 +31,8 @@ Get-Content -LiteralPath $regFile |
 			
 			Write-Output (
 				New-Object psobject -Property @{
-					"Key" = "shell:::$clsid"
-					"Name" = $subKey.GetValue("")
+					'Key' = "shell:::$clsid"
+					'Name' = $subKey.GetValue('')
 				} | Select-Object Key, Name
 			)
 		} finally {
