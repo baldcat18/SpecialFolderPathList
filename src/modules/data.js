@@ -22,8 +22,6 @@
 	/** WWin10IP Build18343以降 */
 	var WIN10_1903 = OS.version.isGreaterThan(new Version(10, 0, 18343));
 	
-	var WIN10_1507_to_1511 = WIN10 && !WIN10_1607;
-	
 	var IS64BIT = State.Host.platform == 64;
 	
 	var USER_SHELL_FOLDERS_KEY =
@@ -702,7 +700,7 @@
 			return createSpecialFolder("デスクトップ", "shell:Desktop", { category: "Desktop / MyComputer" });
 		case 129:
 			// shell:MyComputerFolderはWin10 1507/1511だとなぜかデスクトップになってしまう
-			return createSpecialFolder(WIN81 ? "PC" : "コンピューター", !WIN10_1507_to_1511 ? "shell:MyComputerFolder" : "shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}");
+			return createSpecialFolder(WIN81 ? "PC" : "コンピューター", "shell:MyComputerFolder");
 		case 130:
 			return createSpecialFolder(WIN10 ? "最近使ったフォルダー" : "最近表示した場所", "shell:::{22877A6D-37A1-461A-91B0-DBDA5AAEBC99}");
 		case 131:
