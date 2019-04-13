@@ -126,7 +126,7 @@ global.Version = (function() {
 	 */
 	Version.prototype.isGreaterThan = function(obj) {
 		return !!obj && this.compareTo(obj) > 0;
-	}
+	};
 	/**
 	 * @param {number} [fieldCount]
 	 * @returns {string}
@@ -143,7 +143,7 @@ global.Version = (function() {
 		if (fieldCount >= 3 && this.build != unspecified) tmp.push(this.build);
 		if (fieldCount >= 4 && this.revision != unspecified) tmp.push(this.revision);
 		return tmp.join(".");
-	}
+	};
 	
 	return Version;
 })();

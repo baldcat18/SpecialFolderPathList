@@ -210,7 +210,7 @@
 		sfArg.dir = dir;
 		sfArg.option = option || DEFAULT_OPTION;
 		
-		try { sfArg.folderItem = shell.NameSpace(dir).Self }
+		try { sfArg.folderItem = shell.NameSpace(dir).Self; }
 		catch (err) { sfArg.folderItem = null; }
 		
 		sfArg.path = "";
@@ -246,7 +246,7 @@
 				
 				index.current = itemIndex;
 				return getSpecialFolder(index);
-			};
+			}
 		})(),
 		iterator: function() {
 			return {
@@ -260,7 +260,7 @@
 				 * @type {FolderIteratorIndex}
 				 */
 				_index: { current: -1 }
-			}
+			};
 		}
 	};
 	
