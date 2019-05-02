@@ -15,12 +15,12 @@ var E_NOTFOUND = -2147024894;
 /** 0x800700E8: パイプを閉じています */
 var E_NODATA = -2147024664;
 
-// https://msdn.microsoft.com/ja-jp/library/cc410914.aspx
+// https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-messagebox
 
 /** 感嘆符（!）アイコンを表示します。 */
 var MB_ICONWARNING = 0x30;
 
-// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724958(v=vs.85).aspx
+// https://docs.microsoft.com/ja-jp/windows/desktop/api/sysinfoapi/ns-sysinfoapi-_system_info
 
 /** x86 */
 var PROCESSOR_ARCHITECTURE_INTEL = 0;
