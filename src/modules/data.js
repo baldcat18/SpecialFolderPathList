@@ -231,7 +231,7 @@
 	
 	var DONE_ITERATION = Infinity;
 	
-	global.SpecialFolders = {
+	globalThis.SpecialFolders = {
 		item: (function() {
 			/** @type {FolderIteratorIndex} */
 			var index = null;

@@ -1,6 +1,6 @@
 ﻿/// <reference path="decl-userdef.d.ts" />
 
-if (!this.global || global != this.global) this.global = this;
+if (!this.globalThis || globalThis != this.globalThis) this.globalThis = this;
 
 if (!Object.create) {
 	Object.create = function(o) {
@@ -67,9 +67,9 @@ String.prototype.xFormat = function() {
 	return this.replace(/\{\{|\}\}|\{(\d+)(?::(.+?))?\}/g, replacer);
 };
 
-global.Setting = { debug: false };
+globalThis.Setting = { debug: false };
 
-global.Version = (function() {
+globalThis.Version = (function() {
 	var unspecified = -1;
 	var errmsg = "引数 {0} がマイナス: {1}";
 	
@@ -193,8 +193,8 @@ var State = (function() {
 	
 	/** @returns {string} */
 	function getHostType() {
-		if (global.window && /\.hta$/.test(location.href)) return "mshta";
-		if (global.WScript) return fso.GetBaseName(WScript.FullName).toLowerCase();
+		if (globalThis.window && /\.hta$/.test(location.href)) return "mshta";
+		if (globalThis.WScript) return fso.GetBaseName(WScript.FullName).toLowerCase();
 		throw new Error("対応していない実行環境です。");
 	}
 	
