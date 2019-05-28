@@ -3,12 +3,13 @@
 var VK_ESCAPE = 27;
 
 /** @type {HTMLDialog} */
+// @ts-ignore
 var dialog = this;
 /** @type {DialogArgument} */
 var dlgargs = dialog.dialogArguments;
 
 document.onclick = document.oncontextmenu = function() {
-	var target = event.srcElement;
+	var target = /** @type {Element} */ (event.srcElement);
 	if (target.tagName == "U") target = /** @type {Element} */ (target.parentNode);
 	if (target.tagName == "LI") dlgargs.sendItem(target.id);
 };
