@@ -1,6 +1,6 @@
 ﻿/// <reference path="decl-userdef.d.ts" />
 
-if (!this.global || global != this.global) this.global = this;
+if (!this.globalThis || globalThis != this.globalThis) this.globalThis = this;
 
 if (!Object.create) {
 	Object.create = function(o) {
@@ -15,12 +15,12 @@ var E_NOTFOUND = -2147024894;
 /** 0x800700E8: パイプを閉じています */
 var E_NODATA = -2147024664;
 
-// https://msdn.microsoft.com/ja-jp/library/cc410914.aspx
+// https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-messagebox
 
 /** 感嘆符（!）アイコンを表示します。 */
 var MB_ICONWARNING = 0x30;
 
-// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724958(v=vs.85).aspx
+// https://docs.microsoft.com/ja-jp/windows/desktop/api/sysinfoapi/ns-sysinfoapi-_system_info
 
 /** x86 */
 var PROCESSOR_ARCHITECTURE_INTEL = 0;
@@ -67,9 +67,9 @@ String.prototype.xFormat = function() {
 	return this.replace(/\{\{|\}\}|\{(\d+)(?::(.+?))?\}/g, replacer);
 };
 
-global.Setting = { debug: false };
+globalThis.Setting = { debug: false };
 
-global.Version = (function() {
+globalThis.Version = (function() {
 	var unspecified = -1;
 	var errmsg = "引数 {0} がマイナス: {1}";
 	
@@ -126,7 +126,7 @@ global.Version = (function() {
 	 */
 	Version.prototype.isGreaterThan = function(obj) {
 		return !!obj && this.compareTo(obj) > 0;
-	}
+	};
 	/**
 	 * @param {number} [fieldCount]
 	 * @returns {string}
@@ -143,13 +143,13 @@ global.Version = (function() {
 		if (fieldCount >= 3 && this.build != unspecified) tmp.push(this.build);
 		if (fieldCount >= 4 && this.revision != unspecified) tmp.push(this.revision);
 		return tmp.join(".");
-	}
+	};
 	
 	return Version;
 })();
 
 var State = (function() {
-	var appVersion = "1.3.3.1 alpha";
+	var appVersion = "1.3.3.2";
 	
 	/**
 	 * @template T
@@ -184,18 +184,17 @@ var State = (function() {
 		caption: "{0}{1} ({2})\n    {3}".xFormat(
 			getWinNTCurrentVersionValue("ProductName"), releaseId ? " " + releaseId : "", osVersion, buildLab),
 		isSuppoertedVersion:
-			osVersion.isGreaterThan(new Version(10, 0, 16299)) || // Win10 1709以降
+			osVersion.isGreaterThan(new Version(10, 0, 17134)) || // Win10 1803以降
+			osVersionString == "10.0.16299" || // Win10 1709 Enterprise
 			osVersionString == "10.0.15063" || // Win10 1703 Enterprise
-			osVersionString == "10.0.14393" || // Win10 1607 LTSB | Enterprise
-			osVersionString == "10.0.10240" || // Win10 1507 LTSB
 			osVersionString == "6.3.9600" &&  osVersion.revision >= 17031 || // Win8.1 Update
 			osVersion.toString(2) == "6.1" && osVersion.build >= 7601 // Win7 SP1
 	};
 	
 	/** @returns {string} */
 	function getHostType() {
-		if (global.window && /\.hta$/.test(location.href)) return "mshta";
-		if (global.WScript) return fso.GetBaseName(WScript.FullName).toLowerCase();
+		if (globalThis.window && /\.hta$/.test(location.href)) return "mshta";
+		if (globalThis.WScript) return fso.GetBaseName(WScript.FullName).toLowerCase();
 		throw new Error("対応していない実行環境です。");
 	}
 	

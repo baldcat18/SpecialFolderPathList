@@ -3,12 +3,12 @@
 interface Error {
 	/**
 	 * 特定のエラーと関連付けられた数値を設定します。値の取得も可能です。
-	 * @see https://msdn.microsoft.com/ja-jp/library/cc427878.aspx
+	 * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc427878(v=msdn.10)
 	 */
     number: number;
 }
 
-/** @see https://msdn.microsoft.com/ja-jp/library/cc427715.aspx */
+/** @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc427715(v=msdn.10) */
 interface ErrorConstructor {
 	new (number: number): Error;
 	new (number: number, message: string): Error;
@@ -63,7 +63,7 @@ interface HTMLDialog {
 }
 
 
-/** @see https://msdn.microsoft.com/ja-jp/library/cc428132.aspx */
+/** @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc428132(v=msdn.10) */
 declare enum DriveTypeConst {
 	UnknownType = 0,
 	Removable = 1,
@@ -73,7 +73,7 @@ declare enum DriveTypeConst {
 	RamDisk = 5,
 }
 
-/** @see https://msdn.microsoft.com/ja-jp/library/cc428087.aspx */
+/** @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc428087(v=msdn.10) */
 declare enum FileAttribute {
 	/** 標準ファイル。どの属性も設定されません。 */
 	Normal = 0,
@@ -95,7 +95,7 @@ declare enum FileAttribute {
 	Compressed = 2048,
 }
 
-/** @see https://msdn.microsoft.com/ja-jp/library/cc428042.aspx */
+/** @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc428042(v=msdn.10) */
 declare enum IOMode {
 	/** ファイルを読み取り専用として開きます。このファイルには書き込むことができません */
 	ForReading = 1,
@@ -107,7 +107,7 @@ declare enum IOMode {
 
 /**
  * Specifies unique, system-independent values that identify special folders.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb774096(v=vs.85).aspx
+ * @see https://docs.microsoft.com/en-us/windows/desktop/api/shldisp/ne-shldisp-shellspecialfolderconstants
  */
 declare enum ShellSpecialFolderConstants {
 	/** Windows desktop—the virtual folder that is the root of the namespace. */
@@ -200,7 +200,7 @@ declare enum ShellSpecialFolderConstants {
 	ssfPROGRAMFILESx86 = 42,
 }
 
-/** @see https://msdn.microsoft.com/ja-jp/library/cc428028.aspx */
+/** @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc428028(v=msdn.10) */
 declare enum SpecialFolderConst {
 	/** Windows オペレーティング システムによりセットアップされたファイルの置かれている Windows フォルダが返されます。 */
 	WindowsFolder = 0,
@@ -220,7 +220,7 @@ declare enum StandardStreamTypes {
 	StdErr = 2,
 }
 
-/** @see https://msdn.microsoft.com/ja-jp/library/cc428044.aspx */
+/** @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc428044(v=msdn.10) */
 declare enum Tristate {
 	/** システム デフォルトを使ってファイルを開きます。 */
 	TristateUseDefault = -2,
@@ -231,7 +231,7 @@ declare enum Tristate {
 	TristateFalse = 0,
 }
 
-/** @see https://msdn.microsoft.com/ja-jp/library/cc364410.aspx */
+/** @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc364410(v=msdn.10) */
 declare enum WshExecStatus {
 	/** ジョブはまだ実行中です。 */
 	WshRunning = 0,
@@ -243,7 +243,7 @@ declare enum WshExecStatus {
 
 /**
  * ファイル システムへアクセスする方法を提供します。
- * @see https://msdn.microsoft.com/ja-jp/library/cc428071.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc428071(v=msdn.10)
  */
 interface FileSystemObject {
 	/** ローカル コンピュータ上で利用可能なすべての Drive オブジェクトからなる Drives コレクションを返します。 */
@@ -309,7 +309,7 @@ interface FileSystemObject {
 
 /**
  * ディスク ドライブまたはネットワーク共有の各種プロパティへアクセスする手段を提供します。
- * @see https://msdn.microsoft.com/ja-jp/library/cc428067.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc428067(v=msdn.10)
  */
 interface Drive {
 	/** 指定したドライブ上またはネットワーク共有上でユーザーが利用可能な領域の量を返します。 */
@@ -340,7 +340,7 @@ interface Drive {
 
 /**
  * 利用可能なすべてのドライブの読み取り専用コレクションです。
- * @see https://msdn.microsoft.com/ja-jp/library/cc427962.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc427962(v=msdn.10)
  */
 interface DriveCollection {
 	/** コレクション内にある項目の数を返します。 */
@@ -351,7 +351,7 @@ interface DriveCollection {
 
 /**
  * ファイルのあらゆるプロパティにアクセスする手段を提供します。
- * @see https://msdn.microsoft.com/ja-jp/library/cc428069.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc428069(v=msdn.10)
  */
 interface FsoFile {
 	/** ファイルの属性を設定または参照します。 */
@@ -393,7 +393,7 @@ interface FsoFile {
 
 /**
  * フォルダ内にあるすべての File オブジェクトのコレクションです。
- * @see https://msdn.microsoft.com/ja-jp/library/cc427964.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc427964(v=msdn.10)
  */
 interface FileCollection {
 	/** コレクション内にある項目の数を返します。 */
@@ -404,7 +404,7 @@ interface FileCollection {
 
 /**
  * フォルダのあらゆるプロパティにアクセスする手段を提供します。
- * @see https://msdn.microsoft.com/ja-jp/library/cc428096.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc428096(v=msdn.10)
  */
 interface FsoFolder {
 	/** フォルダの属性を設定または参照します。 */
@@ -450,7 +450,7 @@ interface FsoFolder {
 
 /**
  * Folder オブジェクト内に含まれているすべての Folder オブジェクトのコレクションです。
- * @see https://msdn.microsoft.com/ja-jp/library/cc428003.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc428003(v=msdn.10)
  */
 interface FolderCollection {
 	/** コレクション内にある項目の数を返します。 */
@@ -465,7 +465,7 @@ interface FolderCollection {
 
 /**
  * Represents the objects in the Shell. Methods are provided to control the Shell and to execute commands within the Shell.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb774094(v=vs.85).aspx
+ * @see https://docs.microsoft.com/en-us/windows/desktop/shell/shell
  */
 interface Shell {
 	/** Contains the object's Application object. */
@@ -549,7 +549,7 @@ interface Shell {
 
 /**
  * Represents a Shell folder. This object contains properties and methods that allow you to retrieve information about the folder.
- * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folder2
+ * @see https://docs.microsoft.com/en-us/windows/desktop/shell/folder2-object
  */
 interface ShlFolder {
 	/** Contains the folder's Application object. */
@@ -585,7 +585,7 @@ interface ShlFolder {
 
 /**
  * Represents an item in a Shell folder. This object contains properties and methods that allow you to retrieve information about the item.
- * @see https://msdn.microsoft.com/en-us/library/windows/desktop/bb774059(v=vs.85).aspx
+ * @see https://docs.microsoft.com/en-us/windows/desktop/shell/shellfolderitem-object
  */
 interface FolderItem {
 	/** Contains the Application object of the folder item. */
@@ -627,7 +627,7 @@ interface FolderItem {
 
 /**
  * Represents the collection of items in a Shell folder. This object contains properties and methods that allow you to retrieve information about the collection.
- * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folderitems3
+ * @see https://docs.microsoft.com/en-us/windows/desktop/shell/folderitems3-object
  */
 interface FolderItems {
 	/** Contains the Application object of the folder items collection. */
@@ -647,7 +647,7 @@ interface FolderItems {
 
 /**
  * Represents a single verb available to an item. This object contains properties and methods that allow you to retrieve information about the verb.
- * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folderitemverb
+ * @see https://docs.microsoft.com/en-us/windows/desktop/shell/folderitemverb
  */
 interface FolderItemVerb {
 	/** Contains the verb's name. */
@@ -659,7 +659,7 @@ interface FolderItemVerb {
 
 /**
  * Represents the collection of verbs for an item in a Shell folder. This object contains properties and methods that allow you to retrieve information about the collection.
- * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-folderitemverbs
+ * @see https://docs.microsoft.com/en-us/windows/desktop/shell/folderitemverbs
  */
 interface FolderItemVerbs {
 	/** Contains the number of items in the collection. */
@@ -671,7 +671,7 @@ interface FolderItemVerbs {
 
 /**
  * Manages Shell links.
- * @see https://docs.microsoft.com/ja-jp/windows/desktop/api/shldisp/nn-shldisp-ishelllinkdual2
+ * @see https://docs.microsoft.com/en-us/windows/desktop/shell/ishelllinkdual2-object
  */
 interface ShellLinkObject {
 	/** Contains a link's arguments. */
@@ -702,7 +702,7 @@ interface ShellLinkObject {
 
 /**
  * Windows のネイティブ シェル機能にアクセスできます。
- * @see https://msdn.microsoft.com/ja-jp/library/cc364436.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc364436(v=msdn.10)
  */
 interface WshShell {
 	/** 現在アクティブになっているディレクトリを取得または変更します。 */
@@ -748,7 +748,7 @@ interface WshCollection {
 
 /**
  * Windows 環境変数のコレクションへのアクセスを提供します。
- * @see https://msdn.microsoft.com/ja-jp/library/cc364435.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc364435(v=msdn.10)
  */
 interface WshEnvironment {
 	/** コレクションから、指定されたアイテムを返します。 */
@@ -764,7 +764,7 @@ interface WshEnvironment {
 
 /**
  * Exec を使って実行したスクリプトのステータス情報を提供します。また、StdIn、StdOut、および StdErr の各ストリームへのアクセスも提供します。
- * @see https://msdn.microsoft.com/ja-jp/library/cc364375.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc364375(v=msdn.10)
  */
 interface WshScriptExec {
 	/** Exec() メソッドで実行したスクリプトやプログラムによって設定された終了コードを返します。 */
@@ -786,7 +786,7 @@ interface WshScriptExec {
 
 /**
  * ショートカットへのオブジェクト参照を作成します。
- * @see https://msdn.microsoft.com/ja-jp/library/cc364438.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc364438(v=msdn.10)
  */
 interface WshShortcut {
 	/** ショートカットの引数を設定または識別します。 */
@@ -814,7 +814,7 @@ interface WshShortcut {
 
 /**
  * URL ショートカットへのオブジェクト参照を作成します。
- * @see https://msdn.microsoft.com/ja-jp/library/cc364464.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc364464(v=msdn.10)
  */
 interface WshURLShortcut {
 	/** ショートカット オブジェクトのリンク先への絶対パスを返します。 */
@@ -829,7 +829,7 @@ interface WshURLShortcut {
 
 /**
  * コマンド ラインの名前付き引数へのアクセスを提供します。
- * @see https://msdn.microsoft.com/ja-jp/library/cc364367.aspx
+ * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc364367(v=msdn.10)
  */
 interface WshNamed {
 	/** WshNamed オブジェクト内のアイテムへのアクセスを提供します。 */

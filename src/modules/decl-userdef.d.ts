@@ -16,16 +16,6 @@ interface HTMLAnchorElement {
 }
 
 
-declare var global: {
-	Setting: object;
-	SpecialFolders: object;
-	ssfPROFILE: number;
-	TemporaryFolder: number;
-	Version: Function;
-	window?: Window;
-	WScript?: object;
-};
-
 declare const Setting: {
 	debug: boolean;
 	[name: string]: number | boolean;

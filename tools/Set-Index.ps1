@@ -17,7 +17,8 @@ $index = 0
 
 Get-Content -LiteralPath $dataFile |
 	ForEach-Object {
-		$tmpLine.Add($(if ($_ -cmatch "^\t\tcase \d+:$") { "`t`tcase " + $index++ + ":" } else { $_ }))
+		$tmpLine.Add($(if ($_ -cmatch '^\t\tcase \d+:$') { "`t`tcase " + $index++ + ':' } else { $_ }))
 	}
 
-Set-Content -LiteralPath $dataFile ($tmpLine -join "`r`n") -Encoding UTF8
+$encoding = if ([Version]$PSVersionTable['PSVersion'] -ge (New-Object Version 6, 0)) { 'utf8BOM' } else { 'UTF8' }
+Set-Content -LiteralPath $dataFile ($tmpLine -join "`r`n") -Encoding $encoding

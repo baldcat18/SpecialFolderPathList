@@ -19,10 +19,6 @@
 	var WIN10_1709 = OS.version.isGreaterThan(new Version(10, 0, 16299));
 	/** Win10 1803以降 */
 	var WIN10_1803 = OS.version.isGreaterThan(new Version(10, 0, 17134));
-	/** WWin10IP Build18343以降 */
-	var WIN10_1903 = OS.version.isGreaterThan(new Version(10, 0, 18343));
-	
-	var WIN10_1507_to_1511 = WIN10 && !WIN10_1607;
 	
 	var IS64BIT = State.Host.platform == 64;
 	
@@ -212,7 +208,7 @@
 		sfArg.dir = dir;
 		sfArg.option = option || DEFAULT_OPTION;
 		
-		try { sfArg.folderItem = shell.NameSpace(dir).Self }
+		try { sfArg.folderItem = shell.NameSpace(dir).Self; }
 		catch (err) { sfArg.folderItem = null; }
 		
 		sfArg.path = "";
@@ -233,7 +229,7 @@
 	
 	var DONE_ITERATION = Infinity;
 	
-	global.SpecialFolders = {
+	globalThis.SpecialFolders = {
 		item: (function() {
 			/** @type {FolderIteratorIndex} */
 			var index = null;
@@ -248,7 +244,7 @@
 				
 				index.current = itemIndex;
 				return getSpecialFolder(index);
-			};
+			}
 		})(),
 		iterator: function() {
 			return {
@@ -262,7 +258,7 @@
 				 * @type {FolderIteratorIndex}
 				 */
 				_index: { current: -1 }
-			}
+			};
 		}
 	};
 	
@@ -702,7 +698,7 @@
 			return createSpecialFolder("デスクトップ", "shell:Desktop", { category: "Desktop / MyComputer" });
 		case 129:
 			// shell:MyComputerFolderはWin10 1507/1511だとなぜかデスクトップになってしまう
-			return createSpecialFolder(WIN81 ? "PC" : "コンピューター", !WIN10_1507_to_1511 ? "shell:MyComputerFolder" : "shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}");
+			return createSpecialFolder(WIN81 ? "PC" : "コンピューター", "shell:MyComputerFolder");
 		case 130:
 			return createSpecialFolder(WIN10 ? "最近使ったフォルダー" : "最近表示した場所", "shell:::{22877A6D-37A1-461A-91B0-DBDA5AAEBC99}");
 		case 131:
@@ -1066,7 +1062,7 @@
 		case 261:
 			// Windows Security
 			// Ctrl+Alt+Delと同じ
-			// Win10 1903(?)でこのカテゴリに移動
+			// Win10 1903から
 			return createSpecialFolder("Windows Security", "shell:::{2559A1F2-21D7-11D4-BDAF-00C04F60B9F0}");
 		case 262:
 			return createSpecialFolder("ファイル名を指定して実行", "shell:::{2559A1F3-21D7-11D4-BDAF-00C04F60B9F0}");
@@ -1129,7 +1125,7 @@
 			// Win8まで
 			return createSpecialFolder("生体認証デバイスへようこそ", "shell:::{8E35B548-F174-4C7D-81E2-8ED33126F6FD}");
 		case 286:
-			// Win10 1607から1809まで(?)
+			// Win10 1607から1809まで
 			return createSpecialFolder("赤外線", "shell:::{A0275511-0E86-4ECA-97C2-ECD8F1221D08}");
 		case 287:
 			return createSpecialFolder("インターネット オプション", "shell:::{A3DD4F92-658A-410F-84FD-6FBBBEF2FFFE}");
@@ -1397,86 +1393,83 @@
 		case 390:
 			return createSpecialFolder("CompatContextMenu Class", "shell:::{1D27F844-3A1F-4410-85AC-14651078412D}");
 		case 391:
-			// Win10 1903(?)以降では[OtherShellCommands]カテゴリになるので非表示に
-			return createSpecialFolder("Windows Security", WIN10_1903 ? null : "shell:::{2559A1F2-21D7-11D4-BDAF-00C04F60B9F0}");
-		case 392:
 			return createSpecialFolder("Location Folder", "shell:::{267CF8A9-F4E3-41E6-95B1-AF881BE130FF}");
-		case 393:
+		case 392:
 			return createSpecialFolder("Enhanced Storage Context Menu Handler Class", "shell:::{2854F705-3548-414C-A113-93E27C808C85}");
-		case 394:
+		case 393:
 			return createSpecialFolder("System Restore", "shell:::{3F6BC534-DFA1-4AB4-AE54-EF25A74E0107}");
-		case 395:
+		case 394:
 			return createSpecialFolder("Start Menu Folder", "shell:::{48E7CAAB-B918-4E58-A94D-505519C795DC}");
-		case 396:
+		case 395:
 			return createSpecialFolder("IGD Property Page", "shell:::{4A1E5ACD-A108-4100-9E26-D2FAFA1BA486}");
-		case 397:
+		case 396:
 			// Win10 1607まで
 			return createSpecialFolder("LzhCompressedFolder2", "shell:::{4F289A46-2BBB-4AE8-9EDA-E5E034707A71}");
-		case 398:
+		case 397:
 			// Win10から
 			return createSpecialFolder("This PC", "shell:::{5E5F29CE-E0A8-49D3-AF32-7A7BDC173478}");
-		case 399:
+		case 398:
 			return createSpecialFolder("", "shell:::{62AE1F9A-126A-11D0-A14B-0800361B1103}");
-		case 400:
+		case 399:
 			return createSpecialFolder("Search Connector Folder", "shell:::{72B36E70-8700-42D6-A7F7-C9AB3323EE51}");
-		case 401:
+		case 400:
 			return createSpecialFolder("CryptPKO Class", "shell:::{7444C717-39BF-11D1-8CD9-00C04FC29D45}");
-		case 402:
+		case 401:
 			return createSpecialFolder("Temporary Internet Files", "shell:::{7BD29E00-76C1-11CF-9DD0-00A0C9034933}");
-		case 403:
+		case 402:
 			return createSpecialFolder("Temporary Internet Files", "shell:::{7BD29E01-76C1-11CF-9DD0-00A0C9034933}");
-		case 404:
+		case 403:
 			return createSpecialFolder(WIN10_1703 ? "" : "Briefcase", "shell:::{85BBD920-42A0-1069-A2E4-08002B30309D}");
-		case 405:
+		case 404:
 			return createSpecialFolder("Shortcut", "shell:::{85CFCCAF-2D14-42B6-80B6-F40F65D016E7}");
-		case 406:
+		case 405:
 			return createSpecialFolder("Mobile Broadband Profile Settings Editor", "shell:::{87630419-6216-4FF8-A1F0-143562D16D5C}");
-		case 407:
+		case 406:
 			return createSpecialFolder("Compressed (zipped) Folder SendTo Target", "shell:::{888DCA60-FC0A-11CF-8F0F-00C04FD7D062}");
-		case 408:
+		case 407:
 			return createSpecialFolder("ActiveX Cache Folder", "shell:::{88C6C381-2E85-11D0-94DE-444553540000}");
-		case 409:
+		case 408:
 			return createSpecialFolder("Libraries delegate folder that appears in Users Files Folder", "shell:::{896664F7-12E1-490F-8782-C0835AFD98FC}");
-		case 410:
+		case 409:
 			// Win10 1607まで
 			return createSpecialFolder("Windows Search Service Media Center Namespace Extension Handler", "shell:::{98D99750-0B8A-4C59-9151-589053683D73}");
-		case 411:
+		case 410:
 			return createSpecialFolder("MAPI Shell Context Menu", "shell:::{9D3C0751-A13F-46A6-B833-B46A43C30FE8}");
-		case 412:
+		case 411:
 			return createSpecialFolder("Previous Versions", "shell:::{9DB7A13C-F208-4981-8353-73CC61AE2783}");
-		case 413:
+		case 412:
 			return createSpecialFolder("Mail Service", "shell:::{9E56BE60-C50F-11CF-9A2C-00A0C90A90CE}");
-		case 414:
+		case 413:
 			return createSpecialFolder("Desktop Shortcut", "shell:::{9E56BE61-C50F-11CF-9A2C-00A0C90A90CE}");
-		case 415:
+		case 414:
 			return createSpecialFolder("DevicePairingFolder Initialization", "shell:::{AEE2420F-D50E-405C-8784-363C582BF45A}");
-		case 416:
+		case 415:
 			return createSpecialFolder("CLSID_DBFolder", "shell:::{B2952B16-0E07-4E5A-B993-58C52CB94CAE}");
-		case 417:
+		case 416:
 			return createSpecialFolder("Device Center Scan Context Menu Extension", "shell:::{B5A60A9E-A4C7-4A93-AC6E-0B76D1D87DC4}");
-		case 418:
+		case 417:
 			return createSpecialFolder("DeviceCenter Initialization", "shell:::{C2B136E2-D50E-405C-8784-363C582BF43E}");
-		case 419:
+		case 418:
 			// Win10 1507から1607まで
 			return createSpecialFolder("", "shell:::{D9AC5E73-BB10-467B-B884-AA1E475C51F5}");
-		case 420:
+		case 419:
 			return createSpecialFolder("delegate folder that appears in Users Files Folder", "shell:::{DFFACDC5-679F-4156-8947-C5C76BC0B67F}");
-		case 421:
+		case 420:
 			return createSpecialFolder("CompressedFolder", "shell:::{E88DCCE0-B7B3-11D1-A9F0-00AA0060FA31}");
-		case 422:
+		case 421:
 			return createSpecialFolder("MyDocs Drop Target", "shell:::{ECF03A32-103D-11D2-854D-006008059367}");
-		case 423:
+		case 422:
 			return createSpecialFolder("Shell File System Folder", "shell:::{F3364BA0-65B9-11CE-A9BA-00AA004AE837}");
-		case 424:
+		case 423:
 			// Win10 1607まで
 			return createSpecialFolder("Sticky Notes Namespace Extension for Windows Desktop Search", "shell:::{F3F5824C-AD58-4728-AF59-A1EBE3392799}");
-		case 425:
+		case 424:
 			return createSpecialFolder("Subscription Folder", "shell:::{F5175861-2688-11D0-9C5E-00AA00A45957}");
-		case 426:
+		case 425:
 			return createSpecialFolder("Internet Shortcut", "shell:::{FBF23B40-E3F0-101B-8488-00AA003E56F8}");
-		case 427:
+		case 426:
 			return createSpecialFolder("History", "shell:::{FF393560-C2A7-11CF-BFF4-444553540000}");
-		case 428:
+		case 427:
 			index.current = DONE_ITERATION;
 			
 			return createSpecialFolder("Windows Photo Viewer Image Verbs", "shell:::{FFE2A43C-56B9-4BF5-9A79-CC6D4285608A}");
