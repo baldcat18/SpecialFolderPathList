@@ -16,6 +16,17 @@ interface HTMLAnchorElement {
 }
 
 
+/** グローバル変数参照用 */
+declare var G: {
+	Setting: object;
+	Version: Function;
+	window?: Window;
+	WScript?: typeof WScript;
+	SpecialFolders: object;
+	ssfPROFILE: number;
+	TemporaryFolder: number;
+};
+
 declare const Setting: {
 	debug: boolean;
 	[name: string]: number | boolean;

@@ -1,6 +1,6 @@
 ﻿/// <reference path="decl-userdef.d.ts" />
 
-if (!this.globalThis || globalThis != this.globalThis) this.globalThis = this;
+var G = this;
 
 if (!Object.create) {
 	Object.create = function(o) {
@@ -67,9 +67,9 @@ String.prototype.xFormat = function() {
 	return this.replace(/\{\{|\}\}|\{(\d+)(?::(.+?))?\}/g, replacer);
 };
 
-globalThis.Setting = { debug: false };
+G.Setting = { debug: false };
 
-globalThis.Version = (function() {
+G.Version = (function() {
 	var unspecified = -1;
 	var errmsg = "引数 {0} がマイナス: {1}";
 	
@@ -193,8 +193,8 @@ var State = (function() {
 	
 	/** @returns {string} */
 	function getHostType() {
-		if (globalThis.window && /\.hta$/.test(location.href)) return "mshta";
-		if (globalThis.WScript) return fso.GetBaseName(WScript.FullName).toLowerCase();
+		if (G.window && /\.hta$/.test(location.href)) return "mshta";
+		if (G.WScript) return fso.GetBaseName(WScript.FullName).toLowerCase();
 		throw new Error("対応していない実行環境です。");
 	}
 	
@@ -254,6 +254,7 @@ function toUint32 (value) {
  * @param {boolean} [expand=false]
  * @returns {T}
  */
+// @ts-ignore: オーバーロードあり
 function getRegValue(name, defaultValue, expand) {
 	if (defaultValue === undefined) defaultValue = null;
 	if (expand === undefined) expand = false;

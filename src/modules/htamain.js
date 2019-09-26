@@ -34,8 +34,8 @@ if (getDocumentMode() < 9) {
 	};
 }
 
-globalThis.ssfPROFILE = 40;
-globalThis.TemporaryFolder = 2;
+G.ssfPROFILE = 40;
+G.TemporaryFolder = 2;
 
 var htaDebug = (function() {
 	/** 0x800A01B6: オブジェクトでサポートされていないプロパティまたはメソッドです */
