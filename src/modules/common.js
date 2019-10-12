@@ -186,7 +186,6 @@ var State = (function() {
 		isSuppoertedVersion:
 			osVersion.isGreaterThan(new Version(10, 0, 17134)) || // Win10 1803以降
 			osVersionString == "10.0.16299" || // Win10 1709 Enterprise
-			osVersionString == "10.0.15063" || // Win10 1703 Enterprise
 			osVersionString == "6.3.9600" &&  osVersion.revision >= 17031 || // Win8.1 Update
 			osVersion.toString(2) == "6.1" && osVersion.build >= 7601 // Win7 SP1
 	};
