@@ -134,7 +134,7 @@ interface FolderIteratorIndex {
 
 declare const SpecialFolders: {
 	item(itemIndex: number): SpecialFolder;
-	iterator(): { next: () => IteratorResult<SpecialFolder>; }
+	iterator(): { next: () => IteratorResult<SpecialFolder, undefined>; }
 }
 
 
