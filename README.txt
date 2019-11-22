@@ -16,8 +16,9 @@ Windows で使われている特殊フォルダーのフルパスを表示しま
 ・動作環境
 Windows 7 SP1 (IE11 必須)
 Windows 8.1 Update
-Windows 10 October 2018 Update (バージョン 1809 ビルド 17763)
-           May 2019 Update     (バージョン 1903 ビルド 18362)
+Windows 10 October 2018 Update  (バージョン 1809 ビルド 17763)
+           May 2019 Update      (バージョン 1903 ビルド 18362)
+           November 2019 Update (バージョン 1909 ビルド 18363)
 
 32 ビット版・64 ビット版の両方で動作します。
 
