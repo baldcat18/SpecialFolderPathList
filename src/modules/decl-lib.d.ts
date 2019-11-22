@@ -17,7 +17,7 @@ interface ErrorConstructor {
 interface Document {
 	/**
 	 * Retrieves the document compatibility mode of the document.
-	 * @see https://web.archive.org/web/20140216144518/https://msdn.microsoft.com/en-us/library/cc196988.aspx
+	 * @see https://msdn.microsoft.com/en-us/windows/desktop/cc196988
 	 */
 	readonly documentMode?: number;
 }
@@ -107,7 +107,7 @@ declare enum IOMode {
 
 /**
  * Specifies unique, system-independent values that identify special folders.
- * @see https://docs.microsoft.com/en-us/windows/desktop/api/shldisp/ne-shldisp-shellspecialfolderconstants
+ * @see https://docs.microsoft.com/en-us/windows/win32/api/shldisp/ne-shldisp-shellspecialfolderconstants
  */
 declare enum ShellSpecialFolderConstants {
 	/** Windows desktop—the virtual folder that is the root of the namespace. */
@@ -465,7 +465,7 @@ interface FolderCollection {
 
 /**
  * Represents the objects in the Shell. Methods are provided to control the Shell and to execute commands within the Shell.
- * @see https://docs.microsoft.com/en-us/windows/desktop/shell/shell
+ * @see https://docs.microsoft.com/en-us/windows/win32/shell/shell
  */
 interface Shell {
 	/** Contains the object's Application object. */
@@ -549,7 +549,7 @@ interface Shell {
 
 /**
  * Represents a Shell folder. This object contains properties and methods that allow you to retrieve information about the folder.
- * @see https://docs.microsoft.com/en-us/windows/desktop/shell/folder2-object
+ * @see https://docs.microsoft.com/en-us/windows/win32/shell/folder2-object
  */
 interface ShlFolder {
 	/** Contains the folder's Application object. */
@@ -585,7 +585,7 @@ interface ShlFolder {
 
 /**
  * Represents an item in a Shell folder. This object contains properties and methods that allow you to retrieve information about the item.
- * @see https://docs.microsoft.com/en-us/windows/desktop/shell/shellfolderitem-object
+ * @see https://docs.microsoft.com/en-us/windows/win32/shell/shellfolderitem-object
  */
 interface FolderItem {
 	/** Contains the Application object of the folder item. */
@@ -627,7 +627,7 @@ interface FolderItem {
 
 /**
  * Represents the collection of items in a Shell folder. This object contains properties and methods that allow you to retrieve information about the collection.
- * @see https://docs.microsoft.com/en-us/windows/desktop/shell/folderitems3-object
+ * @see https://docs.microsoft.com/en-us/windows/win32/shell/folderitems3-object
  */
 interface FolderItems {
 	/** Contains the Application object of the folder items collection. */
@@ -647,7 +647,7 @@ interface FolderItems {
 
 /**
  * Represents a single verb available to an item. This object contains properties and methods that allow you to retrieve information about the verb.
- * @see https://docs.microsoft.com/en-us/windows/desktop/shell/folderitemverb
+ * @see https://docs.microsoft.com/en-us/windows/win32/shell/folderitemverb
  */
 interface FolderItemVerb {
 	/** Contains the verb's name. */
@@ -659,7 +659,7 @@ interface FolderItemVerb {
 
 /**
  * Represents the collection of verbs for an item in a Shell folder. This object contains properties and methods that allow you to retrieve information about the collection.
- * @see https://docs.microsoft.com/en-us/windows/desktop/shell/folderitemverbs
+ * @see https://docs.microsoft.com/en-us/windows/win32/shell/folderitemverbs
  */
 interface FolderItemVerbs {
 	/** Contains the number of items in the collection. */
@@ -671,7 +671,7 @@ interface FolderItemVerbs {
 
 /**
  * Manages Shell links.
- * @see https://docs.microsoft.com/en-us/windows/desktop/shell/ishelllinkdual2-object
+ * @see https://docs.microsoft.com/en-us/windows/win32/shell/ishelllinkdual2-object
  */
 interface ShellLinkObject {
 	/** Contains a link's arguments. */
@@ -809,7 +809,7 @@ interface WshShortcut {
 	WorkingDirectory: string;
 	
 	/** ショートカット オブジェクトを保存します。 */
-	Save();
+	Save(): void;
 }
 
 /**
@@ -823,7 +823,7 @@ interface WshURLShortcut {
 	TargetPath: string;
 	
 	/** ショートカット オブジェクトを保存します。 */
-	Save();
+	Save(): void;
 }
 
 

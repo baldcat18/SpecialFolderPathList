@@ -1,6 +1,6 @@
 ﻿/// <reference path="decl-userdef.d.ts" />
 
-if (!this.globalThis || globalThis != this.globalThis) this.globalThis = this;
+var G = this;
 
 if (!Object.create) {
 	Object.create = function(o) {
@@ -67,9 +67,9 @@ String.prototype.xFormat = function() {
 	return this.replace(/\{\{|\}\}|\{(\d+)(?::(.+?))?\}/g, replacer);
 };
 
-globalThis.Setting = { debug: false };
+G.Setting = { debug: false };
 
-globalThis.Version = (function() {
+G.Version = (function() {
 	var unspecified = -1;
 	var errmsg = "引数 {0} がマイナス: {1}";
 	
@@ -149,7 +149,7 @@ globalThis.Version = (function() {
 })();
 
 var State = (function() {
-	var appVersion = "1.3.3.2";
+	var appVersion = "1.3.4.0";
 	
 	/**
 	 * @template T
@@ -184,17 +184,17 @@ var State = (function() {
 		caption: "{0}{1} ({2})\n    {3}".xFormat(
 			getWinNTCurrentVersionValue("ProductName"), releaseId ? " " + releaseId : "", osVersion, buildLab),
 		isSuppoertedVersion:
-			osVersion.isGreaterThan(new Version(10, 0, 17134)) || // Win10 1803以降
+			osVersion.isGreaterThan(new Version(10, 0, 17763)) || // Win10 1809以降
+			osVersionString == "10.0.17134" || // Win10 1803 Enterprise
 			osVersionString == "10.0.16299" || // Win10 1709 Enterprise
-			osVersionString == "10.0.15063" || // Win10 1703 Enterprise
 			osVersionString == "6.3.9600" &&  osVersion.revision >= 17031 || // Win8.1 Update
 			osVersion.toString(2) == "6.1" && osVersion.build >= 7601 // Win7 SP1
 	};
 	
 	/** @returns {string} */
 	function getHostType() {
-		if (globalThis.window && /\.hta$/.test(location.href)) return "mshta";
-		if (globalThis.WScript) return fso.GetBaseName(WScript.FullName).toLowerCase();
+		if (G.window && /\.hta$/.test(location.href)) return "mshta";
+		if (G.WScript) return fso.GetBaseName(WScript.FullName).toLowerCase();
 		throw new Error("対応していない実行環境です。");
 	}
 	
@@ -254,6 +254,7 @@ function toUint32 (value) {
  * @param {boolean} [expand=false]
  * @returns {T}
  */
+// @ts-ignore: オーバーロードあり
 function getRegValue(name, defaultValue, expand) {
 	if (defaultValue === undefined) defaultValue = null;
 	if (expand === undefined) expand = false;
