@@ -3,6 +3,8 @@
 特殊フォルダーに関係するdata.jsに載っていないCLSIDの情報を返す
 #>
 
+#Requires -Version 4.0
+
 [CmdletBinding()]
 param([switch]$All)
 
@@ -29,12 +31,7 @@ Get-Content -LiteralPath $regFile |
 			$clsid = $_
 			$subKey = $clsidKey.OpenSubKey($clsid)
 			
-			Write-Output (
-				New-Object psobject -Property @{
-					'Key' = "shell:::$clsid"
-					'Name' = $subKey.GetValue('')
-				} | Select-Object Key, Name
-			)
+			Write-Output ([pscustomobject]@{ Key = "shell:::$clsid"; Name = $subKey.GetValue('') })
 		} finally {
 			$subKey.Close()
 		}
