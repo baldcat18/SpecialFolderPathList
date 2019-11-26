@@ -3,6 +3,8 @@
 SpecialFolderPathList.wsfの出力をファイルに保存する
 #>
 
+#Requires -Version 4.0
+
 [CmdletBinding()]
 param()
 
@@ -14,7 +16,7 @@ $edition = (Get-Item 'HKLM:/SOFTWARE/Microsoft/Windows NT/CurrentVersion').GetVa
 $now = Get-Date -Format yyyyMMdd-HHmmss
 
 $tempFile = [System.IO.Path]::GetTempFileName()
-$workDir = (Resolve-Path "$($MyInvocation.MyCommand.Path)\..\..").Path
+$workDir = (Resolve-Path "$PSScriptRoot\..").Path
 
 cmd.exe /c cscript.exe //u //nologo "$workDir\src\misc\wsh\SpecialFolderPathList.wsf" /bom /dbg /dir /c /d /f /t `> $tempFile
 Get-Content -LiteralPath $tempFile |

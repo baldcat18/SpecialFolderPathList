@@ -13,6 +13,8 @@ pscustomobject[]
 フォルダーのパス情報
 #>
 
+#Requires -Version 4.0
+
 [CmdletBinding()]
 param()
 
@@ -174,7 +176,6 @@ Add-Type -TypeDefinition $source -ErrorAction Stop
 ) |
 	ForEach-Object {
 		[string]$result = ""
-		[string]$result = $null
 		[Win32API.KnownFolder]$folder = New-Object Win32API.KnownFolder $_['guid'], $KF_FLAG_DEFAULT
 		if ($folder.Result -eq 'OK') {
 			if (!$verbose) { return }
@@ -185,13 +186,5 @@ Add-Type -TypeDefinition $source -ErrorAction Stop
 			$result = if ($folder.Result -eq 'OK') { 'New' } else { $folder.Result }
 		}
 		
-		# [pscustomobject]@{}が使えるのはPowerShell3.0から
-		# Select-Objectはプロパティの表示順を指定するのに使っている
-		Write-Output (
-			New-Object psobject -Property @{
-				'Name' = $_['name']
-				'Result' = $result
-				'Path' = $folder.Path
-			} | Select-Object Name, Result, Path
-		)
+		Write-Output ([pscustomobject]@{ Name = $_['name']; Result = $result; Path = $folder.Path })
 	}

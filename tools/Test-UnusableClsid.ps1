@@ -1,15 +1,17 @@
-<#
+ï»¿<#
 .SYNOPSIS
-data.js‚ÉÚ‚Á‚Ä‚¢‚é“ÁŽêƒtƒHƒ‹ƒ_[‚Æ‚µ‚ÄŽg‚¦‚È‚¢CLSID‚ª‚Ü‚¾ƒŒƒWƒXƒgƒŠ‚É‘¶Ý‚µ‚Ä‚¢‚é‚©’²‚×‚é
+data.jsã«è¼‰ã£ã¦ã„ã‚‹ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ãƒ¼ã¨ã—ã¦ä½¿ãˆãªã„CLSIDãŒã¾ã ãƒ¬ã‚¸ã‚¹ãƒˆãƒªã«å­˜åœ¨ã—ã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹
 #>
+
+#Requires -Version 4.0
 
 [CmdletBinding()]
 param()
 
 Set-StrictMode -Version Latest
 
-$dataFile = (Resolve-Path "$($MyInvocation.MyCommand.Path)\..\..\src\modules\data.js").Path
-$dataText = @(Get-Content -LiteralPath $dataFile) -join "`n"
+$dataFile = (Resolve-Path "$PSScriptRoot\..\src\modules\data.js").Path
+$dataText = Get-Content -LiteralPath $dataFile -Raw
 $unusableText = ($dataText -csplit 'category: "Unusable"', 2, 'SimpleMatch')[1]
 
 ([regex]'\{\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\}').Matches($unusableText) |
@@ -18,11 +20,7 @@ $unusableText = ($dataText -csplit 'category: "Unusable"', 2, 'SimpleMatch')[1]
 		$path = "Microsoft.PowerShell.Core\Registry::HKEY_CLASSES_ROOT\CLSID\$clsid"
 		$exists = Test-path $path
 		
-		Write-Output (
-			New-Object psobject -Property @{
-				'Clsid' = $clsid
-				'Exists' = $exists
-				'Name' = if ($exists) { (Get-Item $path).GetValue('') }
-			} | Select-Object Clsid, Exists, Name
-		)
+		Write-Output ([pscustomobject]@{
+			Clsid = $clsid; Exists = $exists; Name = if ($exists) { (Get-Item $path).GetValue('') }
+		})
 	}
