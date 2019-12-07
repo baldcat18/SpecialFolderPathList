@@ -204,7 +204,7 @@
 	 */
 	function createSpecialFolder(title, dir, option) {
 		sfArg.title = title;
-		if (dir && dir.slice(0, 6) != "shell:") dir = "file:" + dir;
+		if (dir && !/^shell:/.test(dir)) dir = "file:" + dir;
 		sfArg.dir = dir;
 		sfArg.option = option || DEFAULT_OPTION;
 		
@@ -212,10 +212,7 @@
 		catch (err) { sfArg.folderItem = null; }
 		
 		sfArg.path = "";
-		if (sfArg.folderItem) {
-			sfArg.path = sfArg.option.path || sfArg.folderItem.Path;
-			if (sfArg.path.charAt(0) == ":") sfArg.path = "shell:" + sfArg.path;
-		}
+		if (sfArg.folderItem) { sfArg.path = (sfArg.option.path || sfArg.folderItem.Path).replace(/^::/, "shell:::"); }
 		
 		// @ts-ignore: FileFolder、VirtualFolder、InvalidFolder は SpecialFolder のサブクラス
 		if (fso.FolderExists(sfArg.path)) return new FileFolder(sfArg);
