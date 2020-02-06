@@ -273,7 +273,6 @@
 			return createSpecialFolder("個人用フォルダー", "shell:UsersFilesFolder", { category: "UserProfile", folderItemForProperties: shell.NameSpace(ssfPROFILE).Self });
 		case 1:
 			// Win10からサポート
-			// shell:UsersFilesFolder\3D Objects
 			// shell:MyComputerFolder\::{0DB7E03F-FC29-4DC6-9020-FF41B59E513A} (Win10 1709から)
 			// Win10 1507から1703では3D Builderを起動した時に自動生成される
 			return createSpecialFolder("3D オブジェクト", "shell:3D Objects");
@@ -295,7 +294,6 @@
 			// shell:MyComputerFolder\::{1CF1260C-4DD0-4EBB-811F-33C572699FDE} (Win8.1から)
 			return createSpecialFolder(WIN81 ? "ミュージック" : "マイ ミュージック", "shell:My Music");
 		case 6:
-			// shell:My Music\Playlists
 			// WMPやGroove ミュージックで再生リストを作成する時に自動生成される
 			return createSpecialFolder("プレイリスト", "shell:Playlists");
 		
@@ -305,22 +303,16 @@
 			return createSpecialFolder(WIN81 ? "ピクチャ" : "マイ ピクチャ", "shell:My Pictures");
 		case 8:
 			// Win8.1からサポート
-			// shell:My Pictures\Camera Roll
 			// カメラアプリで写真や動画を撮影する時に自動生成される
 			return createSpecialFolder("カメラ ロール", "shell:Camera Roll");
 		case 9:
 			// Win10からサポート
-			// shell:My Pictures\Saved Pictures
 			return createSpecialFolder("保存済みの写真", "shell:SavedPictures");
 		case 10:
 			// Win8からサポート
-			// shell:My Pictures\Screenshots
 			// Win＋PrtScrでスクリーンショットを保存する時に自動生成される
 			return createSpecialFolder("スクリーンショット", "shell:Screenshots");
 		case 11:
-			// shell:My Pictures\Slide Shows
-			// 手動でフォルダーを作成しても使用可
-			// フォルダー名は大文字・小文字を一致させる必要あり(以下同)
 			return createSpecialFolder("スライド ショー", "shell:PhotoAlbums");
 		
 		case 12:
@@ -329,13 +321,11 @@
 			return createSpecialFolder(WIN81 ? "ビデオ" : "マイ ビデオ", "shell:My Video");
 		case 13:
 			// Win10からサポート
-			// shell:My Video\Captures
 			// ゲームバーで動画やスクリーンショットを保存する時に自動生成される
 			return createSpecialFolder("キャプチャ", "shell:Captures");
 		
 		case 14:
 			// Win10 1703からサポート
-			// shell:UsersFilesFolder\AppMods
 			return createSpecialFolder("アプリケーションの修正", "shell:AppMods");
 		case 15:
 			// shell:UsersFilesFolder\{56784854-C6CB-462B-8169-88E350ACB882}
@@ -349,7 +339,6 @@
 			return createSpecialFolder("リンク" + (WIN10 ? "" : " (エクスプローラーのお気に入り)"), "shell:Links");
 		case 18:
 			// Win10からサポート
-			// shell:UsersFilesFolder\Recorded Calls
 			return createSpecialFolder("録音した通話", "shell:Recorded Calls");
 		case 19:
 			// shell:UsersFilesFolder\{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}
@@ -360,23 +349,18 @@
 		
 		// OneDriveカテゴリのフォルダーはすべてWin8.1からサポート
 		case 21:
-			// shell:UsersFilesFolder\OneDrive
 			// Win8.1ではMicrosoftアカウントでサインインする時に自動生成される
 			// shell:::{59031A47-3F72-44A7-89C5-5595FE6B30EE}\::{8E74D236-7F35-4720-B138-1FED0B85EA75} (Win8.1のみ)
 			// shell:::{59031A47-3F72-44A7-89C5-5595FE6B30EE}\::{018D5C66-4533-4307-9B53-224DE2ED1FE6} (Win10から)
 			// %OneDrive% (Win10 1607から)
 			return createSpecialFolder("OneDrive", "shell:OneDrive", { category: "OneDrive" });
 		case 22:
-			// shell:OneDrive\Documents
 			return createSpecialFolder("OneDrive のドキュメント", WIN10 ? "shell:OneDriveDocuments" : "shell:SkyDriveDocuments");
 		case 23:
-			// shell:OneDrive\Music
 			return createSpecialFolder("OneDrive のミュージック", WIN10 ? "shell:OneDriveMusic" : "shell:SkyDriveMusic");
 		case 24:
-			// shell:OneDrive\Pictures
 			return createSpecialFolder("OneDrive の画像", WIN10 ? "shell:OneDrivePictures" : "shell:SkyDrivePictures");
 		case 25:
-			// shell:OneDrive\Pictures\Camera Roll
 			return createSpecialFolder("OneDrive のカメラ ロール", WIN10 ? "shell:OneDriveCameraRoll" : "shell:SkyDriveCameraRoll");
 		
 		case 26:
@@ -423,7 +407,6 @@
 			return createSpecialFolder("ライブラリ", "shell:Libraries", { category: "Libraries", path: LIBRARIES_PATH, folderItemForProperties: getDirectoryFolderItem(LIBRARIES_PATH) });
 		case 42:
 			// Win10からサポート
-			// shell:Libraries\CameraRoll.library-ms
 			// shell:Libraries\{2B20DF75-1EDA-4039-8097-38798227D5B7}
 			return createSpecialFolder("カメラ ロール ライブラリ", "shell:CameraRollLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{2B20DF75-1EDA-4039-8097-38798227D5B7}", LIBRARIES_PATH + "\\CameraRoll.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 43:
@@ -437,7 +420,6 @@
 			return createSpecialFolder("ピクチャ ライブラリ", "shell:PicturesLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{A990AE9F-A03B-4E80-94BC-9912D7504104}", LIBRARIES_PATH + "\\Pictures.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 46:
 			// Win10からサポート
-			// shell:Libraries\SavedPictures.library-ms
 			// shell:Libraries\{E25B5812-BE88-4BD9-94B0-29233477B6C3}
 			return createSpecialFolder("保存済みの写真 ライブラリ", "shell:SavedPicturesLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{E25B5812-BE88-4BD9-94B0-29233477B6C3}", LIBRARIES_PATH + "\\SavedPictures.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 47:
@@ -461,26 +443,21 @@
 		
 		case 54:
 			// Win10 1709からサポート
-			// shell:Local AppData\Desktop
 			return createSpecialFolder("AppDataDesktop", "shell:AppDataDesktop");
 		case 55:
 			// Win10からサポート
-			// shell:Local AppData\DevelopmentFiles
 			return createSpecialFolder("Development Files", "shell:Development Files");
 		case 56:
 			// Win10 1709からサポート
-			// shell:Local AppData\Documents
 			return createSpecialFolder("AppDataDocuments", "shell:AppDataDocuments");
 		case 57:
 			// Win10 1709からサポート
-			// shell:Local AppData\Favorites
 			return createSpecialFolder("AppDataFavorites", "shell:AppDataFavorites");
 		case 58:
 			// Win8からサポート
 			return createSpecialFolder(WINDOWS_APPS_TITLE + "の設定", "shell:Local AppData\\Packages");
 		case 59:
 			// Win10 1709からサポート
-			// shell:Local AppData\ProgramData
 			return createSpecialFolder("AppDataProgramData", "shell:AppDataProgramData");
 		case 60:
 			// %TEMP%
@@ -511,7 +488,6 @@
 			return createSpecialFolder("Ringtones", "shell:Ringtones");
 		case 70:
 			// Win8からサポート
-			// shell:Local AppData\Microsoft\Windows\RoamedTileImages
 			return createSpecialFolder("Roamed Tile Images", "shell:Roamed Tile Images");
 		case 71:
 			// Win8からサポート
@@ -522,25 +498,20 @@
 		
 		case 73:
 			// Win8.1からサポート
-			// shell:Local AppData\Microsoft\Windows\ConnectedSearch\History
 			return createSpecialFolder("検索履歴", "shell:SearchHistoryFolder");
 		case 74:
 			// Win8.1からサポート
-			// shell:Local AppData\Microsoft\Windows\ConnectedSearch\Templates
 			return createSpecialFolder("検索テンプレート", "shell:SearchTemplatesFolder");
 		
 		case 75:
 			return createSpecialFolder("ガジェット", WIN8 ? "shell:Local AppData\\Microsoft\\Windows Sidebar\\Gadgets" :"shell:Gadgets");
 		case 76:
-			// shell:Local AppData\Microsoft\Windows Photo Gallery\Original Images
 			// フォトギャラリーでファイルを編集する時に自動生成される
 			return createSpecialFolder("Original Images", "shell:Original Images");
 		
 		case 77:
-			// shell:Local AppData\Programs
 			return createSpecialFolder("Program Files (Per User)", "shell:UserProgramFiles");
 		case 78:
-			// shell:Local AppData\Programs\Common
 			return createSpecialFolder("Common Program Files (Per User)", "shell:UserProgramFilesCommon");
 		
 		case 79:
@@ -551,7 +522,6 @@
 			return createSpecialFolder("パブリック", "shell:Public", { category: "Public" });
 		case 80:
 			// Win8からサポート
-			// shell:Public\AccountPictures
 			return createSpecialFolder("パブリック アカウントの画像", "shell:PublicAccountPictures");
 		case 81:
 			return createSpecialFolder("パブリック デスクトップ", "shell:Common Desktop");
@@ -568,21 +538,17 @@
 		case 86:
 			return createSpecialFolder("パブリックのミュージック", "shell:CommonMusic");
 		case 87:
-			// shell:CommonMusic\Sample Music
 			return createSpecialFolder("サンプル ミュージック", "shell:SampleMusic");
 		case 88:
 			// Win7までサポート
-			// shell:CommonMusic\Sample Playlists
 			return createSpecialFolder("サンプル プレイリスト", "shell:SamplePlaylists");
 		case 89:
 			return createSpecialFolder("パブリックのピクチャ", "shell:CommonPictures");
 		case 90:
-			// shell:CommonPictures\Sample Pictures
 			return createSpecialFolder("サンプル ピクチャ", "shell:SamplePictures");
 		case 91:
 			return createSpecialFolder("パブリックのビデオ", "shell:CommonVideo");
 		case 92:
-			// shell:CommonVideo\Sample Videos
 			return createSpecialFolder("サンプル ビデオ", "shell:SampleVideos");
 		
 		case 93:
@@ -590,7 +556,6 @@
 			// %ProgramData%
 			return createSpecialFolder("ProgramData", "shell:Common AppData", { category: "ProgramData" });
 		case 94:
-			// %ALLUSERSPROFILE%\OEM Links
 			return createSpecialFolder("OEM Links", "shell:OEM Links");
 		
 		case 95:
@@ -607,7 +572,6 @@
 			return createSpecialFolder("GameExplorer (All Users)", "shell:PublicGameTasks");
 		case 100:
 			// Win10からサポート
-			// shell:Common AppData\Microsoft\Windows\RetailDemo
 			// 市販デモ モードで使用される
 			return createSpecialFolder("RetailDemo", "shell:Retail Demo");
 		case 101:
@@ -652,7 +616,6 @@
 		case 115:
 			return createSpecialFolder("テーマのリソース", "shell:ResourceDir");
 		case 116:
-			// shell:ResourceDir\xxxx (xxxxはロケールIDの16進数4桁 日本語では0411)
 			return createSpecialFolder("テーマのローカライズ リソース", "shell:LocalizedResourcesDir");
 		
 		case 117:
