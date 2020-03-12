@@ -1070,6 +1070,7 @@
 			return createSpecialFolder("インデックスのオプション", "shell:::{87D66A43-7B11-4A28-9811-C86EE395ACF7}");
 		case 282:
 			// Win8から
+			// Win10 1909まで(?)
 			// Enterpriseで使用可
 			// Win10 1607以降ではProでも使用可
 			return createSpecialFolder("Windows To Go ワークスペースの作成", "shell:::{8E0C279D-0BD1-43C3-9EBD-31C3DC5B8A77}");
