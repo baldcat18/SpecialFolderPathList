@@ -20,5 +20,5 @@ Get-Content -LiteralPath $dataFile |
 		$tmpLine.Add($(if ($_ -cmatch '^\t\tcase \d+:$') { "`t`tcase " + $index++ + ':' } else { $_ }))
 	}
 
-$encoding = if ([Version]$PSVersionTable['PSVersion'] -ge (New-Object Version 6, 0)) { 'utf8BOM' } else { 'UTF8' }
+$encoding = if ($PSVersionTable['PSVersion'] -ge '6.0') { 'utf8BOM' } else { 'UTF8' }
 Set-Content -LiteralPath $dataFile ($tmpLine -join "`r`n") -Encoding $encoding

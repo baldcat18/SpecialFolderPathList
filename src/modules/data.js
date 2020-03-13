@@ -204,7 +204,7 @@
 	 */
 	function createSpecialFolder(title, dir, option) {
 		sfArg.title = title;
-		if (dir && dir.slice(0, 6) != "shell:") dir = "file:" + dir;
+		if (dir && !/^shell:/.test(dir)) dir = "file:" + dir;
 		sfArg.dir = dir;
 		sfArg.option = option || DEFAULT_OPTION;
 		
@@ -212,10 +212,7 @@
 		catch (err) { sfArg.folderItem = null; }
 		
 		sfArg.path = "";
-		if (sfArg.folderItem) {
-			sfArg.path = sfArg.option.path || sfArg.folderItem.Path;
-			if (sfArg.path.charAt(0) == ":") sfArg.path = "shell:" + sfArg.path;
-		}
+		if (sfArg.folderItem) { sfArg.path = (sfArg.option.path || sfArg.folderItem.Path).replace(/^::/, "shell:::"); }
 		
 		// @ts-ignore: FileFolder、VirtualFolder、InvalidFolder は SpecialFolder のサブクラス
 		if (fso.FolderExists(sfArg.path)) return new FileFolder(sfArg);
@@ -276,7 +273,6 @@
 			return createSpecialFolder("個人用フォルダー", "shell:UsersFilesFolder", { category: "UserProfile", folderItemForProperties: shell.NameSpace(ssfPROFILE).Self });
 		case 1:
 			// Win10からサポート
-			// shell:UsersFilesFolder\3D Objects
 			// shell:MyComputerFolder\::{0DB7E03F-FC29-4DC6-9020-FF41B59E513A} (Win10 1709から)
 			// Win10 1507から1703では3D Builderを起動した時に自動生成される
 			return createSpecialFolder("3D オブジェクト", "shell:3D Objects");
@@ -298,7 +294,6 @@
 			// shell:MyComputerFolder\::{1CF1260C-4DD0-4EBB-811F-33C572699FDE} (Win8.1から)
 			return createSpecialFolder(WIN81 ? "ミュージック" : "マイ ミュージック", "shell:My Music");
 		case 6:
-			// shell:My Music\Playlists
 			// WMPやGroove ミュージックで再生リストを作成する時に自動生成される
 			return createSpecialFolder("プレイリスト", "shell:Playlists");
 		
@@ -308,22 +303,16 @@
 			return createSpecialFolder(WIN81 ? "ピクチャ" : "マイ ピクチャ", "shell:My Pictures");
 		case 8:
 			// Win8.1からサポート
-			// shell:My Pictures\Camera Roll
 			// カメラアプリで写真や動画を撮影する時に自動生成される
 			return createSpecialFolder("カメラ ロール", "shell:Camera Roll");
 		case 9:
 			// Win10からサポート
-			// shell:My Pictures\Saved Pictures
 			return createSpecialFolder("保存済みの写真", "shell:SavedPictures");
 		case 10:
 			// Win8からサポート
-			// shell:My Pictures\Screenshots
 			// Win＋PrtScrでスクリーンショットを保存する時に自動生成される
 			return createSpecialFolder("スクリーンショット", "shell:Screenshots");
 		case 11:
-			// shell:My Pictures\Slide Shows
-			// 手動でフォルダーを作成しても使用可
-			// フォルダー名は大文字・小文字を一致させる必要あり(以下同)
 			return createSpecialFolder("スライド ショー", "shell:PhotoAlbums");
 		
 		case 12:
@@ -332,13 +321,11 @@
 			return createSpecialFolder(WIN81 ? "ビデオ" : "マイ ビデオ", "shell:My Video");
 		case 13:
 			// Win10からサポート
-			// shell:My Video\Captures
 			// ゲームバーで動画やスクリーンショットを保存する時に自動生成される
 			return createSpecialFolder("キャプチャ", "shell:Captures");
 		
 		case 14:
 			// Win10 1703からサポート
-			// shell:UsersFilesFolder\AppMods
 			return createSpecialFolder("アプリケーションの修正", "shell:AppMods");
 		case 15:
 			// shell:UsersFilesFolder\{56784854-C6CB-462B-8169-88E350ACB882}
@@ -352,7 +339,6 @@
 			return createSpecialFolder("リンク" + (WIN10 ? "" : " (エクスプローラーのお気に入り)"), "shell:Links");
 		case 18:
 			// Win10からサポート
-			// shell:UsersFilesFolder\Recorded Calls
 			return createSpecialFolder("録音した通話", "shell:Recorded Calls");
 		case 19:
 			// shell:UsersFilesFolder\{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}
@@ -363,23 +349,18 @@
 		
 		// OneDriveカテゴリのフォルダーはすべてWin8.1からサポート
 		case 21:
-			// shell:UsersFilesFolder\OneDrive
 			// Win8.1ではMicrosoftアカウントでサインインする時に自動生成される
 			// shell:::{59031A47-3F72-44A7-89C5-5595FE6B30EE}\::{8E74D236-7F35-4720-B138-1FED0B85EA75} (Win8.1のみ)
 			// shell:::{59031A47-3F72-44A7-89C5-5595FE6B30EE}\::{018D5C66-4533-4307-9B53-224DE2ED1FE6} (Win10から)
 			// %OneDrive% (Win10 1607から)
 			return createSpecialFolder("OneDrive", "shell:OneDrive", { category: "OneDrive" });
 		case 22:
-			// shell:OneDrive\Documents
 			return createSpecialFolder("OneDrive のドキュメント", WIN10 ? "shell:OneDriveDocuments" : "shell:SkyDriveDocuments");
 		case 23:
-			// shell:OneDrive\Music
 			return createSpecialFolder("OneDrive のミュージック", WIN10 ? "shell:OneDriveMusic" : "shell:SkyDriveMusic");
 		case 24:
-			// shell:OneDrive\Pictures
 			return createSpecialFolder("OneDrive の画像", WIN10 ? "shell:OneDrivePictures" : "shell:SkyDrivePictures");
 		case 25:
-			// shell:OneDrive\Pictures\Camera Roll
 			return createSpecialFolder("OneDrive のカメラ ロール", WIN10 ? "shell:OneDriveCameraRoll" : "shell:SkyDriveCameraRoll");
 		
 		case 26:
@@ -426,7 +407,6 @@
 			return createSpecialFolder("ライブラリ", "shell:Libraries", { category: "Libraries", path: LIBRARIES_PATH, folderItemForProperties: getDirectoryFolderItem(LIBRARIES_PATH) });
 		case 42:
 			// Win10からサポート
-			// shell:Libraries\CameraRoll.library-ms
 			// shell:Libraries\{2B20DF75-1EDA-4039-8097-38798227D5B7}
 			return createSpecialFolder("カメラ ロール ライブラリ", "shell:CameraRollLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{2B20DF75-1EDA-4039-8097-38798227D5B7}", LIBRARIES_PATH + "\\CameraRoll.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 43:
@@ -440,7 +420,6 @@
 			return createSpecialFolder("ピクチャ ライブラリ", "shell:PicturesLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{A990AE9F-A03B-4E80-94BC-9912D7504104}", LIBRARIES_PATH + "\\Pictures.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 46:
 			// Win10からサポート
-			// shell:Libraries\SavedPictures.library-ms
 			// shell:Libraries\{E25B5812-BE88-4BD9-94B0-29233477B6C3}
 			return createSpecialFolder("保存済みの写真 ライブラリ", "shell:SavedPicturesLibrary", { path: getRegValue(USER_SHELL_FOLDERS_KEY + "{E25B5812-BE88-4BD9-94B0-29233477B6C3}", LIBRARIES_PATH + "\\SavedPictures.library-ms", true), propertyType: PT_SHELLEXECUTE });
 		case 47:
@@ -464,26 +443,21 @@
 		
 		case 54:
 			// Win10 1709からサポート
-			// shell:Local AppData\Desktop
 			return createSpecialFolder("AppDataDesktop", "shell:AppDataDesktop");
 		case 55:
 			// Win10からサポート
-			// shell:Local AppData\DevelopmentFiles
 			return createSpecialFolder("Development Files", "shell:Development Files");
 		case 56:
 			// Win10 1709からサポート
-			// shell:Local AppData\Documents
 			return createSpecialFolder("AppDataDocuments", "shell:AppDataDocuments");
 		case 57:
 			// Win10 1709からサポート
-			// shell:Local AppData\Favorites
 			return createSpecialFolder("AppDataFavorites", "shell:AppDataFavorites");
 		case 58:
 			// Win8からサポート
 			return createSpecialFolder(WINDOWS_APPS_TITLE + "の設定", "shell:Local AppData\\Packages");
 		case 59:
 			// Win10 1709からサポート
-			// shell:Local AppData\ProgramData
 			return createSpecialFolder("AppDataProgramData", "shell:AppDataProgramData");
 		case 60:
 			// %TEMP%
@@ -514,7 +488,6 @@
 			return createSpecialFolder("Ringtones", "shell:Ringtones");
 		case 70:
 			// Win8からサポート
-			// shell:Local AppData\Microsoft\Windows\RoamedTileImages
 			return createSpecialFolder("Roamed Tile Images", "shell:Roamed Tile Images");
 		case 71:
 			// Win8からサポート
@@ -525,25 +498,20 @@
 		
 		case 73:
 			// Win8.1からサポート
-			// shell:Local AppData\Microsoft\Windows\ConnectedSearch\History
 			return createSpecialFolder("検索履歴", "shell:SearchHistoryFolder");
 		case 74:
 			// Win8.1からサポート
-			// shell:Local AppData\Microsoft\Windows\ConnectedSearch\Templates
 			return createSpecialFolder("検索テンプレート", "shell:SearchTemplatesFolder");
 		
 		case 75:
 			return createSpecialFolder("ガジェット", WIN8 ? "shell:Local AppData\\Microsoft\\Windows Sidebar\\Gadgets" :"shell:Gadgets");
 		case 76:
-			// shell:Local AppData\Microsoft\Windows Photo Gallery\Original Images
 			// フォトギャラリーでファイルを編集する時に自動生成される
 			return createSpecialFolder("Original Images", "shell:Original Images");
 		
 		case 77:
-			// shell:Local AppData\Programs
 			return createSpecialFolder("Program Files (Per User)", "shell:UserProgramFiles");
 		case 78:
-			// shell:Local AppData\Programs\Common
 			return createSpecialFolder("Common Program Files (Per User)", "shell:UserProgramFilesCommon");
 		
 		case 79:
@@ -554,7 +522,6 @@
 			return createSpecialFolder("パブリック", "shell:Public", { category: "Public" });
 		case 80:
 			// Win8からサポート
-			// shell:Public\AccountPictures
 			return createSpecialFolder("パブリック アカウントの画像", "shell:PublicAccountPictures");
 		case 81:
 			return createSpecialFolder("パブリック デスクトップ", "shell:Common Desktop");
@@ -571,21 +538,17 @@
 		case 86:
 			return createSpecialFolder("パブリックのミュージック", "shell:CommonMusic");
 		case 87:
-			// shell:CommonMusic\Sample Music
 			return createSpecialFolder("サンプル ミュージック", "shell:SampleMusic");
 		case 88:
 			// Win7までサポート
-			// shell:CommonMusic\Sample Playlists
 			return createSpecialFolder("サンプル プレイリスト", "shell:SamplePlaylists");
 		case 89:
 			return createSpecialFolder("パブリックのピクチャ", "shell:CommonPictures");
 		case 90:
-			// shell:CommonPictures\Sample Pictures
 			return createSpecialFolder("サンプル ピクチャ", "shell:SamplePictures");
 		case 91:
 			return createSpecialFolder("パブリックのビデオ", "shell:CommonVideo");
 		case 92:
-			// shell:CommonVideo\Sample Videos
 			return createSpecialFolder("サンプル ビデオ", "shell:SampleVideos");
 		
 		case 93:
@@ -593,7 +556,6 @@
 			// %ProgramData%
 			return createSpecialFolder("ProgramData", "shell:Common AppData", { category: "ProgramData" });
 		case 94:
-			// %ALLUSERSPROFILE%\OEM Links
 			return createSpecialFolder("OEM Links", "shell:OEM Links");
 		
 		case 95:
@@ -610,7 +572,6 @@
 			return createSpecialFolder("GameExplorer (All Users)", "shell:PublicGameTasks");
 		case 100:
 			// Win10からサポート
-			// shell:Common AppData\Microsoft\Windows\RetailDemo
 			// 市販デモ モードで使用される
 			return createSpecialFolder("RetailDemo", "shell:Retail Demo");
 		case 101:
@@ -655,7 +616,6 @@
 		case 115:
 			return createSpecialFolder("テーマのリソース", "shell:ResourceDir");
 		case 116:
-			// shell:ResourceDir\xxxx (xxxxはロケールIDの16進数4桁 日本語では0411)
 			return createSpecialFolder("テーマのローカライズ リソース", "shell:LocalizedResourcesDir");
 		
 		case 117:
@@ -1057,338 +1017,336 @@
 			// Win8.1まで
 			return createSpecialFolder("ヘルプとサポート", "shell:::{2559A1F1-21D7-11D4-BDAF-00C04F60B9F0}");
 		case 260:
-			// Windows Security
-			// Ctrl+Alt+Delと同じ
-			// Win10 1903から
-			return createSpecialFolder("Windows Security", "shell:::{2559A1F2-21D7-11D4-BDAF-00C04F60B9F0}");
-		case 261:
 			return createSpecialFolder("ファイル名を指定して実行", "shell:::{2559A1F3-21D7-11D4-BDAF-00C04F60B9F0}");
-		case 262:
+		case 261:
 			return createSpecialFolder("電子メール", "shell:::{2559A1F5-21D7-11D4-BDAF-00C04F60B9F0}");
-		case 263:
+		case 262:
 			return createSpecialFolder("プログラムのアクセスとコンピューターの既定の設定", "shell:::{2559A1F7-21D7-11D4-BDAF-00C04F60B9F0}");
-		case 264:
+		case 263:
 			// Win8から
 			return createSpecialFolder(WIN10 ? "Cortana" : "検索", "shell:::{2559A1F8-21D7-11D4-BDAF-00C04F60B9F0}");
-		case 265:
+		case 264:
 			// Win+Dと同じ
 			return createSpecialFolder("デスクトップの表示", "shell:::{3080F90D-D7AD-11D9-BD98-0000947B0257}");
-		case 266:
+		case 265:
 			// Win7ではCtrl+Win+Tab、Win8/8.1ではCtrl+Alt+Tab、Win10 1607以降ではWin+Tabと同じ (Win10 1507/1511では使用不可)
 			return createSpecialFolder("ウィンドウを切り替える", "shell:::{3080F90E-D7AD-11D9-BD98-0000947B0257}");
-		case 267:
+		case 266:
 			// Win7まで
 			return createSpecialFolder("ガジェット ギャラリー", "shell:::{37EFD44D-EF8D-41B1-940D-96973A50E9E0}");
-		case 268:
+		case 267:
 			return createSpecialFolder("接続先", "shell:::{38A98528-6CBF-4CA9-8DC0-B1E1D10F7B1B}");
-		case 269:
+		case 268:
 			return createSpecialFolder("電話とモデム", "shell:::{40419485-C444-4567-851A-2DD7BFA1684D}");
-		case 270:
+		case 269:
 			// Win8.1から
 			return createSpecialFolder("新しいウィンドウで開く", "shell:::{52205FD8-5DFB-447D-801A-D0B52F2E83E1}");
-		case 271:
+		case 270:
 			return createSpecialFolder("Windows モビリティ センター", "shell:::{5EA4F148-308C-46D7-98A9-49041B1DD468}");
-		case 272:
+		case 271:
 			return createSpecialFolder(WIN8 ? "地域" : "地域と言語", "shell:::{62D8ED13-C9D0-4CE8-A914-47DD628FB1B0}");
-		case 273:
+		case 272:
 			return createSpecialFolder("Windows の機能", "shell:::{67718415-C450-4F3C-BF8A-B487642DC39B}");
-		case 274:
+		case 273:
 			return createSpecialFolder("マウス", "shell:::{6C8EEC18-8D75-41B2-A177-8831D59D2D50}");
-		case 275:
+		case 274:
 			return createSpecialFolder(WIN10 ? "エクスプローラーのオプション" : "フォルダー オプション", "shell:::{6DFD7C5C-2451-11D3-A299-00C04F8EF6AF}");
-		case 276:
+		case 275:
 			return createSpecialFolder("キーボード", "shell:::{725BE8F7-668E-4C7B-8F90-46BDB0936430}");
-		case 277:
+		case 276:
 			return createSpecialFolder("デバイス マネージャー", "shell:::{74246BFC-4C96-11D0-ABEF-0020AF6B0B7A}");
-		case 278:
+		case 277:
 			// Win8まで
 			return createSpecialFolder("Windows CardSpace ", "shell:::{78CB147A-98EA-4AA6-B0DF-C8681F69341C}");
-		case 279:
+		case 278:
 			// netplwiz.exe / control.exe userpasswords2
 			return createSpecialFolder("ユーザー アカウント", "shell:::{7A9D77BD-5403-11D2-8785-2E0420524153}");
-		case 280:
+		case 279:
 			return createSpecialFolder(WIN8 ? "タブレット PC 設定" : "Tablet PC 設定", "shell:::{80F3F1D5-FECA-45F3-BC32-752C152E456E}");
-		case 281:
+		case 280:
 			// Win10以降では開けないので非表示に
 			return createSpecialFolder("インターネット", WIN10 ? null : "shell:InternetFolder");
-		case 282:
+		case 281:
 			return createSpecialFolder("インデックスのオプション", "shell:::{87D66A43-7B11-4A28-9811-C86EE395ACF7}");
-		case 283:
+		case 282:
 			// Win8から
+			// Win10 1909まで(?)
 			// Enterpriseで使用可
 			// Win10 1607以降ではProでも使用可
 			return createSpecialFolder("Windows To Go ワークスペースの作成", "shell:::{8E0C279D-0BD1-43C3-9EBD-31C3DC5B8A77}");
-		case 284:
+		case 283:
 			// Win8まで
 			return createSpecialFolder("生体認証デバイスへようこそ", "shell:::{8E35B548-F174-4C7D-81E2-8ED33126F6FD}");
-		case 285:
+		case 284:
 			// Win10 1607から1809まで
 			return createSpecialFolder("赤外線", "shell:::{A0275511-0E86-4ECA-97C2-ECD8F1221D08}");
-		case 286:
+		case 285:
 			return createSpecialFolder("インターネット オプション", "shell:::{A3DD4F92-658A-410F-84FD-6FBBBEF2FFFE}");
-		case 287:
+		case 286:
 			return createSpecialFolder("色の管理", "shell:::{B2C761C6-29BC-4F19-9251-E6195265BAF1}");
-		case 288:
+		case 287:
 			// Win8.1まで
 			return createSpecialFolder(WIN8 ? "Windows への機能の追加" : "Windows Anytime Upgrade", "shell:::{BE122A0E-4503-11DA-8BDE-F66BAD1E3F3A}");
-		case 289:
+		case 288:
 			// Win8まで
 			// shell:::{CCFB7955-B4DC-42CE-893D-884D72DD6B19}
 			return createSpecialFolder("生体認証デバイス メッセージ", "shell:::{CBC84B69-69EA-439B-B791-DF15F60333CF}");
-		case 290:
+		case 289:
 			return createSpecialFolder("音声合成", "shell:::{D17D1D6D-CC3F-4815-8FE3-607E7D5D10B3}");
-		case 291:
+		case 290:
 			return createSpecialFolder("ネットワークの場所の追加", "shell:::{D4480A50-BA28-11D1-8E75-00C04FA31A86}");
-		case 292:
+		case 291:
 			// Win10 1607まで
 			return createSpecialFolder("Windows Defender", "shell:::{D8559EB9-20C0-410E-BEDA-7ED416AECC2A}");
-		case 293:
+		case 292:
 			return createSpecialFolder("日付と時刻", "shell:::{E2E7934B-DCE5-43C4-9576-7FE4F75E7480}");
-		case 294:
+		case 293:
 			return createSpecialFolder("サウンド", "shell:::{F2DDFC82-8F12-4CDD-B7DC-D4FE1425AA4D}");
-		case 295:
+		case 294:
 			return createSpecialFolder("ペンとタッチ", "shell:::{F82DF8F7-8B9F-442E-A48C-818EA735FF9B}");
 		
 		// 上にあるのとは違うデータでフォルダーの情報を取得する
 		// CSIDLは扱わない
-		case 296:
+		case 295:
 			return createSpecialFolder("shell:Profile", "shell:Profile", { category: "OtherDirs" });
-		case 297:
+		case 296:
 			return createSpecialFolder("shell:Local Documents", "shell:Local Documents");
-		case 298:
+		case 297:
 			return createSpecialFolder("shell:Local Downloads", "shell:Local Downloads");
-		case 299:
+		case 298:
 			return createSpecialFolder("shell:Local Music", "shell:Local Music");
-		case 300:
+		case 299:
 			return createSpecialFolder("shell:Local Pictures", "shell:Local Pictures");
-		case 301:
+		case 300:
 			return createSpecialFolder("shell:Local Videos", "shell:Local Videos");
-		case 302:
+		case 301:
 			return createSpecialFolder("アドレス帳", "shell:UsersFilesFolder\\{56784854-C6CB-462B-8169-88E350ACB882}");
-		case 303:
+		case 302:
 			return createSpecialFolder("リンク", "shell:UsersFilesFolder\\{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}");
-		case 304:
+		case 303:
 			return createSpecialFolder("保存したゲーム", "shell:UsersFilesFolder\\{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}");
-		case 305:
+		case 304:
 			return createSpecialFolder("検索", "shell:UsersFilesFolder\\{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}");
-		case 306:
+		case 305:
 			return createSpecialFolder("shell:UsersLibrariesFolder", "shell:UsersLibrariesFolder");
-		case 307:
+		case 306:
 			return createSpecialFolder("カメラ ロール ライブラリ", "shell:Libraries\\{2B20DF75-1EDA-4039-8097-38798227D5B7}");
-		case 308:
+		case 307:
 			return createSpecialFolder("ドキュメント ライブラリ", "shell:Libraries\\{7B0DB17D-9CD2-4A93-9733-46CC89022E7C}");
-		case 309:
+		case 308:
 			return createSpecialFolder("ミュージック ライブラリ", "shell:Libraries\\{2112AB0A-C86A-4FFE-A368-0DE96E47012E}");
-		case 310:
+		case 309:
 			return createSpecialFolder("ピクチャ ライブラリ", "shell:Libraries\\{A990AE9F-A03B-4E80-94BC-9912D7504104}");
-		case 311:
+		case 310:
 			return createSpecialFolder("保存済みの写真 ライブラリ", "shell:Libraries\\{E25B5812-BE88-4BD9-94B0-29233477B6C3}");
-		case 312:
+		case 311:
 			return createSpecialFolder("ビデオ ライブラリ", "shell:Libraries\\{491E922F-5643-4AF4-A7EB-4E7A138D8174}");
-		case 313:
+		case 312:
 			// 64ビットアプリのみ
 			return createSpecialFolder("shell:ProgramFilesX64", "shell:ProgramFilesX64");
-		case 314:
+		case 313:
 			// 64ビットアプリのみ
 			return createSpecialFolder("shell:ProgramFilesCommonX64", "shell:ProgramFilesCommonX64");
-		case 315:
+		case 314:
 			return createSpecialFolder("shell:MyComputerFolder", "shell:MyComputerFolder");
 		
-		case 316:
+		case 315:
 			return createSpecialFolder("%USERPROFILE%", "%USERPROFILE%".xExpand());
-		case 317:
+		case 316:
 			return createSpecialFolder("%HOMEDRIVE%%HOMEPATH%", "%HOMEDRIVE%%HOMEPATH%".xExpand());
-		case 318:
+		case 317:
 			return createSpecialFolder("%OneDrive%", "%OneDrive%".xExpand());
-		case 319:
+		case 318:
 			return createSpecialFolder("%APPDATA%", "%APPDATA%".xExpand());
-		case 320:
+		case 319:
 			return createSpecialFolder("%LOCALAPPDATA%", "%LOCALAPPDATA%".xExpand());
-		case 321:
+		case 320:
 			return createSpecialFolder("%PUBLIC%", "%PUBLIC%".xExpand());
-		case 322:
+		case 321:
 			return createSpecialFolder("%ALLUSERSPROFILE%", "%ALLUSERSPROFILE%".xExpand());
-		case 323:
+		case 322:
 			return createSpecialFolder("%ProgramData%", "%ProgramData%".xExpand());
-		case 324:
+		case 323:
 			return createSpecialFolder("%SystemRoot%", "%SystemRoot%".xExpand());
-		case 325:
+		case 324:
 			return createSpecialFolder("%windir%", "%windir%".xExpand());
-		case 326:
+		case 325:
 			return createSpecialFolder("%ProgramFiles%", "%ProgramFiles%".xExpand());
-		case 327:
+		case 326:
 			return createSpecialFolder("%CommonProgramFiles%", "%CommonProgramFiles%".xExpand());
 		
-		case 328:
+		case 327:
 			// Win10から
 			return createSpecialFolder("OneDrive", "shell:::{018D5C66-4533-4307-9B53-224DE2ED1FE6}");
-		case 329:
+		case 328:
 			// ライブラリ
 			return createSpecialFolder("UsersLibraries", "shell:::{031E4825-7B94-4DC3-B131-E946B44C8DD5}");
-		case 330:
+		case 329:
 			// Win10から
 			return createSpecialFolder("Local Downloads", "shell:::{088E3905-0323-4B02-9826-5D99428E115F}");
-		case 331:
+		case 330:
 			// Win10 1709から
 			return createSpecialFolder("3D Object", "shell:::{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}");
-		case 332:
+		case 331:
 			// プログラムの取得
 			return createSpecialFolder("Install New Programs", "shell:::{15EAE92E-F17A-4431-9F28-805E482DAFD4}");
-		case 333:
+		case 332:
 			// Win8.1から
 			return createSpecialFolder("My Music", "shell:::{1CF1260C-4DD0-4EBB-811F-33C572699FDE}");
-		case 334:
+		case 333:
 			return createSpecialFolder("User Pinned", "shell:::{1F3427C8-5C10-4210-AA03-2EE45287D668}");
-		case 335:
+		case 334:
 			return createSpecialFolder("This PC", "shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}");
-		case 336:
+		case 335:
 			// すべてのコントロール パネル項目
 			return createSpecialFolder("All Control Panel Items", "shell:::{21EC2020-3AEA-1069-A2DD-08002B30309D}");
-		case 337:
+		case 336:
 			// プリンター
 			return createSpecialFolder("Printers", "shell:::{2227A280-3AEA-1069-A2DE-08002B30309D}");
-		case 338:
+		case 337:
 			// Win10から
 			return createSpecialFolder("Local Pictures", "shell:::{24AD3AD4-A569-4530-98E1-AB02F9417AA8}");
-		case 339:
+		case 338:
 			return createSpecialFolder("All Control Panel Items", "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0");
-		case 340:
+		case 339:
 			return createSpecialFolder("Hardware and Sound", "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\4");
-		case 341:
+		case 340:
 			return createSpecialFolder("System and Security", "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\10");
-		case 342:
+		case 341:
 			return createSpecialFolder("All Control Panel Items", "shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}\\11");
-		case 343:
+		case 342:
 			// Win8.1から
 			return createSpecialFolder("Downloads", "shell:::{374DE290-123F-4565-9164-39C4925E467B}");
-		case 344:
+		case 343:
 			// Win8.1から
 			return createSpecialFolder("My Pictures", "shell:::{3ADD1653-EB32-4CB0-BBD7-DFA0ABB5ACCA}");
-		case 345:
+		case 344:
 			// Win10から
 			return createSpecialFolder("Local Music", "shell:::{3DFDF296-DBEC-4FB4-81D1-6A3438BCF4DE}");
-		case 346:
+		case 345:
 			return createSpecialFolder("Applications", "shell:::{4234D49B-0245-4DF3-B780-3893943456E1}");
-		case 347:
+		case 346:
 			// パブリック
 			return createSpecialFolder("Public Folder", "shell:::{4336A54D-038B-4685-AB02-99BB52D3FB8B}");
-		case 348:
+		case 347:
 			return createSpecialFolder("UsersFiles", "shell:::{59031A47-3F72-44A7-89C5-5595FE6B30EE}");
-		case 349:
+		case 348:
 			// このデバイス
 			return createSpecialFolder("This Device", "shell:::{5B934B42-522B-4C34-BBFE-37A3EF7B9C90}");
-		case 350:
+		case 349:
 			// ごみ箱
 			return createSpecialFolder("Recycle Bin", "shell:::{645FF040-5081-101B-9F08-00AA002F954E}");
-		case 351:
+		case 350:
 			// プログラムと機能
 			return createSpecialFolder("Programs and Features", "shell:::{7B81BE6A-CE2B-4676-A29E-EB907A5126C5}");
-		case 352:
+		case 351:
 			// ネットワーク接続
 			return createSpecialFolder("Network Connections", "shell:::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");
-		case 353:
+		case 352:
 			// プリンター
 			return createSpecialFolder("Remote Printers", "shell:::{863AA9FD-42DF-457B-8E4D-0DE1B8015C60}");
-		case 354:
+		case 353:
 			// インターネット
 			return createSpecialFolder("Internet Folder", "shell:::{871C5380-42A0-1069-A2EA-08002B30309D}");
-		case 355:
+		case 354:
 			// Win8.1のみ
 			return createSpecialFolder("OneDrive", "shell:::{8E74D236-7F35-4720-B138-1FED0B85EA75}");
-		case 356:
+		case 355:
 			// 検索結果
 			return createSpecialFolder("CLSID_SearchHome", "shell:::{9343812E-1C37-4A49-A12E-4B2D810D956B}");
-		case 357:
+		case 356:
 			// 同期センター
 			return createSpecialFolder("Sync Center Folder", "shell:::{9C73F5E5-7AE7-4E32-A8E8-8D23B85255BF}");
-		case 358:
+		case 357:
 			// ネットワーク接続
 			return createSpecialFolder("Network Connections", "shell:::{992CFFA0-F557-101A-88EC-00DD010CCC48}");
-		case 359:
+		case 358:
 			// Win8.1から
 			return createSpecialFolder("My Video", "shell:::{A0953C92-50DC-43BF-BE83-3742FED03C9C}");
-		case 360:
+		case 359:
 			// Win8.1から
 			return createSpecialFolder("Personal", "shell:::{A8CDFF1C-4878-43BE-B5FD-F8091C1C60D0}");
-		case 361:
+		case 360:
 			// Win8.1 UpdateからWin10 1511まで
 			return createSpecialFolder("StartMenuAllPrograms", "shell:::{ADFA80E7-9769-4AD9-992C-55DC57E1008C}");
-		case 362:
+		case 361:
 			// Win8.1から
 			return createSpecialFolder("ThisPCDesktopFolder", "shell:::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}");
-		case 363:
+		case 362:
 			// ホームグループ
 			return createSpecialFolder("Other Users Folder", "shell:::{B4FB3F98-C1EA-428D-A78A-D1F5659CBA93}");
-		case 364:
+		case 363:
 			// フォント
 			return createSpecialFolder("Microsoft Windows Font Folder", "shell:ControlPanelFolder\\::{BD84B380-8CA2-1069-AB1D-08000948F534}");
-		case 365:
+		case 364:
 			// 管理ツール (All Users)
 			return createSpecialFolder("Administrative Tools", "shell:::{D20EA4E1-3957-11D2-A40B-0C5020524153}");
-		case 366:
+		case 365:
 			// Win10から
 			return createSpecialFolder("Local Documents", "shell:::{D3162B92-9365-467A-956B-92703ACA08AF}");
-		case 367:
+		case 366:
 			// インストールされた更新プログラム
 			return createSpecialFolder("Installed Updates", "shell:::{D450A8A1-9568-45C7-9C0E-B4F9FB4537BD}");
-		case 368:
+		case 367:
 			// ゲーム
 			// Win10 1709までサポート
 			return createSpecialFolder("Games Explorer", "shell:::{ED228FDF-9EA8-4870-83B1-96B02CFE0D52}");
-		case 369:
+		case 368:
 			// ネットワーク
 			return createSpecialFolder("Computers and Devices", "shell:::{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}");
-		case 370:
+		case 369:
 			// このデバイス (Win10 1703から)
 			return createSpecialFolder("This Device", "shell:::{F8278C54-A712-415B-B593-B77A2BE0DDA9}");
-		case 371:
+		case 370:
 			// Win10から
 			return createSpecialFolder("Local Videos", "shell:::{F86FA3AB-70D2-4FC7-9C99-FCBF05467F3A}");
 		
-		case 372:
+		case 371:
 			// すべてのコントロール パネル項目
 			return createSpecialFolder("Control Panel command object for Start menu and desktop", "shell:::{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}");
-		case 373:
+		case 372:
 			// 既定のプログラム
 			return createSpecialFolder("Default Programs command object for Start menu", "shell:::{E44E5D18-0652-4508-A4E2-8A090067BCB0}");
 		
 		// フォルダーとして使えないshellコマンド
 		// Get-Clsid.ps1やGet-ShellCommand.ps1でヒットしないようにするためのもの
-		case 374:
+		case 373:
 			return createSpecialFolder("shell:MAPIFolder", "shell:MAPIFolder", { category: "Unusable" });
-		case 375:
+		case 374:
 			return createSpecialFolder("shell:RecordedTVLibrary", "shell:RecordedTVLibrary");
 		
-		case 376:
+		case 375:
 			return createSpecialFolder("", "shell:::{00020D75-0000-0000-C000-000000000046}");
-		case 377:
+		case 376:
 			return createSpecialFolder("Desktop", "shell:::{00021400-0000-0000-C000-000000000046}");
-		case 378:
+		case 377:
 			return createSpecialFolder("Shortcut", "shell:::{00021401-0000-0000-C000-000000000046}");
-		case 379:
+		case 378:
 			// Win10 1507から1703まで
 			return createSpecialFolder("", "shell:::{047EA9A0-93BB-415F-A1C3-D7AEB3DD5087}");
-		case 380:
+		case 379:
 			return createSpecialFolder("Open With Context Menu Handler", "shell:::{09799AFB-AD67-11D1-ABCD-00C04FC30936}");
-		case 381:
+		case 380:
 			return createSpecialFolder("Folder Shortcut", "shell:::{0AFACED1-E828-11D1-9187-B532F1E9575D}");
-		case 382:
+		case 381:
 			return createSpecialFolder("", "shell:::{0C39A5CF-1A7A-40C8-BA74-8900E6DF5FCD}");
-		case 383:
+		case 382:
 			return createSpecialFolder("", "shell:::{0D45D530-764B-11D0-A1CA-00AA00C16E65}");
-		case 384:
+		case 383:
 			// Win8から
 			return createSpecialFolder("Shell File System Folder", "shell:::{0E5AAE11-A475-4C5B-AB00-C66DE400274E}");
-		case 385:
+		case 384:
 			return createSpecialFolder("Device Center Print Context Menu Extension", "shell:::{0E6DAA63-DD4E-47CE-BF9D-FDB72ECE4A0D}");
-		case 386:
+		case 385:
 			return createSpecialFolder("IE History and Feeds Shell Data Source for Windows Search", "shell:::{11016101-E366-4D22-BC06-4ADA335C892B}");
-		case 387:
+		case 386:
 			return createSpecialFolder("OpenMediaSharing", "shell:::{17FC1A80-140E-4290-A64F-4A29A951A867}");
-		case 388:
+		case 387:
 			return createSpecialFolder("CLSID_DBFolderBoth", "shell:::{1BEF2128-2F96-4500-BA7C-098DC0049CB2}");
-		case 389:
+		case 388:
 			return createSpecialFolder("CompatContextMenu Class", "shell:::{1D27F844-3A1F-4410-85AC-14651078412D}");
+		case 389:
+			return createSpecialFolder("Windows Security", "shell:::{2559A1F2-21D7-11D4-BDAF-00C04F60B9F0}");
 		case 390:
 			return createSpecialFolder("Location Folder", "shell:::{267CF8A9-F4E3-41E6-95B1-AF881BE130FF}");
 		case 391:

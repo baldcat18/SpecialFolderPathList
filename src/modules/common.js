@@ -149,7 +149,7 @@ G.Version = (function() {
 })();
 
 var State = (function() {
-	var appVersion = "1.3.5.0 alpha";
+	var appVersion = "1.3.5.0 beta";
 	
 	/**
 	 * @template T
@@ -188,7 +188,7 @@ var State = (function() {
 			osVersionString == "10.0.17134" || // Win10 1803 Enterprise
 			osVersionString == "10.0.16299" || // Win10 1709 Enterprise
 			osVersionString == "6.3.9600" &&  osVersion.revision >= 17031 || // Win8.1 Update
-			osVersion.toString(2) == "6.1" && osVersion.build >= 7601 // Win7 SP1
+			osVersion.toString(2) == "6.1" && osVersion.build >= 7601 // Win7 ESU
 	};
 	
 	/** @returns {string} */
