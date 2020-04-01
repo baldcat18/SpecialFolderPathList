@@ -78,18 +78,11 @@
 		this.folderItem = arg.folderItem;
 		this.path = arg.path;
 		this.category = arg.option.category || "";
-		/** @private */
 		this._folderItemForProperties = arg.option.folderItemForProperties;
 	}
-	/**
-	 * @private
-	 * @type {PropertyTypes}
-	 */
+	/** @type {PropertyTypes} */
 	SpecialFolder.prototype._propertyTypes = null;
-	/**
-	 * @private
-	 * @type {FolderItemVerb}
-	 */
+	/** @type {FolderItemVerb} */
 	SpecialFolder.prototype._properties = undefined;
 	SpecialFolder.prototype.open = function() { this.folderItem.InvokeVerb(); };
 	/** @param {string} [verb] */
