@@ -5,13 +5,13 @@ interface Error {
 	 * 特定のエラーと関連付けられた数値を設定します。値の取得も可能です。
 	 * @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc427878(v=msdn.10)
 	 */
-    number: number;
+	number: number;
 }
 
 /** @see https://docs.microsoft.com/ja-jp/previous-versions/windows/scripting/cc427715(v=msdn.10) */
 interface ErrorConstructor {
-	new (number: number): Error;
-	new (number: number, message: string): Error;
+	new(number: number): Error;
+	new(number: number, message: string): Error;
 }
 
 interface Document {
@@ -57,7 +57,7 @@ interface HTMLDialog {
 	returnValue: any;
 	status: string;
 	unadorned: string;
-	
+
 	/** Closes the current browser window or HTA. */
 	close(): void;
 }
@@ -248,13 +248,13 @@ declare enum WshExecStatus {
 interface FileSystemObject {
 	/** ローカル コンピュータ上で利用可能なすべての Drive オブジェクトからなる Drives コレクションを返します。 */
 	readonly Drives: DriveCollection;
-	
+
 	/** 既存のパスの末尾に名前を追加します。 */
 	BuildPath(path: string, name: string): string;
 	/** ファイルを別の場所へコピーします。 */
-	CopyFile(source: string, destination: string, overwrite?: boolean) :void;
+	CopyFile(source: string, destination: string, overwrite?: boolean): void;
 	/** フォルダを、ある場所から別の場所に再帰的にコピーします。 */
-	CopyFolder(source: string, destination: string, overwrite?: boolean) :void;
+	CopyFolder(source: string, destination: string, overwrite?: boolean): void;
 	/** フォルダを作成します。 */
 	CreateFolder(foldername: string): FsoFolder;
 	/** 指定した名前のファイルを作成し、そのファイルの読み取り、書き込みに使用できる TextStream オブジェクトを返します。 */
@@ -298,9 +298,9 @@ interface FileSystemObject {
 	/** ランダムに生成される一時ファイルまたは一時フォルダの名前を返します。これらは一時ファイルや一時フォルダを必要とする処理を実行する際に便利です。 */
 	GetTempName(): string;
 	/** 1 つまたは複数のファイルを、ある場所から別の場所に移動します。 */
-	MoveFile(source: string, destination: string) :void;
+	MoveFile(source: string, destination: string): void;
 	/** 1 つまたは複数のフォルダを、ある場所から別の場所に移動します。 */
-	MoveFolder(source: string, destination: string) :void;
+	MoveFolder(source: string, destination: string): void;
 	/** 指定したファイルを開き、ファイルの読み込みに使用できる TextStream オブジェクトを返します。 */
 	OpenTextFile(filename: string, iomode?: IOMode.ForReading, create?: boolean, format?: Tristate): TextStreamReader;
 	/** 指定したファイルを開き、ファイルの書き込みや追加書き込みに使用できる TextStream オブジェクトを返します。 */
@@ -378,7 +378,7 @@ interface FsoFile {
 	readonly Size: any;
 	/** ファイルの種類に関する情報を返します。  */
 	readonly Type: string;
-	
+
 	/** 指定したファイルを別の場所にコピーします。 */
 	Copy(destination: string, overwrite?: boolean): void;
 	/** 指定したファイルを削除します。 */
@@ -437,7 +437,7 @@ interface FsoFolder {
 	readonly SubFolders: FolderCollection;
 	/** フォルダの種類に関する情報を返します。 */
 	readonly Type: string;
-	
+
 	/** 指定したフォルダを別の場所にコピーします。 */
 	Copy(destination: string, overwrite?: boolean): void;
 	/** 指定した名前のファイルを作成し、作成したファイルの読み取りまたは書き込みに使用できる TextStream オブジェクトを返します。 */
@@ -457,7 +457,7 @@ interface FolderCollection {
 	readonly Count: number;
 	/** 指定されたキーに対応するオブジェクトを返します。 */
 	Item(key: any): FsoFolder;
-	
+
 	/** 新しいフォルダを Folders コレクションに追加します。 */
 	Add(name: string): FsoFolder;
 }
@@ -472,7 +472,7 @@ interface Shell {
 	readonly Application: any;
 	/** Gets an object that represents the parent of the current object. */
 	readonly Parent: any;
-	
+
 	/** Adds a file to the most recently used (MRU) list. */
 	AddToRecent(varFile: any, bstrCategory?: string): void;
 	/** Creates a dialog box that enables the user to select a folder and then returns the selected folder's Folder object. */
@@ -564,7 +564,7 @@ interface ShlFolder {
 	ShowWebViewBarricade: boolean;
 	/** Contains the title of the folder. */
 	readonly Title: string;
-	
+
 	/** Copies an item or items to a folder. */
 	CopyHere(vItem: (string | FolderItem | FolderItems), vOptions?: any): void;
 	/** Called in response to the web view barricade being dismissed by the user. */
@@ -614,7 +614,7 @@ interface FolderItem {
 	readonly Size: number;
 	/** Contains a string representation of the item's type. */
 	readonly Type: string;
-	
+
 	/** Gets the value of a property from an item's property set. */
 	ExtendedProperty(sPropName: string): any;
 	/** Executes a verb on the item. */
@@ -636,7 +636,7 @@ interface FolderItems {
 	readonly Count: number;
 	/** Gets the list of verbs common to all the folder items. */
 	readonly Verbs: FolderItemVerbs;
-	
+
 	/** Sets a wildcard filter to apply to the items returned. */
 	Filter(grfFlags: number, bstrFilter: string): void;
 	/** Executes a verb on a collection of FolderItem objects. */
@@ -652,7 +652,7 @@ interface FolderItems {
 interface FolderItemVerb {
 	/** Contains the verb's name. */
 	readonly Name: string;
-	
+
 	/** Executes a verb on the FolderItem associated with the verb. */
 	DoIt(): void;
 }
@@ -664,7 +664,7 @@ interface FolderItemVerb {
 interface FolderItemVerbs {
 	/** Contains the number of items in the collection. */
 	readonly Count: number;
-	
+
 	/** Retrieves the FolderItemVerb object for a specified item in the collection. */
 	Item(iIndex?: number): FolderItemVerb;
 }
@@ -688,7 +688,7 @@ interface ShellLinkObject {
 	readonly Target: FolderItem;
 	/** Gets or sets the working directory specified in the link. */
 	WorkingDirectory: string;
-	
+
 	/** Gets the location of the icon assigned to the link. */
 	GetIconLocation(/* out */ sPath: string): number;
 	/** Looks for the target of a Shell link, even if the target has been moved or renamed. */
@@ -711,7 +711,7 @@ interface WshShell {
 	Environment(type?: string): WshEnvironment;
 	/** SpecialFolders オブジェクト (特殊フォルダのコレクション) を返します。 */
 	readonly SpecialFolders: WshCollection;
-	
+
 	/** アプリケーション ウィンドウをアクティブにします。 */
 	AppActivate(app: any, wait?: any): boolean;
 	/** ショートカットまたは URL ショートカットへのオブジェクト参照を作成します。 */
@@ -741,7 +741,7 @@ interface WshCollection {
 	Item(index: any): any;
 	/** コレクション内のアイテム数を返します。 */
 	readonly length: number;
-	
+
 	/** オブジェクトの数を返します。 */
 	Count(): number;
 }
@@ -755,7 +755,7 @@ interface WshEnvironment {
 	Item(name: string): string;
 	/** ローカル コンピュータ システム上に存在する Windows 環境変数の個数 (Environment コレクション内のアイテム数) を返します。 */
 	readonly length: number;
-	
+
 	/** オブジェクトの数を返します。 */
 	Count(): number;
 	/** 指定された既存の環境変数を削除します。 */
@@ -779,7 +779,7 @@ interface WshScriptExec {
 	readonly StdIn: TextStreamReader;
 	/** Exec オブジェクトの書き込み専用の stdout 出力ストリームを公開します。 */
 	readonly StdOut: TextStreamWriter;
-	
+
 	/** Exec メソッドで開始したプロセスをスクリプト エンジンに終了させます。 */
 	Terminate(): void;
 }
@@ -807,7 +807,7 @@ interface WshShortcut {
 	WindowStyle: number;
 	/** ショートカットに適用する作業ディレクトリを設定および取得できます。  */
 	WorkingDirectory: string;
-	
+
 	/** ショートカット オブジェクトを保存します。 */
 	Save(): void;
 }
@@ -821,7 +821,7 @@ interface WshURLShortcut {
 	readonly FullName: string;
 	/** ショートカットのリンク先のパスを設定および取得できます。 */
 	TargetPath: string;
-	
+
 	/** ショートカット オブジェクトを保存します。 */
 	Save(): void;
 }
@@ -836,7 +836,7 @@ interface WshNamed {
 	Item(item: string): string | boolean;
 	/** 特定のスクリプトのコマンド ライン パラメータの個数 (引数コレクション内のアイテム数) を返します。 */
 	readonly length: number;
-	
+
 	/** WshNamed オブジェクトのスイッチの数を返します。 */
 	Count(): number;
 	/** WshNamed オブジェクトに特定のキー値が格納されているかどうかを示します。 */
@@ -845,7 +845,7 @@ interface WshNamed {
 
 
 interface ActiveXObject {
-	new (s: "Scripting.FileSystemObject"): FileSystemObject;
-	new (s: "Shell.Application"): Shell;
-	new (s: "WScript.Shell"): WshShell;
+	new(s: "Scripting.FileSystemObject"): FileSystemObject;
+	new(s: "Shell.Application"): Shell;
+	new(s: "WScript.Shell"): WshShell;
 }

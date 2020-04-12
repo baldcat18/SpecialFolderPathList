@@ -30,14 +30,14 @@ declare var G: {
 declare const Setting: {
 	debug: boolean;
 	[name: string]: number | boolean;
-	
+
 	/** サポートされない古いOS上で実行した時に強制終了させる */
 	abortIfOldOS: boolean;
 	/** ファイル フォルダー(ディレクトリ)の情報だけを返す */
 	fileFolderOnly: boolean;
 	/** フォルダーのカテゴリの名前を表示する */
 	viewCategory: boolean;
-	
+
 	/** 64ビットOSでも32ビット版のmshta.exeで実行する */
 	htaFoeceWow64: boolean;
 	/** HTAのウインドウの左上隅のX座標。htaTopにも値を指定した場合のみ有効 */
@@ -48,7 +48,7 @@ declare const Setting: {
 	htaWidth?: number;
 	/** HTAのウインドウの高さ。htaWidthにも値を指定した場合のみ有効 */
 	htaHeight?: number;
-	
+
 	/** WSH版で実行環境ではサポートしないフォルダーも出力する */
 	wshForceWriteAllData?: boolean;
 	/** WSH版でBOMを出力する */
@@ -59,12 +59,12 @@ declare const Setting: {
 	wshWriteDisplayName?: boolean;
 	/** WSH版でフォルダーの種類も出力する */
 	wshWriteType?: boolean;
-	
+
 	/** @deprecated 移行先はfileFolderOnly */
 	directoryOnly?: boolean;
 };
 
-declare function getRegValue(name: string, defaultValue:string, expand: true): string;
+declare function getRegValue(name: string, defaultValue: string, expand: true): string;
 
 
 interface Version {
@@ -72,7 +72,7 @@ interface Version {
 	minor: number;
 	build: number;
 	revision: number;
-	
+
 	compareTo(value: Version): number;
 	equals(obj: Version): boolean;
 	isGreaterThan(obj: Version): boolean;
@@ -80,8 +80,8 @@ interface Version {
 }
 
 interface VersionConstructor {
-	new (major: number, minor: number, build?: number, revision?: number): Version;
-	
+	new(major: number, minor: number, build?: number, revision?: number): Version;
+
 	prototype: Version;
 }
 
@@ -95,7 +95,7 @@ interface SpecialFolder {
 	readonly folderItem: FolderItem;
 	readonly path: string;
 	readonly isFileFolder: boolean;
-	
+
 	execCmd(verb?: string): void;
 	execExplorer(verb?: string): void;
 	execPowershell(verb?: string): void;

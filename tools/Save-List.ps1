@@ -31,7 +31,7 @@ $txtFiles = Get-ChildItem "$osVersion $cpu $edition *.txt" | Sort-Object -Proper
 if (@($txtFiles).Length -ge 2) {
 	# fc.exeはUTF-8が文字化けするのでdiff.exeがあるならこちらを使う
 	$diff = "$($Env:ProgramFiles)/Git/usr/bin/diff.exe"
-	
+
 	if (Test-Path $diff) { & $diff -su1 $txtFiles[1].Name $txtFiles[0].Name }
 	else { fc.exe /n /20 $txtFiles[1].Name $txtFiles[0].Name }
 }
