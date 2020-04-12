@@ -4,7 +4,7 @@ var G = this;
 
 if (!Object.create) {
 	Object.create = function(o) {
-		var _ = function() {};
+		var _ = function() { };
 		_.prototype = o;
 		return new _();
 	};
@@ -48,7 +48,7 @@ String.prototype.xExpand = function() {
 };
 String.prototype.xFormat = function() {
 	var args = arguments;
-	
+
 	/**
 	 * @param {string} matched
 	 * @param {string} index
@@ -63,7 +63,7 @@ String.prototype.xFormat = function() {
 		var value = args[index];
 		return fmt ? value.toString(fmt) : value;
 	}
-	
+
 	return this.replace(/\{\{|\}\}|\{(\d+)(?::(.+?))?\}/g, replacer);
 };
 
@@ -72,7 +72,7 @@ G.Setting = { debug: false };
 G.Version = (function() {
 	var unspecified = -1;
 	var errmsg = "引数 {0} がマイナス: {1}";
-	
+
 	/**
 	 * @constructor
 	 * @param {number} major
@@ -83,34 +83,34 @@ G.Version = (function() {
 	function Version(major, minor, build, revision) {
 		if (major < 0) throw new RangeError(errmsg.xFormat("major", major));
 		this.major = toInt32(major);
-		
+
 		if (minor < 0) throw new RangeError(errmsg.xFormat("minor", minor));
 		this.minor = toInt32(minor);
-		
+
 		this.build = unspecified;
 		this.revision = unspecified;
-		
+
 		if (build == null) return;
 		if (build < 0) throw new RangeError(errmsg.xFormat("build", build));
 		this.build = toInt32(build);
-		
+
 		if (revision == null) return;
 		if (revision < 0) throw new RangeError(errmsg.xFormat("revision", revision));
 		this.revision = toInt32(revision);
 	}
-	
+
 	/**
 	 * @param {Version} value
 	 * @returns {number}
 	 */
 	Version.prototype.compareTo = function(value) {
 		if (!value) return 1;
-		
+
 		if (this.major != value.major) return this.major > value.major ? 1 : -1;
 		if (this.minor != value.minor) return this.minor > value.minor ? 1 : -1;
 		if (this.build != value.build) return this.build > value.build ? 1 : -1;
 		if (this.revision != value.revision) return this.revision > value.revision ? 1 : -1;
-		
+
 		return 0;
 	};
 	/**
@@ -135,7 +135,7 @@ G.Version = (function() {
 		if (fieldCount == undefined) {
 			fieldCount = this.build == unspecified ? 2 : this.revision == unspecified ? 3 : 4;
 		}
-		
+
 		/** @type {number[]} */
 		var tmp = [];
 		if (fieldCount >= 1) tmp.push(this.major);
@@ -144,13 +144,13 @@ G.Version = (function() {
 		if (fieldCount >= 4 && this.revision != unspecified) tmp.push(this.revision);
 		return tmp.join(".");
 	};
-	
+
 	return Version;
 })();
 
 var State = (function() {
-	var appVersion = "1.3.5.0 beta";
-	
+	var appVersion = "1.3.5.1 alpha";
+
 	/**
 	 * @template T
 	 * @param {string} name
@@ -160,7 +160,7 @@ var State = (function() {
 	function getWinNTCurrentVersionValue(name, defaultValue) {
 		return getRegValue("HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\" + name, defaultValue);
 	}
-	
+
 	var major = getWinNTCurrentVersionValue("CurrentMajorVersionNumber", -1);
 	var minor = getWinNTCurrentVersionValue("CurrentMinorVersionNumber", -1);
 	if (major < 0 || minor < 0) {
@@ -168,17 +168,17 @@ var State = (function() {
 		major = +currentVersion[0];
 		minor = +currentVersion[1];
 	}
-	
+
 	var buildLab = getWinNTCurrentVersionValue("BuildLabEx", "") || getWinNTCurrentVersionValue("BuildLab", "");
 	var build = +getWinNTCurrentVersionValue("CurrentBuild") || parseInt(buildLab, 10) || null;
 	var revision = getWinNTCurrentVersionValue("UBR", -1);
 	if (revision < 0) revision = +buildLab.split(".", 2)[1] || null;
-	
+
 	var osVersion = new Version(major, minor, build, revision);
 	var osVersionString = osVersion.toString(3);
-	
+
 	var releaseId = getWinNTCurrentVersionValue("ReleaseId", "") || getWinNTCurrentVersionValue("CSDVersion", "");
-	
+
 	var OS = {
 		version: osVersion,
 		caption: "{0}{1} ({2})\n    {3}".xFormat(
@@ -187,43 +187,43 @@ var State = (function() {
 			osVersion.isGreaterThan(new Version(10, 0, 17763)) || // Win10 1809以降
 			osVersionString == "10.0.17134" || // Win10 1803 Enterprise
 			osVersionString == "10.0.16299" || // Win10 1709 Enterprise
-			osVersionString == "6.3.9600" &&  osVersion.revision >= 17031 || // Win8.1 Update
+			osVersionString == "6.3.9600" && osVersion.revision >= 17031 || // Win8.1 Update
 			osVersion.toString(2) == "6.1" && osVersion.build >= 7601 // Win7 ESU
 	};
-	
+
 	/** @returns {string} */
 	function getHostType() {
 		if (G.window && /\.hta$/.test(location.href)) return "mshta";
 		if (G.WScript) return fso.GetBaseName(WScript.FullName).toLowerCase();
 		throw new Error("対応していない実行環境です。");
 	}
-	
+
 	function getPlatform() {
 		switch (shell.GetSystemInformation("ProcessorArchitecture")) {
-		case PROCESSOR_ARCHITECTURE_AMD64:
-		case PROCESSOR_ARCHITECTURE_ARM64:
-		// case PROCESSOR_ARCHITECTURE_IA64:
-			return 64;
-		case PROCESSOR_ARCHITECTURE_INTEL:
-		case PROCESSOR_ARCHITECTURE_ARM:
-			return 32;
-		default:
-			throw new Error("対応していないプラットフォームです。");
+			// case PROCESSOR_ARCHITECTURE_IA64:
+			case PROCESSOR_ARCHITECTURE_AMD64:
+			case PROCESSOR_ARCHITECTURE_ARM64:
+				return 64;
+			case PROCESSOR_ARCHITECTURE_INTEL:
+			case PROCESSOR_ARCHITECTURE_ARM:
+				return 32;
+			default:
+				throw new Error("対応していないプラットフォームです。");
 		}
 	}
-	
+
 	var Host = {
 		type: getHostType(),
 		platform: getPlatform(),
 		isWow64: !!wShell.Environment("Process").Item("PROCESSOR_ARCHITEW6432")
 	};
-	
+
 	return { version: appVersion, OS: OS, Host: Host };
 })();
 
 var unsupportMessage = (function() {
 	var errmsg = "このバージョンの Windows には対応していません。";
-	
+
 	return {
 		error: errmsg,
 		warning: errmsg + "\n誤った情報が出力されたり、正しく動作しない可能性があります。"
@@ -231,7 +231,7 @@ var unsupportMessage = (function() {
 })();
 
 /**
- * @param {any} value 
+ * @param {any} value
  * @returns {number}
  */
 function toInt32(value) {
@@ -240,10 +240,10 @@ function toInt32(value) {
 }
 
 /**
- * @param {any} value 
+ * @param {any} value
  * @returns {number}
  */
-function toUint32 (value) {
+function toUint32(value) {
 	return value >>> 0;
 }
 
@@ -258,7 +258,7 @@ function toUint32 (value) {
 function getRegValue(name, defaultValue, expand) {
 	if (defaultValue === undefined) defaultValue = null;
 	if (expand === undefined) expand = false;
-	
+
 	var returnValue;
 	try {
 		returnValue = wShell.RegRead(name);
@@ -272,7 +272,7 @@ function getRegValue(name, defaultValue, expand) {
 
 /** @returns {string} */
 function getSystemPath() {
-	return fso.GetSpecialFolder(/** @type {SpecialFolderConst.SystemFolder} */ (1)).Path;
+	return fso.GetSpecialFolder(/** @type {SpecialFolderConst.SystemFolder} */(1)).Path;
 }
 
 /** @returns {string} */
@@ -285,11 +285,11 @@ var writeError =
 	State.Host.type == "mshta" ? function(text) {
 		// ウインドウが後ろに表示されてしまうことがあるので、このメソッドで最前面に持ってくる
 		if (!document.hasFocus()) window.focus();
-		
+
 		// WshShell#Popup()はモードレスダイアログで
 		// ダイアログを残したままメインウインドウを閉じるとプロセスがリークしてしまうので
 		// モーダルダイアログであるalert()を使う
 		alert(text);
 	} :
-	State.Host.type == "cscript" ? function(text) { WScript.StdErr.WriteLine(text); } :
-	function(text) { wShell.Popup(text, 0, "SpecialFolderPathList", MB_ICONWARNING); };
+		State.Host.type == "cscript" ? function(text) { WScript.StdErr.WriteLine(text); } :
+			function(text) { wShell.Popup(text, 0, "SpecialFolderPathList", MB_ICONWARNING); };

@@ -16,11 +16,11 @@ function updateSetting() {
 		o: "fileFolderOnly",
 		t: "wshWriteType"
 	};
-	
+
 	for (var opt in properties) {
 		if (wshNamed.Exists(opt)) Setting[properties[opt]] = wshNamed.Item(opt) !== false;
 	}
-	
+
 	if (!Setting.debug) Setting.wshWriteDir = false;
 }
 
@@ -29,9 +29,9 @@ function main() {
 		writeError("このスクリプトは cscript.exe で実行してください。");
 		WScript.Quit(1);
 	}
-	
+
 	updateSetting();
-	
+
 	if (!State.OS.isSuppoertedVersion) {
 		if (Setting.abortIfOldOS) {
 			writeError(unsupportMessage.error);
@@ -40,7 +40,7 @@ function main() {
 			writeError(unsupportMessage.warning);
 		}
 	}
-	
+
 	if (Setting.wshWriteBom) STDOUT.Write("\uFEFF");
 	if (Setting.debug) writeAppInfo();
 	writeList();
@@ -56,19 +56,19 @@ function writeAppInfo() {
 
 function writeList() {
 	var it = SpecialFolders.iterator();
-	for (;;) {
+	for (; ;) {
 		var result = it.next();
 		if (result.done) break;
 		var folder = result.value;
-		
+
 		try {
 			if (folder.category) {
 				STDOUT.WriteLine("");
 				if (Setting.viewCategory) STDOUT.WriteLine("Category: {0}\n".xFormat(folder.category));
 			}
-			
+
 			if (!folder.folderItem && !Setting.wshForceWriteAllData) continue;
-			
+
 			STDOUT.WriteLine("Title: " + folder.title);
 			if (Setting.wshWriteDir) STDOUT.WriteLine("Dir: " + (folder.dir || ""));
 			if (folder.folderItem) {

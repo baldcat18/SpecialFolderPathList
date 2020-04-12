@@ -25,11 +25,11 @@ if (getDocumentMode() < 9) {
 	Object.getOwnPropertyNames = function(o) {
 		/** @type {string[]} */
 		var names = [];
-		
+
 		for (var name in o) {
 			if (o.hasOwnProperty(name)) names.push(name);
 		}
-		
+
 		return names;
 	};
 }
@@ -40,12 +40,12 @@ G.TemporaryFolder = 2;
 var htaDebug = (function() {
 	/** 0x800A01B6: オブジェクトでサポートされていないプロパティまたはメソッドです */
 	var E_NO_PROPERTY = -2146827850;
-	
+
 	/** @type {Window} */
 	var dbgbox = null;
 	/** @type {HTMLDivElement} */
 	var logBox = null;
-	
+
 	/** @type {(value: any) => string} */
 	function getType(value) {
 		if (value === null) return "null";
@@ -54,7 +54,7 @@ var htaDebug = (function() {
 		var name = /** @type {string} */ (Object.prototype.toString.call(value)).replace(/^\[object (.+)\]$/, "$1");
 		return (name != "Object" || value.construcor == Object) ? name : type;
 	}
-	
+
 	/** @type {(value: any) => string} */
 	function getString(value) {
 		try {
@@ -64,7 +64,7 @@ var htaDebug = (function() {
 			return "unprintable object";
 		}
 	}
-	
+
 	var retobj = {
 		/**
 		 * @type {(expression: string, callEval: (expr: string) => any, message?: string) => void}
@@ -81,7 +81,7 @@ var htaDebug = (function() {
 					}
 				}
 			}
-			
+
 			if (!callEval(expression)) {
 				writeError(message);
 				window.close();
@@ -94,45 +94,45 @@ var htaDebug = (function() {
 					window.showModelessDialog("modules/dbgbox.html", null, "dialogWidth: 700px; dialogHeight: 300px");
 				logBox = dbgbox.document.getElementsByTagName("div")[0];
 			}
-			
+
 			var text = "< " + message;
 			if (title) text = "> " + title + "\n" + text;
-			
+
 			var p = dbgbox.document.createElement("p");
 			p.innerText = text;
 			logBox.appendChild(p);
-			
+
 			dbgbox.location.hash = "#bottom";
 		},
 		/** @type {(obj: {}, title?: string) => void} */
 		list: function(obj, title) {
 			var names = Object.getOwnPropertyNames(obj);
 			var list = "\n";
-			
+
 			for (var i = 0; i < names.length; i++) {
 				var name = names[i];
 				var value = obj[name];
 				var type = getType(value);
 				if (value == null || type == "function") value = "";
-				
+
 				list += "{0}: [{1}] {2}\n".xFormat(name, type, getString(value));
 			}
-			
+
 			this.write(list, title);
 		},
 		/** @type {(obj: {}, depth = 4) => void} */
 		dir: function(obj, depth) {
 			if (depth === undefined) depth = 4;
-			
+
 			this.write("\n" + createDir(obj, 0));
-			
+
 			/** @type {(value: any, currentDepth: number) => string} */
 			function createDir(value, currentDepth) {
 				var type = getType(value);
 				if (type == "function") return "function";
 				if (type == "null" || typeof value != "object") return String(value);
 				if (currentDepth >= depth) return Array.isArray(value) ? "[{0}]".xFormat(value) : getString(value);
-				
+
 				var tabs = "";
 				for (var i = 0; i < currentDepth; i++) tabs += "    ";
 				var tmp = "";
@@ -143,7 +143,7 @@ var htaDebug = (function() {
 					return "[\n{0}{1}]".xFormat(tmp, tabs);
 				}
 				Object.getOwnPropertyNames(value).forEach(function(name) {
-					tmp +="{0}    {1}: {2}\n".xFormat(tabs, name, createDir(value[name], currentDepth + 1));
+					tmp += "{0}    {1}: {2}\n".xFormat(tabs, name, createDir(value[name], currentDepth + 1));
 				}, "");
 				return "{\n{0}{1}}".xFormat(tmp, tabs);
 			}
@@ -152,11 +152,11 @@ var htaDebug = (function() {
 		breakpoint: function(callEval, title) {
 			if (callEval === undefined) callEval = eval;
 			if (title === undefined) title = "";
-			
+
 			var expr = "";
 			var result = "";
-			
-			for (;;) {
+
+			for (; ;) {
 				expr = prompt(title, expr);
 				if (!expr) break;
 				try {
@@ -169,12 +169,12 @@ var htaDebug = (function() {
 			}
 		}
 	};
-	
+
 	if (!Setting.debug) {
-		var nop = function() {};
+		var nop = function() { };
 		for (var method in retobj) retobj[method] = nop;
 	}
-	
+
 	return retobj;
 })();
 
@@ -184,37 +184,37 @@ function main() {
 		window.close();
 		return;
 	}
-	
+
 	if (getDocumentMode() < 11) {
 		writeError("このツールを実行するには、Internet Explorer を\n11 にバージョンアップする必要があります。");
 		window.close();
 		return;
 	}
-	
+
 	if (!Setting.htaFoeceWow64 && State.Host.isWow64) {
 		// 32ビット版のウインドウが表示されないようにするため画面外に飛ばしてサイズも小さくする
 		window.moveTo(-30000, -30000);
 		window.resizeTo(1, 1);
-		
+
 		wShell.Run("\"{0}\\mshta.exe\" {1}".xFormat(getSysNativePath(), location.href));
 		window.close();
 		return;
 	}
-	
+
 	var width = Math.floor(Setting.htaWidth);
 	var height = Math.floor(Setting.htaHeight);
 	if (width > 0 && height > 0) window.resizeTo(width, height);
-	
+
 	var left = Math.floor(Setting.htaLeft);
 	var top = Math.floor(Setting.htaTop);
 	if (!isNaN(left) && !isNaN(top)) window.moveTo(left, top);
-	
+
 	window.onload = function() { loadScript("htalib"); };
 }
 
 function getDocumentMode() {
 	if (document.documentMode) return document.documentMode;
-	
+
 	var ieKey = "HKLM\\SOFTWARE\\Microsoft\\Internet Explorer\\";
 	return parseFloat(getRegValue(ieKey + "svcVersion") || getRegValue(ieKey + "Version"));
 }

@@ -30,7 +30,7 @@ Get-Content -LiteralPath $regFile |
 		try {
 			$clsid = $_
 			$subKey = $clsidKey.OpenSubKey($clsid)
-			
+
 			Write-Output ([pscustomobject]@{ Key = "shell:::$clsid"; Name = $subKey.GetValue('') })
 		} finally {
 			$subKey.Close()

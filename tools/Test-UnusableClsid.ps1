@@ -18,9 +18,9 @@ $unusableText = ($dataText -csplit 'category: "Unusable"', 2, 'SimpleMatch')[1]
 	ForEach-Object {
 		$clsid = $_.Value
 		$path = "Microsoft.PowerShell.Core\Registry::HKEY_CLASSES_ROOT\CLSID\$clsid"
-		$exists = Test-path $path
-		
-		Write-Output ([pscustomobject]@{
-			Clsid = $clsid; Exists = $exists; Name = if ($exists) { (Get-Item $path).GetValue('') }
-		})
+		$exists = Test-Path $path
+
+		Write-Output (
+			[pscustomobject]@{ Clsid = $clsid; Exists = $exists; Name = if ($exists) { (Get-Item $path).GetValue('') } }
+		)
 	}
