@@ -1002,7 +1002,7 @@
 
 			// フォルダー以外のshellコマンド
 			case 257:
-				return createSpecialFolder(WIN8 ? "タスク バーとナビゲーション" : "タスク バーと[スタート]メニュー", "shell:::{0DF44EAA-FF21-4412-828E-260A8728E7F1}", { category: "OtherShellCommands" });
+				return createSpecialFolder(WIN8 ? "タスク バーとナビゲーション" : "タスク バーと[スタート]メニュー", "shell:::{0DF44EAA-FF21-4412-828E-260A8728E7F1}", { category: "ShellCommandsExceptFolders" });
 			case 258:
 				// Win10 1511まで
 				return createSpecialFolder(WIN8 ? "検索 - ファイル" : "検索", "shell:::{2559A1F0-21D7-11D4-BDAF-00C04F60B9F0}");
