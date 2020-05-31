@@ -1017,7 +1017,7 @@
 				return createSpecialFolder("プログラムのアクセスとコンピューターの既定の設定", "shell:::{2559A1F7-21D7-11D4-BDAF-00C04F60B9F0}");
 			case 263:
 				// Win8から
-				return createSpecialFolder(WIN10 ? "Cortana" : "検索", "shell:::{2559A1F8-21D7-11D4-BDAF-00C04F60B9F0}");
+				return createSpecialFolder("検索", "shell:::{2559A1F8-21D7-11D4-BDAF-00C04F60B9F0}");
 			case 264:
 				// Win+Dと同じ
 				return createSpecialFolder("デスクトップの表示", "shell:::{3080F90D-D7AD-11D9-BD98-0000947B0257}");
@@ -1062,8 +1062,7 @@
 			case 281:
 				return createSpecialFolder("インデックスのオプション", "shell:::{87D66A43-7B11-4A28-9811-C86EE395ACF7}");
 			case 282:
-				// Win8から
-				// Win10 1909まで(?)
+				// Win8からWin10 1909まで
 				// Enterpriseで使用可
 				// Win10 1607以降ではProでも使用可
 				return createSpecialFolder("Windows To Go ワークスペースの作成", "shell:::{8E0C279D-0BD1-43C3-9EBD-31C3DC5B8A77}");
