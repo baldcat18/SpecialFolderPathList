@@ -18,10 +18,9 @@ Windows 8.1 Update
 Windows 10 October 2018 Update  (バージョン 1809 ビルド 17763)
            May 2019 Update      (バージョン 1903 ビルド 18362)
            November 2019 Update (バージョン 1909 ビルド 18363)
+           May 2020 Update      (バージョン 2004 ビルド 19041)
 
 32 ビット版・64 ビット版の両方で動作します。
-
-Windows 10 Insider Preview (ビルド 19041) でも動作すると思います。
 
 Windows 7 SP1 や Windows 10 April 2018 Update (バージョン 1803 ビルド 17134) でも
 動作すると思いますが、動作確認していません。
