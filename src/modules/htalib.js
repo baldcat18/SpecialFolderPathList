@@ -14,8 +14,9 @@ const command = {
 	copyAsPath: function(target) { clipboardData.setData("Text", target.innerHTML); },
 	/** @param {HTMLAnchorElement} target */
 	execExplorer: function(target) { target.xFolder.execExplorer(); },
-	/** @param {HTMLAnchorElement} target */
-	execExplorerElevated: isExplorerRunasLaunchingUser ? function(target) { target.xFolder.execExplorer("runas"); } :
+	execExplorerElevated: isExplorerRunasLaunchingUser ?
+		/** @param {HTMLAnchorElement} target */
+		function(target) { target.xFolder.execExplorer("runas"); } :
 		function() { writeError("エクスプローラーを管理者として実行できる設定になっていません。"); },
 	/** @param {HTMLAnchorElement} target */
 	execCmd: function(target) { target.xFolder.execCmd(); },

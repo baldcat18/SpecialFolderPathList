@@ -3,6 +3,10 @@
 var G = this;
 
 if (!Object.create) {
+	/**
+	 * @param {object} o
+	 * @returns {any}
+	 */
 	Object.create = function(o) {
 		var _ = function() { };
 		_.prototype = o;

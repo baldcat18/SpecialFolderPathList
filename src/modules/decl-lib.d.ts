@@ -445,7 +445,7 @@ interface FsoFolder {
 	/** 指定したフォルダを削除します。 */
 	Delete(force?: boolean): void;
 	/** 指定されたファイルまたはフォルダを別の場所へ移動します。 */
-	Move(destination): void;
+	Move(destination: string): void;
 }
 
 /**

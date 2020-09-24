@@ -156,7 +156,7 @@
 	VirtualFolder.prototype = Object.create(SpecialFolder.prototype);
 	VirtualFolder.prototype.constructor = VirtualFolder;
 	VirtualFolder.prototype.isFileFolder = false;
-	VirtualFolder.prototype.execCmd = function(verb) {
+	VirtualFolder.prototype.execCmd = function() {
 		writeError("ファイル フォルダーではないのでコマンドプロンプトを実行できません。");
 	};
 	VirtualFolder.prototype.execPowershell = function() {
