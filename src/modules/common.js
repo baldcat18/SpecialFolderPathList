@@ -181,12 +181,15 @@ var State = (function() {
 	var osVersion = new Version(major, minor, build, revision);
 	var osVersionString = osVersion.toString(3);
 
-	var releaseId = getWinNTCurrentVersionValue("ReleaseId", "") || getWinNTCurrentVersionValue("CSDVersion", "");
+	var dispVersion =
+		getWinNTCurrentVersionValue("DisplayVersion", "") || // Win10 20H2から
+		getWinNTCurrentVersionValue("ReleaseId", "") || // Win10 1511から
+		getWinNTCurrentVersionValue("CSDVersion", "");
 
 	var OS = {
 		version: osVersion,
 		caption: "{0}{1} ({2})\n    {3}".xFormat(
-			getWinNTCurrentVersionValue("ProductName"), releaseId ? " " + releaseId : "", osVersion, buildLab),
+			getWinNTCurrentVersionValue("ProductName"), dispVersion ? " " + dispVersion : "", osVersion, buildLab),
 		isSuppoertedVersion:
 			osVersion.isGreaterThan(new Version(10, 0, 17763)) || // Win10 1809以降
 			osVersionString == "10.0.17134" || // Win10 1803 Enterprise
