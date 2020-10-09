@@ -154,7 +154,5 @@ interface DialogArgument {
 }
 
 
-/** @type {ShellSpecialFolderConstants.ssfPROFILE} */
-declare const ssfPROFILE = 40;
-/** @type {SpecialFolderConst.TemporaryFolder} */
-declare const TemporaryFolder = 2;
+declare const ssfPROFILE: ShellSpecialFolderConstants.ssfPROFILE;
+declare const TemporaryFolder: SpecialFolderConst.TemporaryFolder;
