@@ -1060,7 +1060,7 @@
 				return createSpecialFolder("デバイス マネージャー", "shell:::{74246BFC-4C96-11D0-ABEF-0020AF6B0B7A}");
 			case 279:
 				// Win8まで
-				return createSpecialFolder("Windows CardSpace ", "shell:::{78CB147A-98EA-4AA6-B0DF-C8681F69341C}");
+				return createSpecialFolder("Windows CardSpace", "shell:::{78CB147A-98EA-4AA6-B0DF-C8681F69341C}");
 			case 280:
 				// netplwiz.exe / control.exe userpasswords2
 				return createSpecialFolder("ユーザー アカウント", "shell:::{7A9D77BD-5403-11D2-8785-2E0420524153}");
