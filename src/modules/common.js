@@ -191,7 +191,8 @@ var State = (function() {
 		caption: "{0}{1} ({2})\n    {3}".xFormat(
 			getWinNTCurrentVersionValue("ProductName"), dispVersion ? " " + dispVersion : "", osVersion, buildLab),
 		isSuppoertedVersion:
-			osVersion.isGreaterThan(new Version(10, 0, 17763)) || // Win10 1809以降
+			osVersion.isGreaterThan(new Version(10, 0, 18362)) || // Win10 1903以降
+			osVersionString == "10.0.17763" || // Win10 1809 Enterprise
 			osVersionString == "10.0.17134" || // Win10 1803 Enterprise
 			osVersionString == "6.3.9600" && osVersion.revision >= 17031 || // Win8.1 Update
 			osVersion.toString(2) == "6.1" && osVersion.build >= 7601 // Win7 ESU
