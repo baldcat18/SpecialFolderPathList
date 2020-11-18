@@ -102,7 +102,6 @@ interface SpecialFolder {
 	execWsl(verb?: string): void;
 	getType(): string;
 	hasProperties(): boolean;
-	open(): void;
 	showProperties(): void;
 }
 
