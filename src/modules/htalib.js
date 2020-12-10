@@ -12,11 +12,6 @@ const command = {
 	openFolder: function(target) { target.xFolder.execExplorer(); },
 	/** @param {HTMLAnchorElement} target */
 	copyAsPath: function(target) { clipboardData.setData("Text", target.innerHTML); },
-	/**
-	 * @deprecated
-	 * @param {HTMLAnchorElement} target
-	 */
-	execExplorer: function(target) { target.xFolder.open(); },
 	execExplorerElevated: isExplorerRunasLaunchingUser ?
 		/** @param {HTMLAnchorElement} target */
 		function(target) { target.xFolder.execExplorer("runas"); } :
@@ -50,7 +45,6 @@ const popup = (function() {
 	const items = [
 		{ id: "openFolder", caption: "開く(&O)", isAlwaysVisible: true, },
 		{ id: "copyAsPath", caption: "パスのコピー(&A)", isAlwaysVisible: true, },
-		{ id: "execExplorer", caption: "以前の方法で開く(&X)", isAlwaysVisible: false, },
 		{ id: "execExplorerElevated", caption: "エクスプローラーを管理者として開く(&E)", isExtended: true, isAlwaysVisible: (isExplorerRunasLaunchingUser ? null : false) },
 		{ id: "execCmd", caption: "コマンドプロンプトを開く(&P)", isConsole: true, },
 		{ id: "execCmdElevated", caption: "コマンドプロンプトを管理者として開く(&W)", isConsole: true, isExtended: true, },

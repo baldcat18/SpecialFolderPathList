@@ -86,7 +86,6 @@
 	SpecialFolder.prototype._propertyTypes = null;
 	/** @type {FolderItemVerb} */
 	SpecialFolder.prototype._properties = undefined;
-	SpecialFolder.prototype.open = function() { this.folderItem.InvokeVerb(); };
 	/** @param {string} [verb] */
 	SpecialFolder.prototype.execExplorer = function(verb) {
 		var path = typeof this.dir == "number" ? this.path : this.dir;
