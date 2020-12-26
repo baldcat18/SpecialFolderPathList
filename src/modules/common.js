@@ -1,5 +1,6 @@
 ﻿/// <reference path="decl-userdef.d.ts" />
 
+// @ts-ignore
 var G = this;
 
 if (!Object.create) {
@@ -8,7 +9,7 @@ if (!Object.create) {
 	 * @returns {any}
 	 */
 	Object.create = function(o) {
-		var _ = function() { };
+		var _ = function() {};
 		_.prototype = o;
 		return new _();
 	};
@@ -71,8 +72,10 @@ String.prototype.xFormat = function() {
 	return this.replace(/\{\{|\}\}|\{(\d+)(?::(.+?))?\}/g, replacer);
 };
 
+// @ts-ignore
 G.Setting = { debug: false };
 
+// @ts-ignore
 G.Version = (function() {
 	var unspecified = -1;
 	var errmsg = "引数 {0} がマイナス: {1}";

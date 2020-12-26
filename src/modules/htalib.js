@@ -76,7 +76,7 @@ const popup = (function() {
 			dialog.close();
 			dialog = null;
 		},
-		/** @param {PointerEvent} evt */
+		/** @param {MouseEvent} evt */
 		show: function(evt) {
 			this.hide();
 
@@ -192,7 +192,7 @@ function addEventHandler() {
 
 		command[getVerb(evt)](target);
 	};
-	/** @param {PointerEvent} evt */
+	/** @param {MouseEvent} evt */
 	document.oncontextmenu = function(evt) {
 		evt.preventDefault();
 
@@ -217,7 +217,7 @@ function addEventHandler() {
 	document.ondragstart = function(evt) { evt.preventDefault(); };
 
 	window.onfocus = function() { popup.hide(); };
-	/** @param {WheelEvent} evt */
+	/** @param {Event} evt */
 	window.onmousewheel = function(evt) { if (!popup.isClosed) evt.preventDefault(); };
 }
 

@@ -1,7 +1,7 @@
 ﻿/// <reference path="common.js" />
 
 /**
- * @param {string} msg
+ * @param {Event | string} msg
  * @param {string} url
  * @param {number} line
 */
@@ -171,7 +171,7 @@ var htaDebug = (function() {
 	};
 
 	if (!Setting.debug) {
-		var nop = function() { };
+		var nop = function() {};
 		for (var method in retobj) retobj[method] = nop;
 	}
 
