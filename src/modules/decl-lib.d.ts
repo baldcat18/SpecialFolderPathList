@@ -17,7 +17,7 @@ interface ErrorConstructor {
 interface Document {
 	/**
 	 * Retrieves the document compatibility mode of the document.
-	 * @see https://msdn.microsoft.com/en-us/windows/desktop/cc196988
+	 * @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/cc288665(v=vs.85)
 	 */
 	readonly documentMode?: number;
 }
