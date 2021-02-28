@@ -384,6 +384,7 @@
 				// Win8.1以降では[LocalAppData]カテゴリになるので非表示に
 				return createSpecialFolder("Cookies", WIN81 ? null : "shell:Cookies");
 			case 36:
+				// shell:::{B155BDF8-02F0-451E-9A26-AE317CFD7779} ([delegate folder that appears in Computer])
 				return createSpecialFolder("Network Shortcuts", "shell:NetHood");
 			case 37:
 				// shell:::{ED50FC29-B964-48A9-AFB3-15EBB9B97F36} ([printhood delegate folder])
@@ -879,30 +880,30 @@
 				// 企業向けエディションで使用可
 				return createSpecialFolder("オフライン ファイル フォルダー", "shell:::{AFDB1F70-2A4C-11D2-9039-00C04F8EEB3E}");
 			case 213:
-				return createSpecialFolder("delegate folder that appears in Computer", "shell:::{B155BDF8-02F0-451E-9A26-AE317CFD7779}");
-			case 214:
 				return createSpecialFolder("AppSuggestedLocations", "shell:::{C57A6066-66A3-4D91-9EB9-41532179F0A5}");
-			case 215:
+			case 214:
 				// Win10 1709までサポート
 				return createSpecialFolder("ゲーム", "shell:Games");
-			case 216:
+			case 215:
 				if (!Setting.debug) index.current = DONE_ITERATION;
 
 				return createSpecialFolder("Previous Versions Results Folder", "shell:::{F8C2AB3B-17BC-41DA-9758-339D7DBF2D88}");
 
 			// 通常とは違う名前がエクスプローラーのタイトルバーに表示されるフォルダー
-			case 217:
+			case 216:
 				// Win10から
 				// shell:::{5B934B42-522B-4C34-BBFE-37A3EF7B9C90} (Win10 1507から1607まで)
 				// shell:::{F8278C54-A712-415B-B593-B77A2BE0DDA9} (Win10 1703から)
 				return createSpecialFolder("このデバイス ({0})".xFormat(WIN10_1703 ? "個人用フォルダー" : "パブリック"), "shell:ThisDeviceFolder", { category: "OtherNames", propertyType: PT_VERB });
-			case 218:
+			case 217:
 				// Win8までだと別名にならないので非表示に
 				return createSpecialFolder("マイ ドキュメント (ドキュメント)", WIN81 ? "shell:::{450D8FBA-AD25-11D0-98A8-0800361B1103}" : null);
-			case 219:
+			case 218:
 				return createSpecialFolder("お気に入り (リンク)", "shell:::{323CA680-C24D-4099-B94D-446DD2D7249E}");
-			case 220:
+			case 219:
 				return createSpecialFolder("Common Places FS Folder (リンク)", "shell:::{D34A6CA6-62C2-4C34-8A7C-14709C1AD938}", { propertyType: PT_VERB });
+			case 220:
+				return createSpecialFolder("delegate folder that appears in Computer (Network Shortcuts)", "shell:::{B155BDF8-02F0-451E-9A26-AE317CFD7779}");
 			case 221:
 				return createSpecialFolder("printhood delegate folder (Printer Shortcuts)", "shell:::{ED50FC29-B964-48A9-AFB3-15EBB9B97F36}");
 			case 222:
