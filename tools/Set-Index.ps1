@@ -1,9 +1,9 @@
-﻿#Requires -Version 4.0
-
-<#
+﻿<#
 .SYNOPSIS
 data.jsのSpecialFolder.getObject()内で参照しているindex番号を振りなおす
 #>
+
+#Requires -Version 4.0
 
 [CmdletBinding()]
 param()
