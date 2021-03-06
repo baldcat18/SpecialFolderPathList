@@ -1,5 +1,6 @@
 ﻿/// <reference path="decl-userdef.d.ts" />
 
+// @ts-ignore
 var G = this;
 
 if (!Object.create) {
@@ -8,7 +9,7 @@ if (!Object.create) {
 	 * @returns {any}
 	 */
 	Object.create = function(o) {
-		var _ = function() { };
+		var _ = function() {};
 		_.prototype = o;
 		return new _();
 	};
@@ -19,12 +20,12 @@ var E_NOTFOUND = -2147024894;
 /** 0x800700E8: パイプを閉じています */
 var E_NODATA = -2147024664;
 
-// https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-messagebox
+// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox
 
 /** 感嘆符（!）アイコンを表示します。 */
 var MB_ICONWARNING = 0x30;
 
-// https://docs.microsoft.com/ja-jp/windows/desktop/api/sysinfoapi/ns-sysinfoapi-_system_info
+// https://docs.microsoft.com/ja-jp/windows/win32/api/sysinfoapi/ns-sysinfoapi-system_info
 
 /** x86 */
 var PROCESSOR_ARCHITECTURE_INTEL = 0;
@@ -71,8 +72,10 @@ String.prototype.xFormat = function() {
 	return this.replace(/\{\{|\}\}|\{(\d+)(?::(.+?))?\}/g, replacer);
 };
 
+// @ts-ignore
 G.Setting = { debug: false };
 
+// @ts-ignore
 G.Version = (function() {
 	var unspecified = -1;
 	var errmsg = "引数 {0} がマイナス: {1}";
