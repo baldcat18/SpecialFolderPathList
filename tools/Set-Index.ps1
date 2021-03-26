@@ -12,7 +12,7 @@ Set-StrictMode -Version Latest
 
 $modules = (Resolve-Path "$PSScriptRoot\..\src\modules").Path
 $dataFile = "$modules\data.js"
-$tmpFile = "$modules\data.js.tmp"
+$tmpFile = [System.IO.Path]::GetTempFileName()
 
 $index = 0
 
