@@ -5,12 +5,10 @@
 
 
 /*
- * Yu Gothic UIはWin10 1507から
- * UDデジタル教科書体はWin10 1709から
  * BIZ UDゴシックはWin10 1809から
  */
 body {
-	font-family: "BIZ UDPGothic", "UD Digi Kyokasho NK-R", "Meiryo UI", "Yu Gothic UI", sans-serif;
+	font-family: "BIZ UDPGothic", "Meiryo UI", sans-serif;
 	line-height: 112.5%;
 	white-space: nowrap;
 }
@@ -18,13 +16,13 @@ body {
 	color: red;
 }
 #info {
-	font-family: "BIZ UDGothic", "UD Digi Kyokasho N-R", "Lucida Console", monospace;
+	font-family: "BIZ UDGothic", "Lucida Console", monospace;
 }
 h2 {
 	font-size: 100%;
 	font-weight: normal;
 }
 dd {
-	font-family: "BIZ UDGothic", "UD Digi Kyokasho N-R", "Meiryo", "Yu Gothic Medium", monospace;
+	font-family: "BIZ UDGothic", "Meiryo", monospace;
 	margin-left: 0;
 }
